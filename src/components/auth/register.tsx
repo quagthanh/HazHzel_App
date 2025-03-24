@@ -30,9 +30,11 @@ const Register = () => {
     });
 
     if (res?.data) {
-      setLoading(false);
       router.push(`/verify/${res?.data?._id}`);
+      setLoading(false);
+    
     } else {
+      setLoading(false);
       notification.error({
         message: "Đăng nhập thất bại",
         description: res?.message,

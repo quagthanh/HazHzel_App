@@ -3,8 +3,6 @@
 import { auth } from "@/auth";
 import { IBackendRes } from "@/types/backend";
 import { sendRequest } from "@/utils/api";
-import { message } from "antd";
-import { Session } from "inspector";
 import { revalidateTag } from "next/cache";
 
 export interface IUserData {

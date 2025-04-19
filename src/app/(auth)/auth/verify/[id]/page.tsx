@@ -1,4 +1,4 @@
-import Verify from "@/components/auth/verify";
+import Verify from "@/components/feature/auth/verify";
 
 export default async function verifyPage({
   params,

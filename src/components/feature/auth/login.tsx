@@ -21,11 +21,14 @@ const Login = () => {
   const [userEmail, setUserEmail] = useState("");
   const [changePassword, setChangePassword] = useState(false);
   const { Title } = Typography;
+  const [loading, setLoading] = useState(false);
+
   const onFinish = async (values: any) => {
+    setLoading(true);
     const { username, password } = values;
     setUserEmail("");
     const res = await authenticate(username, password);
-
+    setLoading(false);
     if (res?.error) {
       if (res?.code == 2) {
         setIsModalOpen(true);
@@ -91,7 +94,13 @@ const Login = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" block size="large">
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                size="large"
+                loading={loading}
+              >
                 Đăng nhập
               </Button>
             </Form.Item>

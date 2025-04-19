@@ -12,7 +12,6 @@ import { AdminContext } from "@/library/admin.context";
 import type { MenuProps } from "antd";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import path from "path";
 
 type MenuItem = Required<MenuProps>["items"][number];
 const AdminSideBar = () => {

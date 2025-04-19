@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
-import { PageNotFound } from "@/components/admin/pagenotfound";
-import UserTable from "@/components/admin/user.table";
+import { PageNotFound } from "@/components/common/pagenotfound";
+import UserTable from "@/components/feature/admin/user.table";
 import { IBackendRes } from "@/types/backend";
 import { sendRequest } from "@/utils/api";
 import { revalidateTag } from "next/cache";

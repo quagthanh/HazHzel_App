@@ -30,7 +30,7 @@ const Register = () => {
     });
 
     if (res?.data) {
-      router.push(`/verify/${res?.data?._id}`);
+      router.push(`/auth/verify/${res?.data?._id}`);
       setLoading(false);
     
     } else {

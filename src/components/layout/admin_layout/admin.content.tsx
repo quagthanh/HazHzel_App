@@ -14,7 +14,7 @@ const AdminContent = ({
       <div
         style={{
           padding: 24,
-          minHeight: "calc(100vh - 180px)",
+          minHeight: "calc(100vh - 131px)",
         }}
       >
         {children}

@@ -15,9 +15,11 @@ const ManageUserPage = async (props: any) => {
     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users`,
     queryParams: { current, pageSize },
     nextOption: { tags: ["users"], revalidate: 60 },
-    headers: `Bearer ${session?.user?.access_token}`,
+    headers: {
+      Authorization: `Bearer ${session?.user?.access_token}`,
+    },
   });
-  if (+res.statusCode == 404) {
+  if (!res || +res.statusCode == 404) {
     // console.log("Có vấn đề xảy ra trong lúc fetch users");
     return (
       <>

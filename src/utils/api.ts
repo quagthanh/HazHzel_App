@@ -12,11 +12,12 @@ export const sendRequest = async <T>(props: IRequest) => {
     headers = {},
     nextOption = {},
   } = props;
-
-  const options: any = {
+  const options = {
     method: method,
-    // by default setting the content-type to be json type
-    headers: new Headers({ "content-type": "application/json", ...headers }),
+    headers: new Headers({
+      "content-type": "application/json",
+      ...headers,
+    }),
     body: body ? JSON.stringify(body) : null,
     ...nextOption,
   };

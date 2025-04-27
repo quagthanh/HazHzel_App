@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { Open_Sans } from 'next/font/google'
-import "@/app/globals.css";
+import { Open_Sans } from "next/font/google";
 import NextAuthWrapper from "@/library/next.auth.wrapper";
+import "@/scss/abstracts/_global.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 const openSans = Open_Sans({
-  subsets: ['latin'], 
- 
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "AccounFreak",
-  icons: "/accountfreak_icon-removebg-preview.ico",
 };
 
 export default function RootLayout({

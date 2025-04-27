@@ -19,7 +19,7 @@ const AdminSideBar = () => {
   const { collapseMenu } = useContext(AdminContext)!;
   const pathname = usePathname();
   const getSelected = () => {
-    if (pathname === "/dashboard/user") {
+    if (pathname === "/admin/dashboard/user") {
       return "users";
     } else {
       return "dashboard";
@@ -33,12 +33,12 @@ const AdminSideBar = () => {
       children: [
         {
           key: "dashboard",
-          label: <Link href={"/dashboard"}>Dashboard</Link>,
+          label: <Link href={"/admin/dashboard"}>Dashboard</Link>,
           icon: <AppstoreOutlined />,
         },
         {
           key: "users",
-          label: <Link href={"/dashboard/user"}>Quản lý người dùng</Link>,
+          label: <Link href={"/admin/dashboard/user"}>Quản lý người dùng</Link>,
           icon: <TeamOutlined />,
         },
         {

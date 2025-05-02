@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { Open_Sans } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import NextAuthWrapper from "@/library/next.auth.wrapper";
 import "@/scss/abstracts/_global.scss";
+import { ConfigProvider } from "antd";
 
-const inter = Inter({ subsets: ["latin"] });
-const openSans = Open_Sans({
+const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
@@ -21,10 +20,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={openSans.className}>
-        <AntdRegistry>
-          <NextAuthWrapper>{children}</NextAuthWrapper>
-        </AntdRegistry>
+      <body className={montserrat.className}>
+        <ConfigProvider
+          theme={{
+            token: {
+              // Seed Token
+              colorPrimary: "#0000",
+
+              // Alias Token
+              colorBgContainer: "#f6ffed",
+            },
+          }}
+        >
+          <AntdRegistry>
+            <NextAuthWrapper>{children}</NextAuthWrapper>
+          </AntdRegistry>
+        </ConfigProvider>
       </body>
     </html>
   );

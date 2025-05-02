@@ -1,5 +1,6 @@
+import { Button } from "antd";
 import React from "react";
 const CustomerPage = () => {
-  return <div>this is main page</div>;
+  return <></>;
 };
 export default CustomerPage;

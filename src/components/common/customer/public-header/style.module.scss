@@ -1,2 +1,143 @@
+@use "../../../../scss/abstracts/variables" as *;
+
+.headerMain {
+  height: auto;
+}
 .headerLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerPrimaryNav {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.unstyledList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 16px;
+}
+.headerPrimaryNavItem {
+  position: relative;
+  line-height: 100px;
+  &:before {
+    content: attr(data-title);
+    transform-origin: left;
+    z-index: 999;
+    background: $border-header-color 2px;
+    color: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    pointer-events: none;
+    width: 100%;
+    height: 2px;
+    transition: transform 0.2s ease-in-out;
+    position: absolute;
+    bottom: 0px;
+    transform: scaleX(0);
+  }
+
+  &:hover:before {
+    transform: scaleX(1);
+  }
+}
+
+.h6 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $text-color;
+  }
+}
+
+.active {
+  font-weight: bold;
+  color: #0070f3;
+}
+
+.headerSecondaryNav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.megaMenuDisclosure {
+  display: contents;
+}
+.headerMenuDisclosure {
+  position: relative;
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+}
+.megaMenu {
+  position: fixed; // dùng fixed để dính theo viewport thay vì theo thẻ ch
+  left: 0;
+  right: 0;
+  width: 100vw;
+
+  background-color: $primary-color;
+  padding: 40px 48px;
+  border: 1px solid $border-color;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  display: flex;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  .headerPrimaryNavItem:hover & {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+//override
+.headerPrimaryNavItem .megaMenu {
+  line-height: normal;
+  font-size: 10px;
+  text-transform: none;
+}
+
+.megaMenuLinkList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+.vStack {
+  display: flex;
+  flex-direction: column;
+}
+.justifyItemsStart {
+  align-items: start;
+}
+.gap5 {
+  gap: 20px;
+}
+
+.gap25 {
+  gap: 10px;
+}
+.linkFaded {
+  color: rgb(126, 125, 125);
+  text-decoration: none;
+  font-size: 14px;
+
+  &:hover {
+    color: #494949;
+    transition: transform 0.2s ease-in-out;
+  }
 }

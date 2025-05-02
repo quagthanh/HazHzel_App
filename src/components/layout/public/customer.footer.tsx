@@ -1,4 +1,4 @@
 const PublicFooter = () => {
-  return <a>this is footer public</a>;
+  return <></>;
 };
 export default PublicFooter;

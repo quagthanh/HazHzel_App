@@ -1,6 +1,31 @@
-$primary-color: #4caf50;
+//main color
+$primary-color: rgb(255, 251, 245);
 $secondary-color: #2ecc71;
 
-a {
-  color: $primary-color;
-}
+//color schema light
+$accent: rgb(28, 28, 28);
+$text-color: rgb(28, 28, 28);
+$light-border-bottem-color: rgb(0, 255, 166);
+$background: rgb(255, 251, 245);
+$background-without-opacity: rgb(255, 251, 245);
+$border-header-color: rgb(28, 28, 28);
+$border-color: rgb(221 218 212);
+$button-background: rgb(28, 28, 28);
+$button-text-color: rgb(255, 255, 255);
+$circle-button-background: rgb(255, 255, 255);
+$circle-button-text-color: rgb(28, 28, 28);
+
+//font
+$heading-font-weight: 600;
+$text-font-weight: 400;
+$text-font-family: "Montserrat", sans-serif !important;
+
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6 {
+//   font-weight: $text-font-weight;
+//   color: $text-color;
+// }

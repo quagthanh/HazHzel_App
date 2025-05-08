@@ -5,7 +5,7 @@ import Link from "next/link";
 const PublicHeader = () => {
   return (
     <>
-      <AnnouncementBarCasoul />
+      {/* <AnnouncementBarCasoul /> */}
       <NavBar />
     </>
   );

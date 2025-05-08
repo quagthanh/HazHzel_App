@@ -14,6 +14,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { NavItem } from "@/types/interface";
 import imgexam from "@/../public/assets/exam.jpg";
+import AnnouncementBar from "../announcement-bar-carousel";
 const NavBar = () => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -54,6 +55,24 @@ const NavBar = () => {
       href: "/women",
       label: "Women",
       data_title: "Women",
+      children: [
+        {
+          label: "Clothing",
+          href: "/men-clothing",
+          subChildren: [
+            { label: "Jeans", href: "/men-clothing-jeans" },
+            { label: "Jackets", href: "/men-clothing-jackets" },
+          ],
+        },
+        {
+          label: "Accessories",
+          href: "/men-accessories",
+          subChildren: [
+            { label: "Perfumes", href: "/men-accessories-perfumes" },
+          ],
+        },
+        { label: "Sale", href: "/men-sale" },
+      ],
     },
     {
       href: "/brands",
@@ -122,6 +141,7 @@ const NavBar = () => {
 
   return (
     <>
+      {/* <AnnouncementBar /> */}
       <Header style={headerStyle} className={styles.headerMain}>
         <div className={styles.headerLogo}>
           <Link href="/" className={styles.headerLogo}>
@@ -240,16 +260,3 @@ const NavBar = () => {
   );
 };
 export default NavBar;
-
-// {navItems.map((item) => (
-//   <div key={item.href}>
-//     <Link
-//       href={item.href}
-//       className={`${styles.link} ${
-//         pathname === item.href ? styles.active : ""
-//       }`}
-//     >
-//       {item.label}
-//     </Link>
-//   </div>
-// ))}

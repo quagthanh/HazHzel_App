@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import FirstDashboard from "@/components/feature/admin/maindashboard";
+import FirstDashboard from "@/components/feature/admin/firstdashboard";
 
 const DashboardPage = async () => {
   const session = await auth();

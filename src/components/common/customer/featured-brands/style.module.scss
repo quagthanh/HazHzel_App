@@ -1,0 +1,47 @@
+@use "../../../../scss//abstracts/variables" as *;
+.colorSchema {
+  background-color: $primary-color;
+}
+.sectionStack {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 36px;
+  width: 100%;
+}
+.collectionListTextOutSide {
+  display: flex;
+  row-gap: 3rem;
+  justify-content: center;
+}
+.wrap {
+  @include wrap;
+}
+.collectionCard {
+  display: grid;
+  align-content: start;
+  gap: 20px;
+}
+.contentOverMedia {
+  display: grid;
+  position: relative;
+  overflow: hidden;
+}
+.zoomImage {
+  transition: transform 5s ease;
+}
+.collectionCard:hover .zoomImage {
+  transform: scale(1.1);
+}
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 30px;
+  h3 {
+    font-size: 30px;
+    color: black;
+    text-transform: uppercase;
+  }
+}

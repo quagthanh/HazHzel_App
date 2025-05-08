@@ -3,14 +3,14 @@ $primary-color: rgb(255, 251, 245);
 $secondary-color: #2ecc71;
 
 //color schema light
-$accent: rgb(28, 28, 28);
+$black-background: rgb(28, 28, 28);
 $text-color: rgb(28, 28, 28);
+$white-text-color: rgb(255, 255, 255);
 $light-border-bottem-color: rgb(0, 255, 166);
 $background: rgb(255, 251, 245);
 $background-without-opacity: rgb(255, 251, 245);
 $border-header-color: rgb(28, 28, 28);
 $border-color: rgb(221 218 212);
-$button-background: rgb(28, 28, 28);
 $button-text-color: rgb(255, 255, 255);
 $circle-button-background: rgb(255, 255, 255);
 $circle-button-text-color: rgb(28, 28, 28);
@@ -20,6 +20,20 @@ $heading-font-weight: 600;
 $text-font-weight: 400;
 $text-font-family: "Montserrat", sans-serif !important;
 
+//spacing
+@mixin section-spacing($pt: 48px, $pb: 48px) {
+  padding-top: $pt;
+  padding-bottom: $pb;
+}
+@mixin container($pl: 48px, $pr: 48px) {
+  padding-left: $pl;
+  padding-right: $pr;
+}
+
+//wrap
+@mixin wrap() {
+  flex-wrap: wrap;
+}
 // h1,
 // h2,
 // h3,

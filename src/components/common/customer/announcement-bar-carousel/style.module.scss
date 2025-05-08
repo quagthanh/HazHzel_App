@@ -1,0 +1,29 @@
+.announcementBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  padding: 10px 20px;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 0 10px;
+}
+
+.carousel {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.carouselText {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 0;
+}

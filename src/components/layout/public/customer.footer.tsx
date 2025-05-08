@@ -1,4 +1,6 @@
+import Footer from "@/components/common/customer/public-footer";
+
 const PublicFooter = () => {
-  return <></>;
+  return <Footer></Footer>;
 };
 export default PublicFooter;

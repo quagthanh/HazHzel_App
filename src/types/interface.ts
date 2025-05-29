@@ -60,6 +60,8 @@ export interface DataShopFavorite {
   price: string;
   vendor: string;
   is_new: boolean;
+  is_sale: boolean;
+  is_hot: boolean;
 }
 export interface ShopFavorite {
   href: string;

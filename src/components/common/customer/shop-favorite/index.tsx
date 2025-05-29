@@ -37,7 +37,9 @@ const ShopFavorites = () => {
           product_name: "kore studios",
           price: "167,45",
           vendor: "OAS",
-          is_new: true,
+          is_new: false,
+          is_sale: true,
+          is_hot: true,
         },
         {
           href: "#",
@@ -46,6 +48,8 @@ const ShopFavorites = () => {
           price: "Euro Summer Vibes",
           vendor: "OAS",
           is_new: false,
+          is_sale: true,
+          is_hot: false,
         },
         {
           href: "#",
@@ -53,7 +57,9 @@ const ShopFavorites = () => {
           product_name: "kore studios",
           price: "Euro Summer Vibes",
           vendor: "OAS",
-          is_new: true,
+          is_new: false,
+          is_sale: true,
+          is_hot: true,
         },
         {
           href: "#",
@@ -62,6 +68,8 @@ const ShopFavorites = () => {
           price: "Euro Summer Vibes",
           vendor: "OAS",
           is_new: false,
+          is_sale: true,
+          is_hot: false,
         },
         {
           href: "#",
@@ -70,6 +78,8 @@ const ShopFavorites = () => {
           price: "Euro Summer Vibes",
           vendor: "OAS",
           is_new: true,
+          is_sale: true,
+          is_hot: true,
         },
         {
           href: "#",
@@ -78,6 +88,8 @@ const ShopFavorites = () => {
           price: "Euro Summer Vibes",
           vendor: "OAS",
           is_new: false,
+          is_sale: false,
+          is_hot: true,
         },
         {
           href: "#",
@@ -86,6 +98,8 @@ const ShopFavorites = () => {
           price: "Euro Summer Vibes",
           vendor: "OAS",
           is_new: true,
+          is_sale: true,
+          is_hot: false,
         },
         {
           href: "#",
@@ -94,6 +108,8 @@ const ShopFavorites = () => {
           price: "Euro Summer Vibes",
           vendor: "OAS",
           is_new: false,
+          is_sale: false,
+          is_hot: true,
         },
       ],
     },
@@ -125,12 +141,21 @@ const ShopFavorites = () => {
                   }}
                 >
                   {shop.items.map((item, index) => (
-                    <SwiperSlide key={index}>
+                    <SwiperSlide key={`${item.product_name}-${index}`}>
                       <div className={styles.slide}>
                         <div className={styles.imageContainer}>
-                          {item.is_new === true && (
-                            <span className={styles.newBadge}>NEW</span>
-                          )}
+                          <div className={styles.badgeGroup}>
+                            {/* new badge */}
+                            {item.is_new === true && (
+                              <span className={styles.badge}>NEW</span>
+                            )}
+                            {item.is_sale === true && (
+                              <span className={styles.badge}>SALE</span>
+                            )}
+                            {item.is_hot === true && (
+                              <span className={styles.badge}>HOT</span>
+                            )}
+                          </div>
 
                           <Image
                             src={item.src}

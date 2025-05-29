@@ -23,13 +23,7 @@ export default function RootLayout({
       <body className={montserrat.className}>
         <ConfigProvider
           theme={{
-            token: {
-              // Seed Token
-              colorPrimary: "#0000",
-
-              // Alias Token
-              colorBgContainer: "#f6ffed",
-            },
+            token: {},
           }}
         >
           <AntdRegistry>

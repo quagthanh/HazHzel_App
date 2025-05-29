@@ -40,7 +40,7 @@ const Login = () => {
         description: res?.error,
       });
     } else {
-      router.push("/dashboard");
+      router.push("/admin/dashboard");
     }
   };
 

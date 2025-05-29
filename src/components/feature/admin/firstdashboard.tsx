@@ -10,12 +10,7 @@ interface FirstDashboardProps {
 }
 const FirstDashboard = (props: any) => {
   const { session } = props;
-  return (
-    <>
-      <div>name: {session?.user?.name ?? "Fetch name failed"}</div>
-      <div>access token: {"Fetch access_token failed"}</div>
-    </>
-  );
+  return <div>first page</div>;
 };
 
 export default FirstDashboard;

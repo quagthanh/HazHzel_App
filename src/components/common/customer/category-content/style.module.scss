@@ -1,0 +1,21 @@
+@use "../../../../scss/abstracts/variables" as *;
+
+.container {
+  display: flex;
+  gap: 2rem;
+  background-color: $primary-color;
+  padding: 2rem 3rem;
+}
+.sidebar {
+  width: 270px;
+  position: sticky;
+  top: 160px;
+  align-self: flex-start;
+  @media (max-width: 1250px) {
+    display: none;
+  }
+}
+.grid {
+  width: 100%;
+  height: auto;
+}

@@ -1,3 +1,5 @@
+@use "../../../../scss/abstracts/variables" as *;
+
 .customBtn {
   color: white;
   background-color: black;
@@ -34,4 +36,16 @@
 
 .customBtn:hover {
   color: black;
+}
+
+.changeColor {
+  color: black;
+  background-color: $primary-color;
+  border: 1px solid rgb(235, 235, 235);
+  &::before {
+    background-color: black;
+  }
+  &:hover {
+    color: white;
+  }
 }

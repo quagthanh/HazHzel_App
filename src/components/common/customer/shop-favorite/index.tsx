@@ -170,9 +170,9 @@ const ShopFavorites = () => {
                   ))}
                 </Swiper>
                 <div className={styles.cardContent}>
-                  <CustomButton className={styles.antBtn}>
-                    SHOP NOW
-                  </CustomButton>
+                  <Link href={shop.href}>
+                    <CustomButton>SHOP NOW</CustomButton>
+                  </Link>
                 </div>
               </div>
             ))}

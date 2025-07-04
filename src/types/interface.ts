@@ -68,3 +68,17 @@ export interface ShopFavorite {
   label: string;
   items: DataShopFavorite[];
 }
+export interface INewBrand {
+  src: StaticImageData;
+  href: string;
+  label: string;
+  description: string;
+}
+export interface IProduct {
+  id: number;
+  name: string;
+  image: string;
+  soldOut?: boolean;
+  category?: string;
+  specificColor?: number;
+}

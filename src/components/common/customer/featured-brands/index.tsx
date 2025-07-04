@@ -76,7 +76,7 @@ const FeaturedBrands = () => {
                 </div>
                 <div className={styles.cardContent}>
                   <h3>{brand.label}</h3>
-                  <CustomButton className={styles.antBtn}>SHOP</CustomButton>
+                  <CustomButton>SHOP</CustomButton>
                 </div>
               </Link>
             ))}

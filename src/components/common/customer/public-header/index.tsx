@@ -3,7 +3,7 @@ import Image from "next/image";
 import logo from "@/../public/assets/test6.png";
 import styles from "@/components/common/customer/public-header/style.module.scss";
 import { Header } from "antd/es/layout/layout";
-import { Button } from "antd";
+import { Button, Drawer } from "antd";
 import {
   SearchOutlined,
   ShoppingCartOutlined,
@@ -15,13 +15,23 @@ import { usePathname } from "next/navigation";
 import { NavItem } from "@/types/interface";
 import imgexam from "@/../public/assets/exam.jpg";
 import AnnouncementBar from "../announcement-bar-carousel";
-const NavBar = () => {
+const NavBar: React.FC = () => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const showLoading = () => {
+    setOpen(true);
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
+  };
 
   const navItems: NavItem[] = [
     {
-      href: "/men",
+      href: "/collections/men",
       label: "Men",
       data_title: "Men",
       children: [
@@ -52,12 +62,12 @@ const NavBar = () => {
       ],
     },
     {
-      href: "/women",
+      href: "/collections/women",
       label: "Women",
       data_title: "Women",
       children: [
         {
-          label: "Clothing",
+          label: "abc",
           href: "/men-clothing",
           subChildren: [
             { label: "Jeans", href: "/men-clothing-jeans" },
@@ -65,13 +75,13 @@ const NavBar = () => {
           ],
         },
         {
-          label: "Accessories",
+          label: "ede",
           href: "/men-accessories",
           subChildren: [
             { label: "Perfumes", href: "/men-accessories-perfumes" },
           ],
         },
-        { label: "Sale", href: "/men-sale" },
+        { label: "Sdqdale", href: "/men-sale" },
       ],
     },
     {
@@ -86,12 +96,12 @@ const NavBar = () => {
       data_title: "New Arrivals",
       children: [
         {
-          label: "New Mens",
+          label: "New Girl",
           href: "/new-arrivals-menwears",
           subChildren: [{ label: "Dresses", href: "/arrival/dresses" }],
         },
         {
-          label: "New Womens",
+          label: "abc",
           href: "/new-arrivals-womanwears",
           subChildren: [{ label: "Dresses", href: "/arrival/dresses" }],
         },
@@ -140,123 +150,116 @@ const NavBar = () => {
   };
 
   return (
-    <>
-      {/* <AnnouncementBar /> */}
-      <Header style={headerStyle} className={styles.headerMain}>
-        <div className={styles.headerLogo}>
-          <Link href="/" className={styles.headerLogo}>
-            <Image style={{ objectFit: "contain" }} alt="" src={logo} />
-          </Link>
-        </div>
-        <nav className={styles.headerPrimaryNav}>
-          <ul className={styles.unstyledList}>
-            {navItems.map((item) => (
-              <li
-                key={item.href}
-                className={styles.headerPrimaryNavItem}
-                data-title={item.data_title}
-                onMouseEnter={() => item.children && setOpenDropdown(item.href)}
-                onMouseLeave={() => setOpenDropdown(null)}
-              >
-                {item.children?.length ? (
-                  <div className={styles.megaMenuDisclosure}>
-                    <details
-                      className={styles.headerMenuDisclosure}
-                      open={openDropdown == item.href}
+    <Header style={headerStyle} className={styles.headerMain}>
+      <div className={styles.headerLogo}>
+        <Link href="/" className={styles.headerLogo}>
+          <Image style={{ objectFit: "contain" }} alt="" src={logo} />
+        </Link>
+      </div>
+      <nav className={styles.headerPrimaryNav}>
+        <ul className={styles.unstyledList}>
+          {navItems.map((item) => (
+            <li
+              key={item.href}
+              className={styles.headerPrimaryNavItem}
+              data-title={item.data_title}
+              onMouseEnter={() => item.children && setOpenDropdown(item.href)}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <div className={styles.megaMenuDisclosure}>
+                <div className={styles.headerMenuDisclosure}>
+                  <div className={styles.h6}>
+                    <Link
+                      href={item.href}
+                      className={`${styles.h6} ${styles.underline} ${
+                        pathname === item.href ? styles.active : ""
+                      }`}
                     >
-                      <summary className={styles.h6}>
-                        <Link
-                          href={item.href}
-                          className={`${styles.h6} ${
-                            pathname === item.href ? styles.active : ""
-                          }`}
-                        >
-                          {item.label}
-                        </Link>
-                      </summary>
-                      <div className={styles.megaMenu}>
-                        <ul
-                          className={`${styles.megaMenuLinkList} ${styles.unstyledList}`}
-                        >
-                          {/* miniheader 1 */}
-                          {item.children?.map((child) => (
-                            <li
-                              key={child.href}
-                              className={`${styles.vStack} ${styles.justifyItemsStart} ${styles.gap5}`}
-                            >
-                              <Link href={child.href} className={styles.h6}>
-                                {child.label}
-                              </Link>
-
-                              {/* miniheader 2 */}
-                              {child.subChildren && (
-                                <ul
-                                  className={`${styles.vStack} ${styles.gap25} ${styles.unstyledList}`}
-                                >
-                                  {child.subChildren.map((subChild) => (
-                                    <li key={subChild.href}>
-                                      <Link
-                                        href={subChild.href}
-                                        className={styles.linkFaded}
-                                      >
-                                        {subChild.label}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </details>
+                      {item.label}
+                    </Link>
                   </div>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={`${styles.h6} ${
-                      pathname === item.href ? styles.active : ""
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className={styles.headerSecondaryNav}>
-          <Link href="#">
-            <Button
-              type="link"
-              icon={
-                <UserOutlined style={{ color: "gray", fontSize: "24px" }} />
-              }
-            />
-          </Link>
-          <Link href="#">
-            <Button
-              type="link"
-              icon={
-                <SearchOutlined style={{ color: "gray", fontSize: "24px" }} />
-              }
-            />
-          </Link>
+                  {openDropdown === item.href && (
+                    <div className={styles.megaMenu}>
+                      <ul
+                        className={`${styles.megaMenuLinkList} ${styles.unstyledList}`}
+                      >
+                        {item.children?.map((child) => (
+                          <li
+                            key={child.href}
+                            className={`${styles.vStack} ${styles.justifyItemsStart} ${styles.gap5}`}
+                          >
+                            <Link href={child.href} className={styles.h6}>
+                              {child.label}
+                            </Link>
+                            {child.subChildren && (
+                              <ul
+                                className={`${styles.vStack} ${styles.gap25} ${styles.unstyledList}`}
+                              >
+                                {child.subChildren.map((subChild) => (
+                                  <li key={subChild.href}>
+                                    <Link
+                                      href={subChild.href}
+                                      className={styles.linkFaded}
+                                    >
+                                      {subChild.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div className={styles.headerSecondaryNav}>
+        <Link href="#">
+          <Button
+            type="link"
+            icon={<UserOutlined style={{ color: "gray", fontSize: "24px" }} />}
+          />
+        </Link>
+        <Link href="#">
+          <Button
+            type="link"
+            icon={
+              <SearchOutlined style={{ color: "gray", fontSize: "24px" }} />
+            }
+          />
+        </Link>
 
-          <Link href="#">
-            <Button
-              type="link"
-              icon={
-                <ShoppingCartOutlined
-                  style={{ color: "gray", fontSize: "24px" }}
-                />
-              }
-            />
-          </Link>
-        </div>
-      </Header>
-      <div></div>
-    </>
+        <Link href="#">
+          <Button
+            type="link"
+            icon={
+              <ShoppingCartOutlined
+                style={{ color: "gray", fontSize: "24px" }}
+              />
+            }
+            onClick={showLoading}
+          />
+        </Link>
+        <Drawer
+          title={<p>CART</p>}
+          closable={true}
+          placement="right"
+          open={open}
+          loading={loading}
+          onClose={() => setOpen(false)}
+          style={{ backgroundColor: "rgb(255, 251, 245" }}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Drawer>
+      </div>
+    </Header>
   );
 };
 export default NavBar;

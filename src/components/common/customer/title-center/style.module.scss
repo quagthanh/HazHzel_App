@@ -1,0 +1,15 @@
+@use "../../../../scss/abstracts/variables" as *;
+
+.wrapper {
+  position: relative;
+  background-color: $primary-color;
+  padding: 3rem 0rem;
+}
+.breadcrumb {
+  position: absolute;
+  top: 1.5rem;
+  left: 3rem;
+}
+.title {
+  text-align: center;
+}

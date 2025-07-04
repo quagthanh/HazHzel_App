@@ -1,0 +1,61 @@
+.card {
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+
+  &:hover .hoverImage {
+    opacity: 1;
+  }
+
+  &:hover .addToCart {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.image {
+  object-fit: cover;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.hoverImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.addToCart {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: white;
+  border: none;
+  padding: 8px;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+
+  &:hover .plusIcon {
+    transform: rotate(90deg);
+  }
+}
+.plusIcon {
+  transition: transform 0.2s ease-in-out;
+}
+.productName {
+  margin-top: 8px;
+  font-weight: 500;
+  text-align: center;
+}

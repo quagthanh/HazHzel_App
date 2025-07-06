@@ -3,8 +3,9 @@ import Image from "next/image";
 import logo from "@/../public/assets/test6.png";
 import styles from "@/components/common/customer/public-header/style.module.scss";
 import { Header } from "antd/es/layout/layout";
-import { Button, Drawer } from "antd";
+import { Button } from "antd";
 import {
+  MenuOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
   UserOutlined,
@@ -14,21 +15,19 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { NavItem } from "@/types/interface";
 import imgexam from "@/../public/assets/exam.jpg";
-import AnnouncementBar from "../announcement-bar-carousel";
+import CartDrawer from "../drawer/cart-drawer";
+import SearchDrawer from "../drawer/search-drawer";
 const NavBar: React.FC = () => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [open, setOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const showLoading = () => {
-    setOpen(true);
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
+  const [openCart, setOpenCart] = useState<boolean>(false);
+  const [openSearch, setOpenSearch] = useState<boolean>(false);
+  const showDrawerCart = () => {
+    setOpenCart(true);
   };
-
+  const showDrawerSearch = () => {
+    setOpenSearch(true);
+  };
   const navItems: NavItem[] = [
     {
       href: "/collections/men",
@@ -152,9 +151,17 @@ const NavBar: React.FC = () => {
   return (
     <Header style={headerStyle} className={styles.headerMain}>
       <div className={styles.headerLogo}>
-        <Link href="/" className={styles.headerLogo}>
-          <Image style={{ objectFit: "contain" }} alt="" src={logo} />
-        </Link>
+        <div className={styles.leftMobileNav}>
+          <Button
+            type="link"
+            icon={<MenuOutlined style={{ color: "gray", fontSize: "20px" }} />}
+          />
+        </div>
+        <div className={styles.centerLogo}>
+          <Link href="/" className={styles.headerLogo}>
+            <Image style={{ objectFit: "contain" }} alt="" src={logo} />
+          </Link>
+        </div>
       </div>
       <nav className={styles.headerPrimaryNav}>
         <ul className={styles.unstyledList}>
@@ -231,6 +238,7 @@ const NavBar: React.FC = () => {
             icon={
               <SearchOutlined style={{ color: "gray", fontSize: "24px" }} />
             }
+            onClick={() => showDrawerSearch()}
           />
         </Link>
 
@@ -242,22 +250,15 @@ const NavBar: React.FC = () => {
                 style={{ color: "gray", fontSize: "24px" }}
               />
             }
-            onClick={showLoading}
+            onClick={() => showDrawerCart()}
           />
         </Link>
-        <Drawer
-          title={<p>CART</p>}
-          closable={true}
-          placement="right"
-          open={open}
-          loading={loading}
-          onClose={() => setOpen(false)}
-          style={{ backgroundColor: "rgb(255, 251, 245" }}
-        >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-        </Drawer>
+        <CartDrawer open={openCart} onClose={() => setOpenCart(false)} />
+        <SearchDrawer
+          open={openSearch}
+          setOpen={setOpenSearch}
+          onClose={() => setOpenSearch(false)}
+        />
       </div>
     </Header>
   );

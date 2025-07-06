@@ -23,7 +23,24 @@ export default function RootLayout({
       <body className={montserrat.className}>
         <ConfigProvider
           theme={{
-            token: {},
+            token: {
+              colorPrimary: "#7D7D7D",
+            },
+            components: {
+              Input: {
+                colorText: "#343534",
+                colorBgContainer: "#fffbf5",
+              },
+              Button: {
+                colorBgContainer: "#fffbf5",
+              },
+              Pagination: {
+                colorBgContainer: "#fffbf5",
+              },
+              Select: {
+                colorBgContainer: "#fffbf5",
+              },
+            },
           }}
         >
           <AntdRegistry>

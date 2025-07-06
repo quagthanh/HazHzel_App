@@ -82,3 +82,9 @@ export interface IProduct {
   category?: string;
   specificColor?: number;
 }
+
+export interface SearchDrawerProps {
+  open: boolean;
+  onClose: () => void;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}

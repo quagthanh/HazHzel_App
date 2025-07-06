@@ -15,7 +15,16 @@
     display: none;
   }
 }
+.content {
+  display: grid;
+  width: 100%;
+  height: auto;
+  row-gap: 2.25rem;
+}
 .grid {
   width: 100%;
   height: auto;
+}
+.paginationCategory {
+  justify-self: center;
 }

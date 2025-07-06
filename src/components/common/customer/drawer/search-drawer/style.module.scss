@@ -1,0 +1,15 @@
+.center {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+}
+.cancelBtn {
+  background: transparent;
+  border: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  &:hover {
+    color: rgb(139, 139, 139);
+    cursor: pointer;
+  }
+}

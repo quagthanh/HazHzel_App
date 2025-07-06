@@ -4,6 +4,10 @@
   justify-content: center;
   background-color: #000000;
   padding: 10px 20px;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .navButton {

@@ -1,76 +1,73 @@
 "use client";
-import styles from "@/components/common/customer/public-footer/style.module.scss";
 import {
   FacebookOutlined,
   InstagramOutlined,
+  PinterestOutlined,
   TwitterOutlined,
+  YoutubeOutlined,
 } from "@ant-design/icons";
-import { Button } from "antd";
-import Link from "next/link";
+import styles from "@/components/common/customer/public-footer/style.module.scss";
+
 const Footer = () => {
   return (
-    <div className={styles.footer}>
+    <footer className={styles.footer}>
       <div className={styles.container}>
-        <div className={styles.footerInner}>
-          <div className={styles.footerBlockList}>
-            <div>
-              <h3>ABOUT OUR STORE</h3>
-              <p>ESTABLISHED 2020</p>
-              <p>
-                Locale Potts Point is passionate about bringing the best of
-                Australian
-              </p>
-            </div>
-            <div>
-              <h3>JOIN TEAM LOCALE</h3>
-              <p>
-                Subscribe to receive updates to new collections, VIP access to
-                sales, access to exclusive deals, and MUCH MORE.
-              </p>
-            </div>
-            <div>
-              <h3>VISIT THE STORE</h3>
-              <p>Shop 5, 127-133 Macleay St, Potts Point, NSW 2011</p>
-              <p>0404 868 702</p>
-            </div>
+        {/* Logo + About + Social */}
+        <div className={styles.col}>
+          <h2 className={styles.logo}>HazHzel</h2>
+          <p>
+            Gravida massa volutpat aenean odio. Amet, turpis erat nullam
+            fringilla elementum diam in. Nisi, purus vitae, ultrices nunc. Sit
+            ac sit suscipit hendrerit.
+          </p>
+          <div className={styles.socials}>
+            <FacebookOutlined />
+            <TwitterOutlined />
+            <YoutubeOutlined />
+            <PinterestOutlined />
+            <InstagramOutlined />
           </div>
-          <div className={styles.socialMedia}>
-            <Link href="#">
-              <Button
-                type="link"
-                icon={
-                  <FacebookOutlined
-                    style={{ color: "gray", fontSize: "20px" }}
-                  />
-                }
-              />
-            </Link>
-            <Link href="#">
-              <Button
-                type="link"
-                icon={
-                  <InstagramOutlined
-                    style={{ color: "gray", fontSize: "20px" }}
-                  />
-                }
-              />
-            </Link>
+        </div>
 
-            <Link href="#">
-              <Button
-                type="link"
-                icon={
-                  <TwitterOutlined
-                    style={{ color: "gray", fontSize: "20px" }}
-                  />
-                }
-              />
-            </Link>
-          </div>
-          <div className={styles.footerAside}>@2025 ACCOUNT FREAK</div>{" "}
-        </div>{" "}
+        {/* Quick Links */}
+        <div className={styles.col}>
+          <h3>QUICK LINKS</h3>
+          <ul>
+            <li>HOME</li>
+            <li>ABOUT</li>
+            <li>SERVICES</li>
+            <li>SINGLE ITEM</li>
+            <li>CONTACT</li>
+          </ul>
+        </div>
+
+        {/* Help & Info */}
+        <div className={styles.col}>
+          <h3>HELP & INFO</h3>
+          <ul>
+            <li>TRACK YOUR ORDER</li>
+            <li>RETURNS + EXCHANGES</li>
+            <li>SHIPPING + DELIVERY</li>
+            <li>CONTACT US</li>
+            <li>FIND US EASY</li>
+            <li>FAQS</li>
+          </ul>
+        </div>
+
+        {/* Contact */}
+        <div className={styles.col}>
+          <h3>CONTACT US</h3>
+          <p>Do you have any questions or suggestions?</p>
+          <p>
+            <strong>contact@yourcompany.com</strong>
+          </p>
+          <p>Do you need support? Give us a call.</p>
+          <p>
+            <strong>+43 720 11 52 78</strong>
+          </p>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

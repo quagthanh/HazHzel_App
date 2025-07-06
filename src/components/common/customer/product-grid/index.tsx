@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "../product-card";
 import styles from "@/components/common/customer/product-grid/style.module.scss";
 import useGridStore from "@/library/stores/useGridStore";
+import { col } from "framer-motion/client";
 const products = [
   {
     id: 1,
@@ -143,12 +144,20 @@ const products = [
 ];
 const ProductGrid = () => {
   const column = useGridStore((state) => state.column);
+  const mobileColumn = useGridStore((state) => state.mobileColumn);
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <div
       className={styles.grid}
       style={{
-        gridTemplateColumns: `repeat(${column},1fr )`,
+        gridTemplateColumns: `repeat(${isMobile ? mobileColumn : column},1fr )`,
       }}
     >
       {products.map((product) => (

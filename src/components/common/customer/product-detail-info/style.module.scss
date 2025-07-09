@@ -1,0 +1,47 @@
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  top: 120px;
+  position: sticky;
+
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .price {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  .stock {
+    color: orangered;
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  .addToCart {
+    background: black;
+    color: white;
+    padding: 1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .benefits {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+
+    li {
+      margin-bottom: 0.3rem;
+    }
+  }
+}

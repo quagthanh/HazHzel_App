@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import ProductCard from "../product-card";
 import styles from "@/components/common/customer/product-grid/style.module.scss";
 import useGridStore from "@/library/stores/useGridStore";
-import { col } from "framer-motion/client";
 const products = [
   {
     id: 1,

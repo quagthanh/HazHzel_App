@@ -13,7 +13,6 @@ const PublicContent = ({
       <div
         style={{
           backgroundColor: "white",
-          minHeight: "100vh",
         }}
       >
         {children}

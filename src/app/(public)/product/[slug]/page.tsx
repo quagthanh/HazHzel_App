@@ -1,4 +1,6 @@
+import PublicProductPage from "@/components/feature/public/public.product";
+
 const ProductPage = () => {
-  return <>Productlist</>;
+  return <PublicProductPage></PublicProductPage>;
 };
 export default ProductPage;

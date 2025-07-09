@@ -5,7 +5,7 @@ import exampl2 from "@/../public/assets/Maison_Balzac_Olive_test.jpg";
 
 import styles from "@/components/common/customer/product-card/style.module.scss";
 import { IProduct } from "@/types/interface";
-import { PlusOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
 const ProductCard = ({
   id,

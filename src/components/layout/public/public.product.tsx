@@ -2,7 +2,7 @@
 
 import DetailPage from "@/components/common/customer/detail-product-page";
 
-const PublicProductPage = () => {
+const PublicProductDetailPage = () => {
   return <DetailPage />;
 };
-export default PublicProductPage;
+export default PublicProductDetailPage;

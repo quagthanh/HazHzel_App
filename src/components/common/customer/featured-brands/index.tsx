@@ -6,7 +6,7 @@ import styles from "@/components/common/customer/featured-brands/style.module.sc
 import Link from "next/link";
 import Image from "next/image";
 import { FeatureBrands } from "@/types/interface";
-import CustomButton from "@/components/feature/public/public-button";
+import CustomButton from "@/components/common/customer/public-button";
 const FeaturedBrands = () => {
   const featuredBrands: FeatureBrands[] = [
     {

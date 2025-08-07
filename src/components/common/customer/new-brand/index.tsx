@@ -4,7 +4,7 @@ import logo from "@/../public/assets/new_brand_img.webp";
 import { INewBrand } from "@/types/interface";
 
 import styles from "@/components/common/customer/new-brand/style.module.scss";
-import CustomButton from "@/components/feature/public/public-button";
+import CustomButton from "@/components/common/customer/public-button";
 import Link from "next/link";
 const newBrand: INewBrand[] = [
   {

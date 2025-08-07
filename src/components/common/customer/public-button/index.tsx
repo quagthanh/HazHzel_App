@@ -1,4 +1,4 @@
-import styles from "@/components/feature/public/public-button/style.module.scss";
+import styles from "@/components/common/customer/public-button/style.module.scss";
 type CustomButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "danger";
   changeColor?: boolean;

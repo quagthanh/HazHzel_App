@@ -3,7 +3,7 @@ import styles from "@/components/common/customer/product-detail-info/style.modul
 import SizeSelector from "../size-selection";
 import PaymentOptions from "../payment-option";
 import ProductDetailsTabs from "../product-detail-tabs";
-import CustomButton from "@/components/feature/public/public-button";
+import CustomButton from "@/components/common/customer/public-button";
 const ProductInfo = () => {
   return (
     <div className={styles.productInfo}>

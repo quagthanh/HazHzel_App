@@ -77,6 +77,7 @@ export interface INewBrand {
 export interface IProduct {
   id: number;
   name: string;
+  slug?: string;
   image: string;
   soldOut?: boolean;
   category?: string;
@@ -87,4 +88,12 @@ export interface SearchDrawerProps {
   open: boolean;
   onClose: () => void;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface ICancelButton {
+  onClick: () => void;
+  children: React.ReactNode;
+}
+export interface ICartItem {
+  onChangeTable: boolean;
 }

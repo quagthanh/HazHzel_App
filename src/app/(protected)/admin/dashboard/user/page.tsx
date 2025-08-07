@@ -20,7 +20,6 @@ const ManageUserPage = async (props: any) => {
     },
   });
   if (!res || +res.statusCode == 404) {
-    // console.log("Có vấn đề xảy ra trong lúc fetch users");
     return (
       <>
         <div>Không lấy được thông tin người dùng</div>

@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import BreadcrumbPublic from "../breadcrumb";
 import styles from "@/components/common/customer/title-center/style.module.scss";
-const TitleHeaderCentter = () => {
+const TitleHeaderCenter = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const title = pathSegments[1].toUpperCase() || "Page";
@@ -16,4 +16,4 @@ const TitleHeaderCentter = () => {
     </div>
   );
 };
-export default TitleHeaderCentter;
+export default TitleHeaderCenter;

@@ -4,6 +4,7 @@ import logo from "@/../public/assets/test6.png";
 import Image from "next/image";
 import styles from "@/components/common/customer/drawer/search-drawer/style.module.scss";
 import { SearchDrawerProps } from "@/types/interface";
+import CancelButton from "../../cancel-button";
 
 const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, setOpen }) => {
   const closeDrawer = () => {
@@ -27,9 +28,7 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, setOpen }) => {
           <Input.Search placeholder="Search" variant="filled" />
         </Col>
         <Col className={styles.center} xs={5} sm={8}>
-          <button className={styles.cancelBtn} onClick={closeDrawer}>
-            Cancel
-          </button>
+          <CancelButton onClick={closeDrawer}>Cancel</CancelButton>
         </Col>
       </Row>
     </Drawer>

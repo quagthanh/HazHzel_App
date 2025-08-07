@@ -3,7 +3,7 @@
 import BreadcrumbPublic from "@/components/common/customer/breadcrumb";
 import MainContent from "@/components/common/customer/category-content";
 import FilterBar from "@/components/common/customer/filter-bar";
-import TitleHeaderCentter from "@/components/common/customer/title-center";
+import TitleHeaderCenter from "@/components/common/customer/title-center";
 import { usePathname } from "next/navigation";
 
 export const filters = {
@@ -69,7 +69,7 @@ export const products = [
 const PublicCollectionPage = () => {
   return (
     <>
-      <TitleHeaderCentter />
+      <TitleHeaderCenter />
       <FilterBar />
       <MainContent />
     </>

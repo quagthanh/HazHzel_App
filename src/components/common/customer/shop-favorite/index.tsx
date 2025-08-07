@@ -6,7 +6,7 @@ import oas3 from "@/../public/assets/oas3.webp";
 import oas4 from "@/../public/assets/oas4.webp";
 
 import { ShopFavorite } from "@/types/interface";
-import CustomButton from "@/components/feature/public/public-button";
+import CustomButton from "@/components/common/customer/public-button";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 

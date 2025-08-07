@@ -3,7 +3,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Montserrat } from "next/font/google";
 import NextAuthWrapper from "@/library/next.auth.wrapper";
 import "@/scss/abstracts/_global.scss";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, InputNumber } from "antd";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -38,6 +38,10 @@ export default function RootLayout({
                 colorBgContainer: "#fffbf5",
               },
               Select: {
+                colorBgContainer: "#fffbf5",
+              },
+              InputNumber: {
+                activeBg: "#fffbf5",
                 colorBgContainer: "#fffbf5",
               },
             },

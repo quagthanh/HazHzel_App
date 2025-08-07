@@ -4,13 +4,21 @@ import { useEffect, useState } from "react";
 import ProductCard from "../product-card";
 import styles from "@/components/common/customer/product-grid/style.module.scss";
 import useGridStore from "@/library/stores/useGridStore";
+import Link from "next/link";
+import { ROUTE_CONFIG } from "@/shared/configs/route";
 const products = [
   {
     id: 1,
     name: "Sunglasses",
-    category: "car",
+    slug: "sung-glasses",
+    collections: "MR SIMPLE",
+    category: "Mon Renn",
     image: "/glasses.jpg",
     soldOut: true,
+    specificColor: 180310,
+    p1: "something very special",
+    p2: "FORTUNE TELLER CARDIGAN",
+    description: "- DENIM FABRICATION",
   },
   {
     id: 2,

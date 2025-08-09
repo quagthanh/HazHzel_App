@@ -19,7 +19,12 @@
 .collectionList {
   display: flex;
   gap: 40px;
+  flex-wrap: nowrap;
   justify-content: center;
+  @media (max-width: 800px) {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }
 .collectionCard {
   display: grid;
@@ -43,6 +48,9 @@
   }
 }
 .zoomImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
   transition: transform 5s ease;
 }
 .collectionCard:hover .zoomImage {

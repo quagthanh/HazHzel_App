@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "@/components/common/customer/filter-sidebar.tsx/style.module.scss";
-import { Switch } from "antd";
+import { Slider, Switch } from "antd";
 import DropdownSection from "@/components/common/customer/filter-sidebar.tsx/DropdownSection";
 
 const DROPDOWN_DATA: { label: string; items?: string[] }[] = [
@@ -78,10 +78,14 @@ export default function FilterSidebar() {
   const toggleDropdown = (label: string) =>
     setOpenDropdown((prev) => (prev === label ? null : label));
 
+  const [priceRange, setPriceRange] = useState<number[]>([0, 1000000000]);
   const handleStockChange = (checked: boolean) => {
     // Handle "In stock only" switch toggle
   };
 
+  const handlePriceChange = (value: number[]) => {
+    setPriceRange(value);
+  };
   return (
     <div className={styles.sidebar}>
       {DROPDOWN_DATA.map(({ label, items }) => (
@@ -98,7 +102,26 @@ export default function FilterSidebar() {
           </ul>
         </DropdownSection>
       ))}
-
+      <DropdownSection
+        label="Price"
+        isOpen={openDropdown === "Price"}
+        onToggle={() => toggleDropdown("Price")}
+      >
+        <div className={styles.priceSort}>
+          <Slider
+            range
+            min={0}
+            max={1000000000}
+            step={10000}
+            value={priceRange}
+            onChange={handlePriceChange}
+          />
+          <div>
+            {priceRange[0].toLocaleString()} ₫ -{" "}
+            {priceRange[1].toLocaleString()} ₫
+          </div>
+        </div>
+      </DropdownSection>
       <DropdownSection
         label="Availability"
         isOpen={openDropdown === "Availability"}

@@ -11,8 +11,24 @@
 }
 .collectionListTextOutSide {
   display: flex;
-  row-gap: 3rem;
+  flex-wrap: wrap;
+  gap: 3rem;
   justify-content: center;
+
+  .collectionCard {
+    flex: 1 1 calc(33.333% - 3rem);
+    max-width: calc(33.333% - 3rem);
+
+    @media (max-width: 1024px) {
+      flex: 1 1 calc(50% - 3rem);
+      max-width: calc(50% - 3rem);
+    }
+
+    @media (max-width: 768px) {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+  }
 }
 .wrap {
   @include wrap;
@@ -23,9 +39,16 @@
   gap: 20px;
 }
 .contentOverMedia {
-  display: grid;
   position: relative;
   overflow: hidden;
+
+  // Giữ tỷ lệ 635 x 672 của ảnh gốc
+  aspect-ratio: 635 / 672;
+
+  // Hoặc nếu không hỗ trợ aspect-ratio, dùng:
+  // height: 400px; // tùy kích thước bạn muốn
+
+  display: block;
 }
 .zoomImage {
   transition: transform 5s ease;

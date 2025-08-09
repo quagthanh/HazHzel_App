@@ -3,10 +3,11 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Montserrat } from "next/font/google";
 import NextAuthWrapper from "@/library/next.auth.wrapper";
 import "@/scss/abstracts/_global.scss";
-import { ConfigProvider, InputNumber } from "antd";
+import { ConfigProvider } from "antd";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({
           theme={{
             token: {
               colorPrimary: "#7D7D7D",
+              fontFamily: "Montserrat, sans-serif",
             },
             components: {
               Input: {
@@ -43,6 +45,11 @@ export default function RootLayout({
               InputNumber: {
                 activeBg: "#fffbf5",
                 colorBgContainer: "#fffbf5",
+              },
+              Table: {
+                colorBgContainer: "#fffbf5",
+                rowHoverBg: "#fffbf5",
+                headerBg: "#fffbf5",
               },
             },
           }}

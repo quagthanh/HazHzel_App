@@ -1,7 +1,38 @@
+@use "../../../../scss/abstracts/variables" as *;
+.sectionSpacing {
+  @include section-spacing;
+  background-color: $primary-color;
+}
+.container {
+  @include container;
+}
+
+.cartWrapper {
+  padding: 0 300px;
+  text-align: center;
+
+  h1 {
+    margin-bottom: 5px;
+  }
+
+  p {
+    color: #555;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 1200px) {
+    padding: 0 100px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    text-align: left;
+  }
+}
+
 .cartItem {
-  padding: 1.5rem 0;
   display: flex;
-  gap: 1rem;
+  align-items: flex-start;
+  gap: 15px;
 }
 
 .productInfo {
@@ -45,4 +76,9 @@
     transform: scaleX(1); // mở rộng ra từ phải sang trái
     transform-origin: left;
   }
+}
+.checkOutBtn {
+  padding-top: 40px;
+  display: flex;
+  justify-content: flex-end;
 }

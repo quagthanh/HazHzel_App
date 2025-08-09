@@ -6,18 +6,15 @@ import styles from "@/components/common/customer/drawer/search-drawer/style.modu
 import { SearchDrawerProps } from "@/types/interface";
 import CancelButton from "../../cancel-button";
 
-const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, setOpen }) => {
-  const closeDrawer = () => {
-    setOpen?.(false);
-  };
+const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
   return (
     <Drawer
       open={open}
       placement="top"
-      maskClosable={false}
+      maskClosable={true}
       width="100%"
       style={{ backgroundColor: "rgb(255, 251, 245)" }}
-      onClose={closeDrawer}
+      onClose={onClose}
       closable={false}
     >
       <Row>
@@ -28,7 +25,7 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, setOpen }) => {
           <Input.Search placeholder="Search" variant="filled" />
         </Col>
         <Col className={styles.center} xs={5} sm={8}>
-          <CancelButton onClick={closeDrawer}>Cancel</CancelButton>
+          <CancelButton onClick={onClose}>Cancel</CancelButton>
         </Col>
       </Row>
     </Drawer>

@@ -23,13 +23,21 @@ $text-font-weight: 400;
 $text-font-family: "Montserrat", sans-serif !important;
 
 //spacing
-@mixin section-spacing($pt: 48px, $pb: 48px) {
-  padding-top: $pt;
-  padding-bottom: $pb;
+@mixin section-spacing($ptd: 48px, $pbd: 48px, $ptm: 30px, $pbm: 30px) {
+  padding-top: $ptd;
+  padding-bottom: $pbd;
+  @media (max-width: 767px) {
+    padding-top: $ptm;
+    padding-bottom: $pbm;
+  }
 }
-@mixin container($pl: 48px, $pr: 48px) {
-  padding-left: $pl;
-  padding-right: $pr;
+@mixin container($pld: 48px, $prd: 48px, $plm: 10px, $prm: 10px) {
+  padding-left: $pld;
+  padding-right: $prd;
+  @media (max-width: 767px) {
+    padding-left: $plm;
+    padding-right: $prm;
+  }
 }
 
 //wrap

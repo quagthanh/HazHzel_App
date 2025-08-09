@@ -87,13 +87,14 @@ export interface IProduct {
 export interface SearchDrawerProps {
   open: boolean;
   onClose: () => void;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ICancelButton {
   onClick: () => void;
   children: React.ReactNode;
 }
-export interface ICartItem {
-  onChangeTable: boolean;
+
+export interface CartDrawerProps {
+  open: boolean;
+  onClose: () => void;
 }

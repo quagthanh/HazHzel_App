@@ -254,11 +254,7 @@ const NavBar: React.FC = () => {
           />
         </Link>
         <CartDrawer open={openCart} onClose={() => setOpenCart(false)} />
-        <SearchDrawer
-          open={openSearch}
-          setOpen={setOpenSearch}
-          onClose={() => setOpenSearch(false)}
-        />
+        <SearchDrawer open={openSearch} onClose={() => setOpenSearch(false)} />
       </div>
     </Header>
   );

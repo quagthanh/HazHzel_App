@@ -4,27 +4,30 @@ import CancelButton from "../../cancel-button";
 import CustomButton from "@/components/common/customer/public-button";
 import styles from "@/components/common/customer/drawer/cart-drawer/style.module.scss";
 import CartItem from "../../list-cart-item";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-interface CartDrawerProps {
-  open: boolean;
-  onClose: () => void;
-}
+import { CartDrawerProps } from "@/types/interface";
+import Link from "next/link";
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
   const router = useRouter();
-  const handleCloseDrawer = () => {
+  const handleCloseCartDrawer = () => {
     onClose();
     setTimeout(() => {
       router.push("/cart");
+    }, 0);
+  };
+  const handleOpenCheckout = () => {
+    onClose();
+    setTimeout(() => {
+      router.push("/checkout");
     }, 0);
   };
   return (
     <Drawer
       title={<p>CART</p>}
       placement="right"
-      maskClosable={false}
+      maskClosable={true}
+      onClose={onClose}
       open={open}
       bodyStyle={{ padding: "0 1.5rem" }}
       closeIcon={false}
@@ -37,12 +40,12 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
     >
       <div className={styles.container}>
         <div className={styles.content}>
-          <CartItem onChangeTable={false}></CartItem>
+          <CartItem></CartItem>
         </div>
         <div className={styles.drawerFooter}>
-          <CustomButton onClick={handleCloseDrawer}>View cart</CustomButton>
+          <CustomButton onClick={handleCloseCartDrawer}>View cart</CustomButton>
 
-          <CustomButton>check out</CustomButton>
+          <CustomButton onClick={handleOpenCheckout}>check out</CustomButton>
         </div>
       </div>
     </Drawer>

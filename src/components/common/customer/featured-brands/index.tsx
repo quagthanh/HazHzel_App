@@ -66,11 +66,10 @@ const FeaturedBrands = () => {
                 <div className={styles.contentOverMedia}>
                   <Image
                     src={brand.image[0].src}
-                    alt="img unisexcollection"
-                    width={635}
-                    height={672}
+                    alt="img"
+                    fill
                     className={styles.zoomImage}
-                    draggable={false}
+                    style={{ objectFit: "cover" }}
                   />
                 </div>
                 <div className={styles.cardContent}>

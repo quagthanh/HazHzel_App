@@ -41,13 +41,7 @@
 .contentOverMedia {
   position: relative;
   overflow: hidden;
-
-  // Giữ tỷ lệ 635 x 672 của ảnh gốc
   aspect-ratio: 635 / 672;
-
-  // Hoặc nếu không hỗ trợ aspect-ratio, dùng:
-  // height: 400px; // tùy kích thước bạn muốn
-
   display: block;
 }
 .zoomImage {

@@ -11,9 +11,9 @@ import UnisexCollections from "@/components/common/customer/unisex-collections";
 const PublicHomePage = () => {
   return (
     <>
-      <MarqueeText />
       <HeroPublic />
       <UnisexCollections />
+      <MarqueeText />
       <FeaturedBrands />
       <ShopFavorites />
       <NewBrand />

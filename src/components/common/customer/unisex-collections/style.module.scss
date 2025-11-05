@@ -30,6 +30,7 @@
   display: grid;
   gap: 1.5rem;
   align-content: start;
+  width: 1000px;
 }
 .contentOverMedia {
   position: relative;
@@ -83,7 +84,7 @@
     margin: 0;
   }
   .antBtn {
-    font-size: 16px; // Nhỏ hơn h3
+    font-size: 16px;
     color: rgb(var(--button-text-color));
     background-color: transparent;
     border: 1px solid rgb(var(--button-outline-color));

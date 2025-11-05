@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Montserrat } from "next/font/google";
 import NextAuthWrapper from "@/library/next.auth.wrapper";
-import "@/scss/abstracts/_global.scss";
+import "@/scss/dependencies/_global.scss";
 import { ConfigProvider } from "antd";
 
 const montserrat = Montserrat({

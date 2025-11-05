@@ -8,7 +8,7 @@ import oas4 from "@/../public/assets/oas4.webp";
 import { ShopFavorite } from "@/types/interface";
 import CustomButton from "@/components/common/customer/public-button";
 import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import {

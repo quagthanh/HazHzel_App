@@ -13,13 +13,12 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
 }
-//button
 $button-text-transform: uppercase;
-$button-font: 400 1rem/1.5 "Montserrat", sans-serif; // Phù hợp với Montserrat trong RootLayout
+$button-font: 400 1rem/1.5 "Montserrat", sans-serif; 
 $button-letter-spacing: 0.05em;
-$button-text-color: 0, 0, 0; // Màu đen
-$button-background: 51, 139, 56; // Phù hợp với $primary-color (#338b38)
-$button-outline-color: 51, 139, 56; // Đồng bộ với nền
+$button-text-color: 0, 0, 0;
+$button-background: 51, 139, 56; 
+$button-outline-color: 51, 139, 56; 
 $button-border-radius: 4px;
 
 $hover-gradient: linear-gradient(transparent, transparent);

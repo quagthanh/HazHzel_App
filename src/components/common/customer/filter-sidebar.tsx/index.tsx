@@ -117,8 +117,8 @@ export default function FilterSidebar() {
             onChange={handlePriceChange}
           />
           <div>
-            {priceRange[0].toLocaleString()} ₫ -{" "}
-            {priceRange[1].toLocaleString()} ₫
+            {priceRange[0].toLocaleString("vi-VN")} ₫ -{" "}
+            {priceRange[1].toLocaleString("vi-VN")} ₫
           </div>
         </div>
       </DropdownSection>

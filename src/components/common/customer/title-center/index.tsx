@@ -6,7 +6,7 @@ import styles from "@/components/common/customer/title-center/style.module.scss"
 const TitleHeaderCenter = () => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
-  const title = pathSegments[1].toUpperCase() || "Page";
+const title = pathSegments[1]?.toUpperCase() || pathSegments[0]?.toUpperCase() || "Page";
   return (
     <div className={styles.wrapper}>
       <div className={styles.breadcrumb}>

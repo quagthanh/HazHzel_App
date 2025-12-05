@@ -1,9 +1,5 @@
 import { auth } from "@/auth";
-import AdminContent from "@/components/layout/admin_layout/admin.content";
-import AdminFooter from "@/components/layout/admin_layout/admin.footer";
-import AdminHeader from "@/components/layout/admin_layout/admin.header";
-import AdminSideBar from "@/components/layout/admin_layout/admin.sidebar";
-import { AdminContextProvider } from "@/library/admin.context";
+import AdminDashBoardLayout from "@/components/layout/admin_layout/admin.index";
 
 const AdminLayout = async ({
   children,
@@ -11,20 +7,7 @@ const AdminLayout = async ({
   children: React.ReactNode;
 }>) => {
   const session = await auth();
-  return (
-    <AdminContextProvider>
-      <div style={{ display: "flex" }}>
-        <div className="left-side" style={{ minWidth: 80 }}>
-          <AdminSideBar />
-        </div>
-        <div className="right-side" style={{ flex: 1 }}>
-          <AdminHeader session={session} />
-          <AdminContent>{children}</AdminContent>
-          <AdminFooter />
-        </div>
-      </div>
-    </AdminContextProvider>
-  );
+  return <AdminDashBoardLayout session={session}>{children}</AdminDashBoardLayout>;
 };
 
 export default AdminLayout;

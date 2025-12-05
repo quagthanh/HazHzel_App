@@ -1,113 +1,52 @@
 "use client";
+import { base_url } from "@/constants";
+import { AdminDashboadContext } from "@/library/admin.context";
+import { itemsSidebar } from "@/shared/configs/menu/adminMenu";
 import Layout from "antd/es/layout";
 import Menu from "antd/es/menu";
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
-import React, { useContext } from "react";
-import { AdminContext } from "@/library/admin.context";
-import type { MenuProps } from "antd";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useContext, useState } from "react";
 
-type MenuItem = Required<MenuProps>["items"][number];
 const AdminSideBar = () => {
+  
   const { Sider } = Layout;
-  const { collapseMenu } = useContext(AdminContext)!;
+  const context = useContext(AdminDashboadContext);
+  if (!context) {
+    return null;
+  }
+  const { collapsed } = context;
   const pathname = usePathname();
-  const getSelected = () => {
-    if (pathname === "/admin/dashboard/user") {
-      return "users";
-    } else {
-      return "dashboard";
-    }
-  };
-  const items: MenuItem[] = [
-    {
-      key: "grp",
-      label: "AccountFreak",
-      type: "group",
-      children: [
-        {
-          key: "dashboard",
-          label: <Link href={"/admin/dashboard"}>Dashboard</Link>,
-          icon: <AppstoreOutlined />,
-        },
-        {
-          key: "users",
-          label: <Link href={"/admin/dashboard/user"}>Quản lý người dùng</Link>,
-          icon: <TeamOutlined />,
-        },
-        {
-          key: "sub1",
-          label: "Navigation One",
-          icon: <MailOutlined />,
-          children: [
-            {
-              key: "g1",
-              label: "Item 1",
-              type: "group",
-              children: [
-                { key: "1", label: "Option 1" },
-                { key: "2", label: "Option 2" },
-              ],
-            },
-            {
-              key: "g2",
-              label: "Item 2",
-              type: "group",
-              children: [
-                { key: "3", label: "Option 3" },
-                { key: "4", label: "Option 4" },
-              ],
-            },
-          ],
-        },
-        {
-          key: "sub2",
-          label: "Navigation Two",
-          icon: <AppstoreOutlined />,
-          children: [
-            { key: "5", label: "Option 5" },
-            { key: "6", label: "Option 6" },
-            {
-              key: "sub3",
-              label: "Submenu",
-              children: [
-                { key: "7", label: "Option 7" },
-                { key: "8", label: "Option 8" },
-              ],
-            },
-          ],
-        },
-        {
-          type: "divider",
-        },
-        {
-          key: "sub4",
-          label: "Navigation Three",
-          icon: <SettingOutlined />,
-          children: [
-            { key: "9", label: "Option 9" },
-            { key: "10", label: "Option 10" },
-            { key: "11", label: "Option 11" },
-            { key: "12", label: "Option 12" },
-          ],
-        },
-      ],
-    },
-  ];
+  const checkPoint = (pathname: string) => {
+  if (pathname === "/admin/dashboard/product/list") return "product-list";
+  if (pathname === "/admin/dashboard/product/grid") return "product-grid";
+  if (pathname === "/admin/dashboard/product/details") return "product-details";
+  if (pathname === "/admin/dashboard/product/add") return "add-product";
+  if (pathname === "/admin/dashboard/user") return "users";
+  if (pathname === "/admin/dashboard/order/list") return "order-list";
+  if (pathname === "/admin/dashboard/order/details") return "order-details";
+  if (pathname === "/admin/dashboard/customer/list") return "customer-list";
+  if (pathname === "/admin/dashboard/customer/details") return "customer-details";
+  if (pathname === "/admin/dashboard/customer/add") return "add-customer";
+  if (pathname === "/admin/dashboard/shopping-cart/list") return "shopping-cart-list";
+  if (pathname === "/admin/dashboard/checkout") return "checkout";
+  return "dashboard"; 
+};
 
-  return (
-    <Sider collapsed={collapseMenu}>
+  const selectedPage=checkPoint(pathname)
+    return (
+    <Sider
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+      breakpoint="lg"
+      collapsedWidth="0"
+    >
+      <div className="demo-logo-vertical" />
       <Menu
+        theme="dark"
         mode="inline"
-        defaultSelectedKeys={[getSelected()]}
-        items={items}
-        style={{ height: "100vh" }}
+        defaultSelectedKeys={[selectedPage]}
+        items={itemsSidebar}
       />
     </Sider>
   );

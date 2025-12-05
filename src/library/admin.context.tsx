@@ -1,22 +1,19 @@
-'use client'
-
-import { createContext, useContext, useState } from "react";
-
+import { createContext, useState } from "react";
 interface IAdminContext {
-    collapseMenu: boolean;
-    setCollapseMenu: (v: boolean) => void;
+  collapsed: boolean;
+  setCollapsed: (v: boolean) => void;
 }
+export const AdminDashboadContext = createContext<IAdminContext | null>(null);
+export const AdminDashboadProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [collapsed, setCollapsed] = useState(false);
 
-export const AdminContext = createContext<IAdminContext | null>(null);
-
-export const AdminContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [collapseMenu, setCollapseMenu] = useState(false);
-
-    return (
-        <AdminContext.Provider value={{ collapseMenu, setCollapseMenu }}>
-            {children}
-        </AdminContext.Provider>
-    )
+  return (
+    <AdminDashboadContext.Provider value={{ collapsed, setCollapsed }}>
+      {children}
+    </AdminDashboadContext.Provider>
+  );
 };
-
-export const useAdminContext = () => useContext(AdminContext);

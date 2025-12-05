@@ -6,7 +6,7 @@ const AdminFooter = () => {
 
   return (
     <Footer style={{ textAlign: "center" }}>
-      AccountFreak ©{new Date().getFullYear()} Created by @AccountFreak
+      Ant Design ©{new Date().getFullYear()} Created by Ant UED
     </Footer>
   );
 };

@@ -1,65 +1,63 @@
 "use client";
-import { AdminContext } from "@/library/admin.context";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Button, Layout } from "antd";
-import { useContext } from "react";
-import { DownOutlined, SmileOutlined } from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Dropdown, Space } from "antd";
-import { signOut } from "next-auth/react";
+import { userMenu } from "@/shared/configs/menu/adminMenu";
+import { BellOutlined } from "@ant-design/icons";
+import { Avatar, Badge, Dropdown, Layout, Select, Space, Tooltip } from "antd";
 
-const AdminHeader = (props: any) => {
-  const { Header } = Layout;
-  const { collapseMenu, setCollapseMenu } = useContext(AdminContext)!;
-  const { session } = props;
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: <span>Setting </span>,
-    },
+const { Header } = Layout;
 
-    {
-      key: "2",
-      danger: true,
-      label: <span onClick={() => signOut()}>Đăng xuất</span>,
-    },
-  ];
-
+const AdminHeader = ({ session }: any) => {
+  const handleClick = (e: any) => {
+    console.log(e.key);
+  };
   return (
     <Header
       style={{
-        padding: 0,
         display: "flex",
-        background: "#f5f5f5",
-        justifyContent: "space-between",
         alignItems: "center",
+        background: "black",
+        padding: "0 24px",
+        justifyContent: "space-between",
       }}
     >
-      <Button
-        type="text"
-        icon={collapseMenu ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-        onClick={() => setCollapseMenu(!collapseMenu)}
+      <div
         style={{
-          fontSize: "16px",
-          width: 64,
-          height: 64,
+          color: "white",
+          fontSize: 20,
+          fontWeight: 600,
         }}
-      />
-      <Dropdown menu={{ items }}>
-        <a
-          onClick={(e) => e.preventDefault()}
-          style={{
-            color: "unset",
-            lineHeight: "0 !important",
-            marginRight: 20,
+      >
+        LOGO
+      </div>
+
+      <Space size="large">
+        <Select
+          defaultValue="vi"
+          options={[
+            { value: "vi", label: "VN" },
+            { value: "en", label: "EN" },
+          ]}
+        />
+
+        <Tooltip title="Thông báo">
+          <Badge count={5} size="small">
+            <BellOutlined style={{ fontSize: 20, color: "white" }} />
+          </Badge>
+        </Tooltip>
+
+        <Dropdown
+          menu={{
+            onClick: handleClick,
+            items: userMenu,
           }}
+          placement="bottomRight"
+          trigger={["hover"]}
         >
-          <Space>
-            Welcome {session?.user?.email ?? ""}
-            <DownOutlined />
+          <Space style={{ cursor: "pointer", color: "white" }}>
+            <Avatar src="https://i.pravatar.cc/150?img=3" />
+            <span>{session?.user?.name}</span>
           </Space>
-        </a>
-      </Dropdown>
+        </Dropdown>
+      </Space>
     </Header>
   );
 };

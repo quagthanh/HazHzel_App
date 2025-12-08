@@ -7,11 +7,14 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { sendRequest } from "@/utils/api";
-import { IBackendRes } from "@/types/backend";
-
+import {
+  handleCheckCode,
+  handleRetryActive,
+  retryActiveDTO,
+} from "@/services/auth.api";
+import styles from "@/components/feature/auth/reactive-model/style.module.scss";
 export default function ModalReactive(props: any) {
-  const { isModalOpen, setIsModalOpen, userEmail } = props;
+  const { isModalOpen, onClose, userEmail } = props;
   const [current, setCurrent] = useState(0);
   const [userId, setUserId] = useState<string | null>("");
   const [form] = Form.useForm();
@@ -20,49 +23,48 @@ export default function ModalReactive(props: any) {
       form.setFieldValue("email", userEmail);
     }
   }, [userEmail]);
+  useEffect(() => {
+    console.log(`Log current: ${current} and userId: ${userId}`);
+  }, [userId, current]);
 
   const hasMounted = useHasMounted();
   if (!hasMounted) {
     return <></>;
   }
   const handleOk = () => {
-    setIsModalOpen(false);
+    onClose();
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    onClose();
   };
 
   const onFinishStep0 = async (value: any) => {
     const { email } = value;
-    const res = await sendRequest<IBackendRes<any>>({
-      method: "POST",
-      url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/retry-active`,
-      body: {
-        email,
-      },
-    });
+    const res = await handleRetryActive({ email });
+    console.log("Check res step 0", res);
     if (res?.data) {
-      setUserId(res?.data?._id);
+      setUserId(res?.data?.data?._id);
       setCurrent(1);
     } else {
       notification.error({
-        message: res.message,
-        description: "Lỗi khi xác nhận code xác nhận lại",
+        message: res?.result?.data?.message,
+        description: "Something go wrong when re-active the code",
       });
     }
   };
 
   const onFinishStep1 = async (value: any) => {
+    console.log(value);
     const { code } = value;
-    const res = await sendRequest<IBackendRes<any>>({
-      method: "POST",
-      url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/check-code`,
-      body: {
-        _id: userId,
-        code: code,
-      },
-    });
+    if (!userId) {
+      return null;
+    }
+    const checkCode = {
+      _id: userId,
+      code,
+    };
+    const res = await handleCheckCode(checkCode);
     if (res?.data) {
       setCurrent(2);
     } else {
@@ -101,9 +103,8 @@ export default function ModalReactive(props: any) {
       />
       {current == 0 && (
         <>
-          {" "}
           <div style={{ margin: "20px 0" }}>
-            <p>Tài khoản của bạn chưa được kích hoạt!</p>
+            <p>Your account has not active yet</p>
           </div>
           <Form
             name="Verify"
@@ -117,8 +118,12 @@ export default function ModalReactive(props: any) {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Gửi lại mã
+              <Button
+                type="primary"
+                htmlType="submit"
+                className={styles.submitButton}
+              >
+                Resend code
               </Button>
             </Form.Item>
           </Form>
@@ -126,9 +131,8 @@ export default function ModalReactive(props: any) {
       )}
       {current === 1 && (
         <>
-          {" "}
           <div style={{ margin: "20px 0" }}>
-            <p>Hãy nhập mã kích hoạt lại!</p>
+            <p>Please enter the code again</p>
           </div>
           <Form
             name="Verif2"
@@ -142,8 +146,13 @@ export default function ModalReactive(props: any) {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Xác nhận
+              <Button
+                key="back-button"
+                type="primary"
+                htmlType="submit"
+                className={styles.submitButton}
+              >
+                Submit
               </Button>
             </Form.Item>
           </Form>
@@ -151,15 +160,18 @@ export default function ModalReactive(props: any) {
       )}
       {current === 2 && (
         <>
-          {" "}
           <div style={{ margin: "20px 0" }}>
             <Result
               status="success"
-              title="Tài khoản của bạn đã được kích hoạt thành công"
-              subTitle="Bạn có thể quay lại đăng nhập"
+              title="Your account has already actived"
+              subTitle="Now you can go back to login page"
               extra={[
-                <Button type="primary" onClick={handleOk} key="">
-                  Quay lại
+                <Button
+                  type="primary"
+                  onClick={handleOk}
+                  className={styles.submitButton}
+                >
+                  Back
                 </Button>,
               ]}
             />

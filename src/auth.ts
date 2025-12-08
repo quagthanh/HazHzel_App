@@ -19,17 +19,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           password: credentials.password,
         } as loginDTO;
         const res = await handleLogin(login);
+
         if (res?.data?.statusCode === 201) {
           return {
-            _id: res.data?.data?.user?._id,
-            name: res.data?.data?.user?.name,
-            email: res.data?.data?.user?.email,
-            roles: res.data?.data?.user?.roles,
-            access_token: res.data?.data?.user?.access_token,
-          };
-        } else if (res?.response?.data?.statusCode === 401) {
+            ...res?.data?.data?.user,
+            access_token: res?.data?.data?.access_token,
+          } as IUser;
+        } else if (res?.response?.status === 401) {
           throw new InvalidEmailPasswordError();
-        } else if (res?.response?.data?.statusCode === 400) {
+        } else if (res?.response?.status === 400) {
           throw new InactiveAccountError();
         } else {
           throw new Error("Internal server error");
@@ -43,13 +41,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        // User is available during sign-in
+        token.access_token = (user as IUser).access_token;
         token.user = user as IUser;
       }
       return token;
     },
     session({ session, token }) {
       (session.user as IUser) = token.user;
+      session.access_token = token.access_token;
       return session;
     },
     authorized: async ({ auth }) => {

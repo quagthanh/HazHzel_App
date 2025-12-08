@@ -33,7 +33,7 @@ declare global {
       name: string;
       email: string;
       roles: string[];
+      access_token: string;
     };
-    access_token: string;
   }
 }

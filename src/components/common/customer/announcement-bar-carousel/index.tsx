@@ -9,11 +9,9 @@ const AnnouncementBar = () => {
   const carouselRef = useRef<any>(null);
   const handlePrev = () => {
     carouselRef.current?.prev();
-    console.log("prev", carouselRef.current?.prev());
   };
   const handleNext = () => {
     carouselRef.current?.next();
-    console.log("next", carouselRef.current?.next());
   };
   const announcements = [
     "extra 30% off sale | code EXTRA30",

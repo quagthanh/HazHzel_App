@@ -2,32 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Next.js: debug full stack",
+      "name": "Next.js debug",
       "type": "node",
       "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 9229,
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--inspect",
+        "node_modules/next/dist/bin/next",
+        "dev"
+      ],
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"],
-      "sourceMaps": true,
-      "serverReadyAction": {
-        "pattern": "started server on .*, url: (https?://.+)",
-        "uriFormat": "%s",
-        "action": "debugWithChrome"
-      },
-      "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "Next.js: debug client-side",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///./*": "${workspaceFolder}/*"
-      }
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

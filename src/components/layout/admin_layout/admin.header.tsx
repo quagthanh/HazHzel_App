@@ -6,9 +6,7 @@ import { Avatar, Badge, Dropdown, Layout, Select, Space, Tooltip } from "antd";
 const { Header } = Layout;
 
 const AdminHeader = ({ session }: any) => {
-  const handleClick = (e: any) => {
-    console.log(e.key);
-  };
+  const handleClick = (e: any) => {};
   return (
     <Header
       style={{

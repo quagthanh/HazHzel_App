@@ -18,9 +18,7 @@ interface CartItemType {
 }
 
 export default function CartTable({ items }: { items: CartItemType[] }) {
-  const onChange = (value: number | null) => {
-    console.log("new quantity", value);
-  };
+  const onChange = (value: number | null) => {};
 
   const columns = [
     {

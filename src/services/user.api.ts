@@ -1,14 +1,19 @@
 import { api } from "@/utils/api";
-import { message } from "antd";
 
-export async function getUser(): Promise<any> {
+export async function getUser({
+  current,
+  pageSize,
+}: {
+  current: number;
+  pageSize: number;
+}): Promise<any> {
   try {
     const result = await api.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/users`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/users?current=${current}&pageSize=${pageSize}`
     );
     return result;
   } catch (error) {
-    console.log("Error at user api", error);
+    throw error;
   }
 }
 

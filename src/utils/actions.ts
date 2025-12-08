@@ -1,8 +1,11 @@
 "use server";
 import { signIn } from "@/auth";
+import { FormData } from "@/components/common/admin/login-form/login-form";
+import { auth } from "@/auth";
 
-export async function authenticate(username: string, password: string) {
+export async function authenticate(formData: FormData) {
   try {
+    const { username, password } = formData;
     const r = await signIn("credentials", {
       username: username,
       password: password,
@@ -24,4 +27,9 @@ export async function authenticate(username: string, password: string) {
       return { error: "Internal server error", code: 0 };
     }
   }
+}
+
+export async function getSessionToken() {
+  const session = await auth();
+  return session?.user?.access_token;
 }

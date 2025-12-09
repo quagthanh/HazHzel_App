@@ -1,3 +1,4 @@
+"use client";
 import { api } from "@/utils/api";
 
 export async function getUser({
@@ -16,56 +17,33 @@ export async function getUser({
     throw error;
   }
 }
-
-// "use server";
-
-// import { auth } from "@/auth";
-// import { IBackendRes } from "@/types/backend";
-// import { sendRequest } from "@/utils/api";
-// import { revalidateTag } from "next/cache";
-
-// export interface IUserData {
-//   name: string;
-//   email: string;
-//   password: string;
-// }
-// export const handleCreateUser = async ({
-//   name,
-//   email,
-//   password,
-// }: IUserData) => {
-//   const session = await auth();
-//   const res = await sendRequest<IBackendRes<any>>({
-//     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users`,
-//     method: "POST",
-//     headers: { Authorization: `Bearer ${session?.user?.access_token}` },
-//     body: { name, email, password },
-//   });
-//   revalidateTag("users");
-//   return res;
-// };
-// export const handleDeleteUser = async (props: any) => {
-//   const { _id } = props;
-//   const session = await auth();
-//   const res = await sendRequest<IBackendRes<any>>({
-//     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/${_id}`,
-//     method: "DELETE",
-//     headers: { Authorization: `Bearer ${session?.user?.access_token}` },
-//   });
-//   revalidateTag("users");
-//   return res;
-// };
-
-// export const handleEditUser = async (props: any) => {
-//   const session = await auth();
-//   const res = await sendRequest<IBackendRes<any>>({
-//     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users`,
-//     method: "PATCH",
-//     headers: {
-//       Authorization: `Bearer ${session?.user?.access_token}`,
-//     },
-//     body: { ...props },
-//   });
-//   revalidateTag("users");
-//   return res;
-// };
+export async function handleCreateUser({
+  name,
+  email,
+  password,
+}: {
+  name: string;
+  email: string;
+  password: string;
+}) {
+  try {
+    const result = await api.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users`,
+      { name, email, password }
+    );
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function handleEditUser(data: any) {
+  try {
+    const result = await api.patch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users`,
+      data
+    );
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+}

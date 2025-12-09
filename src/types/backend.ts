@@ -45,6 +45,48 @@ export interface IUser {
   createdAt?: string;
   updatedAt?: string;
 }
+export interface IProductImage {
+  public_id: string;
+  secure_url: string;
+  width: number;
+  height: number;
+}
+
+export interface IProductCategory {
+  _id: string;
+  name: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
+}
+
+export interface IProductSupplier {
+  _id: string;
+  name: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
+}
+
+export interface IProductVariant {}
+
+export interface IProduct {
+  _id: string;
+  name: string;
+  description: string;
+  stock: number;
+  views: number;
+  categoryId: IProductCategory;
+  supplierId: IProductSupplier;
+  variants: IProductVariant[];
+  images: IProductImage[];
+  status: "ACTIVE" | "INACTIVE" | string;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
+}
 
 export interface IUserTable {
   _id: string;

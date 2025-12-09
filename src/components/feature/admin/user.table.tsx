@@ -18,7 +18,6 @@ interface Meta {
 }
 
 interface Props {
-  // optional initial server-side data; nếu không có thì fetch client hoàn toàn
   initialUsers?: IUser[];
   initialMeta?: Meta;
 }

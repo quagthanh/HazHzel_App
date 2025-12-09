@@ -5,6 +5,7 @@ import NextAuthWrapper from "@/library/next.auth.wrapper";
 import "@/scss/partial/_body.scss";
 import { ConfigProvider } from "antd";
 import PreventFlash from "@/components/common/preventFlash";
+import { SessionProviders } from "./provider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -55,10 +56,12 @@ export default function RootLayout({
             },
           }}
         >
-          <PreventFlash />
-          <AntdRegistry>
-            <NextAuthWrapper>{children}</NextAuthWrapper>
-          </AntdRegistry>
+          <SessionProviders>
+            <PreventFlash />
+            <AntdRegistry>
+              <NextAuthWrapper>{children}</NextAuthWrapper>
+            </AntdRegistry>
+          </SessionProviders>
         </ConfigProvider>
       </body>
     </html>

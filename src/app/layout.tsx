@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Montserrat } from "next/font/google";
-import NextAuthWrapper from "@/library/next.auth.wrapper";
 import "@/scss/partial/_body.scss";
 import { ConfigProvider } from "antd";
 import PreventFlash from "@/components/common/preventFlash";
@@ -24,45 +23,43 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: "#7D7D7D",
-              fontFamily: "Montserrat, sans-serif",
-            },
-            components: {
-              Input: {
-                colorText: "#343534",
-                colorBgContainer: "#fffbf5",
+        <SessionProviders>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: "#7D7D7D",
+                fontFamily: "Montserrat, sans-serif",
               },
-              Button: {
-                colorBgContainer: "#fffbf5",
+              components: {
+                Input: {
+                  colorText: "#343534",
+                  colorBgContainer: "#fffbf5",
+                },
+                Button: {
+                  colorBgContainer: "#fffbf5",
+                },
+                Pagination: {
+                  colorBgContainer: "#fffbf5",
+                },
+                Select: {
+                  colorBgContainer: "#fffbf5",
+                },
+                InputNumber: {
+                  activeBg: "#fffbf5",
+                  colorBgContainer: "#fffbf5",
+                },
+                Table: {
+                  colorBgContainer: "#fffbf5",
+                  rowHoverBg: "#fffbf5",
+                  headerBg: "#fffbf5",
+                },
               },
-              Pagination: {
-                colorBgContainer: "#fffbf5",
-              },
-              Select: {
-                colorBgContainer: "#fffbf5",
-              },
-              InputNumber: {
-                activeBg: "#fffbf5",
-                colorBgContainer: "#fffbf5",
-              },
-              Table: {
-                colorBgContainer: "#fffbf5",
-                rowHoverBg: "#fffbf5",
-                headerBg: "#fffbf5",
-              },
-            },
-          }}
-        >
-          <SessionProviders>
+            }}
+          >
             <PreventFlash />
-            <AntdRegistry>
-              <NextAuthWrapper>{children}</NextAuthWrapper>
-            </AntdRegistry>
-          </SessionProviders>
-        </ConfigProvider>
+            <AntdRegistry>{children}</AntdRegistry>
+          </ConfigProvider>
+        </SessionProviders>
       </body>
     </html>
   );

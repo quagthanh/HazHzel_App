@@ -45,7 +45,6 @@ const UserTable = ({ initialUsers = [], initialMeta }: Props) => {
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false);
   const [dataUpdate, setDataUpdate] = useState<IUser | null>(null);
 
-  // fetch when current / pageSize change
   useEffect(() => {
     let mounted = true;
     const fetchUsers = async () => {
@@ -55,7 +54,6 @@ const UserTable = ({ initialUsers = [], initialMeta }: Props) => {
           current: paramCurrent,
           pageSize: paramPageSize,
         });
-        // giả sử res.data.data.result + res.data.data.meta theo cấu trúc backend bạn dùng
         const result = res?.data?.data?.result ?? [];
         const m = res?.data?.data?.meta ?? {};
         if (!mounted) return;
@@ -77,7 +75,7 @@ const UserTable = ({ initialUsers = [], initialMeta }: Props) => {
     return () => {
       mounted = false;
     };
-  }, [paramCurrent, paramPageSize]); // dependencies: derived from searchParams
+  }, [paramCurrent, paramPageSize]);
 
   const onClickCreate = () => setIsUserCreateModalOpen(true);
 
@@ -88,12 +86,9 @@ const UserTable = ({ initialUsers = [], initialMeta }: Props) => {
       "pageSize",
       pagination.pageSize?.toString() ?? meta.pageSize.toString()
     );
-    // dùng replace để không push lịch sử mới (tuỳ bạn)
     router.replace(`${pathname}?${params.toString()}`);
-    // Khi searchParams thay đổi, paramCurrent sẽ update => effect chạy lại
   };
 
-  // memoize data/columns to avoid rerenders
   const dataSource = useMemo(
     () =>
       users.map((u) => ({

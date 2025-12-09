@@ -1,3 +1,4 @@
+"use client";
 import { auth } from "@/auth";
 import axios from "axios";
 import { getSession, useSession } from "next-auth/react";
@@ -9,7 +10,6 @@ export const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const token = useAuthStore.getState().accessToken;
-    console.log("Check new session", token);
     config.headers["Content-Type"] = "application/json";
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

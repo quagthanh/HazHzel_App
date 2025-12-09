@@ -23,9 +23,6 @@ export default function ModalReactive(props: any) {
       form.setFieldValue("email", userEmail);
     }
   }, [userEmail]);
-  useEffect(() => {
-    console.log(`Log current: ${current} and userId: ${userId}`);
-  }, [userId, current]);
 
   const hasMounted = useHasMounted();
   if (!hasMounted) {

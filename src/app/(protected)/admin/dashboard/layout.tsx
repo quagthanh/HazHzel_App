@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import AdminDashBoardLayout from "@/components/layout/admin_layout/admin.index";
+import { ConfigProvider } from "antd";
 
 const AdminLayout = async ({
   children,
@@ -7,7 +8,11 @@ const AdminLayout = async ({
   children: React.ReactNode;
 }>) => {
   const session = await auth();
-  return <AdminDashBoardLayout session={session}>{children}</AdminDashBoardLayout>;
+  return (
+    <>
+      <AdminDashBoardLayout session={session}>{children}</AdminDashBoardLayout>
+    </>
+  );
 };
 
 export default AdminLayout;

@@ -1,8 +1,4 @@
-"use client";
-import { auth } from "@/auth";
 import axios from "axios";
-import { getSession, useSession } from "next-auth/react";
-import { getSessionToken } from "./actions";
 import { useAuthStore } from "@/library/stores/useAuthStore";
 export const api = axios.create({
   baseURL: "process.env.NEXT_PUBLIC_BACKEND_URL",

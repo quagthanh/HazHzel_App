@@ -1,7 +1,7 @@
 "use client";
 import { api } from "@/utils/api";
 
-export async function getProduct({
+export async function getProducts({
   current,
   pageSize,
 }: {

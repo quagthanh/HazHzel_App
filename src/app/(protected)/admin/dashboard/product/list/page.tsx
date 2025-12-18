@@ -1,5 +1,4 @@
-import ProductListClient from "@/components/feature/admin/product/product-list";
-import { getProduct } from "@/services/product.api";
+import ProductListClient from "@/components/feature/admin/product/product-list/product.list";
 
 const ProductListPage = async () => {
   return <ProductListClient />;

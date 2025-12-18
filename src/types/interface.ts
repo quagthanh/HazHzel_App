@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import { IUser } from "./next-auth";
 
 export interface Promo {
   href: string;
@@ -97,4 +98,15 @@ export interface ICancelButton {
 export interface CartDrawerProps {
   open: boolean;
   onClose: () => void;
+}
+export interface Meta {
+  current: number;
+  pageSize: number;
+  total: number;
+  pages?: number;
+}
+
+export interface UserListProps {
+  initialUsers?: IUser[];
+  initialMeta?: Meta;
 }

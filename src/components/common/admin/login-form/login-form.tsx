@@ -50,7 +50,7 @@ const LoginForm = () => {
           return;
         }
         notification.error({
-          message: "Lỗi xảy ra khi đăng nhập",
+          message: "Lỗi trong quá trình xác thực tài khoản",
           description: res?.error,
         });
       } else {

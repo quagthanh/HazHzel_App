@@ -1,9 +1,7 @@
-import { PageNotFound } from "@/components/common/pagenotfound";
-import UserTable from "@/components/feature/admin/user.table";
-import { getUser } from "@/services/user.api";
+import UserListClient from "@/components/feature/admin/user/user.list";
 
 const ManageUserPage = async () => {
-  return <UserTable />;
+  return <UserListClient />;
 };
 
 export default ManageUserPage;

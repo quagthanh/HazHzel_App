@@ -103,3 +103,36 @@ export interface IProps {
     total: number;
   };
 }
+export interface IImage {
+  public_id: string;
+  secure_url: string;
+  width: number;
+  height: number;
+}
+
+export interface ICategory {
+  _id: string;
+  name: string;
+  isActive: boolean;
+}
+
+export interface ISupplier {
+  _id: string;
+  name: string;
+  status: string;
+}
+
+export interface IProduct {
+  _id: string;
+  name: string;
+  description: string;
+  stock: number;
+  views: number;
+  categoryId: IProductCategory;
+  supplierId: IProductSupplier;
+  variants: IProductVariant[];
+  images: IProductImage[];
+  status: "ACTIVE" | "INACTIVE" | string;
+  createdAt: string;
+  updatedAt: string;
+}

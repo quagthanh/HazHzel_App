@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Montserrat } from "next/font/google";
 import "@/scss/partial/_body.scss";
-import { ConfigProvider } from "antd";
 import PreventFlash from "@/components/common/preventFlash";
 import { SessionProviders } from "./provider";
 
@@ -24,41 +23,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={montserrat.className}>
         <SessionProviders>
-          <ConfigProvider
-            theme={{
-              token: {
-                colorPrimary: "#7D7D7D",
-                fontFamily: "Montserrat, sans-serif",
-              },
-              components: {
-                Input: {
-                  colorText: "#343534",
-                  colorBgContainer: "#fffbf5",
-                },
-                Button: {
-                  colorBgContainer: "#fffbf5",
-                },
-                Pagination: {
-                  colorBgContainer: "#fffbf5",
-                },
-                Select: {
-                  colorBgContainer: "#fffbf5",
-                },
-                InputNumber: {
-                  activeBg: "#fffbf5",
-                  colorBgContainer: "#fffbf5",
-                },
-                Table: {
-                  colorBgContainer: "#fffbf5",
-                  rowHoverBg: "#fffbf5",
-                  headerBg: "#fffbf5",
-                },
-              },
-            }}
-          >
-            <PreventFlash />
-            <AntdRegistry>{children}</AntdRegistry>
-          </ConfigProvider>
+          <PreventFlash />
+          <AntdRegistry>{children}</AntdRegistry>
         </SessionProviders>
       </body>
     </html>

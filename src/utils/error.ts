@@ -17,3 +17,7 @@ export class InvalidEmailPasswordError extends AuthError {
 export class InactiveAccountError extends AuthError {
   static type = "Tài khoản chưa được kích hoạt ";
 }
+
+export class SystemError extends AuthError {
+  static type = "Internal se123rver error";
+}

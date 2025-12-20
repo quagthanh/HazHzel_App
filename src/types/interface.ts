@@ -1,5 +1,6 @@
 import { StaticImageData } from "next/image";
 import { IUser } from "./next-auth";
+import { statusProduct } from "./enum";
 
 export interface Promo {
   href: string;
@@ -50,7 +51,8 @@ export interface ImageFeaturedBrands {
   height: number;
 }
 export interface FeatureBrands {
-  href: string;
+  name: string;
+  slug: string;
   label: string;
   image: ImageFeaturedBrands[];
 }
@@ -75,15 +77,15 @@ export interface INewBrand {
   label: string;
   description: string;
 }
-export interface IProduct {
-  id: number;
-  name: string;
-  slug?: string;
-  image: string;
-  soldOut?: boolean;
-  category?: string;
-  specificColor?: number;
-}
+// export interface IProduct {
+//   id: number;
+//   name: string;
+//   slug?: string;
+//   image: string;
+//   soldOut?: boolean;
+//   category?: string;
+//   specificColor?: number;
+// }
 
 export interface SearchDrawerProps {
   open: boolean;
@@ -109,4 +111,103 @@ export interface Meta {
 export interface UserListProps {
   initialUsers?: IUser[];
   initialMeta?: Meta;
+}
+export interface IProductImage {
+  public_id: string;
+  secure_url: string;
+  width: number;
+  height: number;
+}
+
+export interface IProductCategory {
+  _id: string;
+  name: string;
+  slug?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IAddress {
+  street?: string;
+  ward?: string;
+  district?: string;
+  city?: string;
+  province?: string;
+  country?: string;
+}
+
+export interface IProductSupplier {
+  _id: string;
+
+  name: string;
+  contactName?: string;
+  email?: string;
+  phone?: string;
+
+  address?: IAddress;
+  description?: string;
+
+  status: "active" | "inactive";
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IProductVariant {}
+
+export interface IProduct {
+  _id: string;
+  name: string;
+  description: string;
+  views: number;
+  slug: string;
+  categoryId: IProductCategory;
+  supplierId: IProductSupplier;
+  images: IProductImage[];
+  status: statusProduct.ACTIVE | statusProduct.INACTIVE;
+  isHot: boolean;
+  isSale: boolean;
+  originalPrice: number;
+  discountPrice?: number;
+  currentPrice?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IUserTable {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+export interface IProps {
+  users: IUserTable[] | [];
+  meta: {
+    current: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+  };
+}
+export interface IImage {
+  public_id: string;
+  secure_url: string;
+  width: number;
+  height: number;
+}
+
+export interface ICategory {
+  _id: string;
+  name: string;
+  isActive: boolean;
+}
+
+export interface ISupplier {
+  _id: string;
+  name: string;
+  status: string;
+}
+export interface IProductGrid {
+  products: IProduct[];
 }

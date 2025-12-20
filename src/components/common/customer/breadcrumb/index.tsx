@@ -1,6 +1,7 @@
 "use client";
 import { Breadcrumb } from "antd";
 import { usePathname } from "next/navigation";
+import styles from "@/components/common/customer/announcement-bar-carousel/style.module.scss";
 const formatTitle = (slug: string) => {
   return slug
     .split("-")
@@ -28,6 +29,8 @@ const BreadcrumbPublic = () => {
       href: `/collections/${categorySlug}`,
     });
   }
-  return <Breadcrumb style={{ fontSize: "0.7rem" }} items={breadcrumbItems} />;
+  return (
+    <Breadcrumb className={styles.titleBreadcrumb} items={breadcrumbItems} />
+  );
 };
 export default BreadcrumbPublic;

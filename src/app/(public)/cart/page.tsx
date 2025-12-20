@@ -1,4 +1,4 @@
-import PublicCartPage from "@/components/feature/public/cart/public.cart";
+import PublicCartPage from "@/components/common/customer/cart/public.cart";
 
 const CartPage = () => {
   return <PublicCartPage></PublicCartPage>;

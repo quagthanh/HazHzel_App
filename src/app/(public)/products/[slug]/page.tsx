@@ -1,4 +1,4 @@
-import PublicProductDetailPage from "@/components/layout/public/public.product";
+import PublicProductDetailPage from "@/components/layout/public/public.detail.product";
 const products = [
   {
     id: 1,

@@ -10,7 +10,8 @@ import CustomButton from "@/components/common/customer/public-button";
 const FeaturedBrands = () => {
   const featuredBrands: FeatureBrands[] = [
     {
-      href: "/collections/birkin",
+      name: "birkin",
+      slug: "birkin",
       label: "Birkenstock",
       image: [
         {
@@ -24,7 +25,8 @@ const FeaturedBrands = () => {
       ],
     },
     {
-      href: "/collections/kore-studio",
+      name: "kore studio",
+      slug: "kore-studio",
       label: "kore studios",
       image: [
         {
@@ -38,7 +40,8 @@ const FeaturedBrands = () => {
       ],
     },
     {
-      href: "/collections/masion-balzac",
+      name: "masion balzac",
+      slug: "masion-balzac",
       label: "Maison balzac",
       image: [
         {
@@ -59,8 +62,8 @@ const FeaturedBrands = () => {
           <div className={`${styles.collectionListTextOutSide} ${styles.wrap}`}>
             {featuredBrands.map((brand, idx) => (
               <Link
-                href={brand.href}
-                key={`${brand.href}-${idx}`}
+                href={`/stores/${brand.slug}`}
+                key={`${brand.slug}-${idx}`}
                 className={styles.collectionCard}
               >
                 <div className={styles.contentOverMedia}>

@@ -4,152 +4,9 @@ import { useEffect, useState } from "react";
 import ProductCard from "../product-card";
 import styles from "@/components/common/customer/product-grid/style.module.scss";
 import useGridStore from "@/library/stores/useGridStore";
-import Link from "next/link";
-import { ROUTE_CONFIG } from "@/shared/configs/route";
-const products = [
-  {
-    id: 1,
-    name: "Sunglasses",
-    slug: "sung-glasses",
-    collections: "MR SIMPLE",
-    category: "Mon Renn",
-    image: "/glasses.jpg",
-    soldOut: true,
-    specificColor: 180310,
-    p1: "something very special",
-    p2: "FORTUNE TELLER CARDIGAN",
-    description: "- DENIM FABRICATION",
-  },
-  {
-    id: 2,
-    name: "Leather Belt",
-    category: "car",
-    specificColor: 1,
-    image: "/belt.jpg",
-  },
-  {
-    id: 3,
-    name: "Bomber Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/jacket.jpg",
-  },
-  {
-    id: 4,
-    name: "Green Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/green-jacket.jpg",
-  },
-  {
-    id: 5,
-    name: "Sunglasses",
-    category: "car",
-    specificColor: 1,
-    image: "/glasses.jpg",
-    soldOut: true,
-  },
-  {
-    id: 6,
-    name: "Leather Belt",
-    category: "car",
-    specificColor: 1,
-    image: "/belt.jpg",
-  },
-  {
-    id: 7,
-    name: "Bomber Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/jacket.jpg",
-  },
-  {
-    id: 8,
-    name: "Green Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/green-jacket.jpg",
-  },
-  {
-    id: 9,
-    name: "Green Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/green-jacket.jpg",
-  },
-  {
-    id: 10,
-    name: "Sunglasses",
-    category: "car",
-    image: "/glasses.jpg",
-    soldOut: true,
-  },
-  {
-    id: 11,
-    name: "Sunglasses",
-    category: "car",
-    image: "/glasses.jpg",
-    soldOut: true,
-  },
-  {
-    id: 12,
-    name: "Leather Belt",
-    category: "car",
-    specificColor: 1,
-    image: "/belt.jpg",
-  },
-  {
-    id: 13,
-    name: "Bomber Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/jacket.jpg",
-  },
-  {
-    id: 14,
-    name: "Green Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/green-jacket.jpg",
-  },
-  {
-    id: 15,
-    name: "Sunglasses",
-    category: "car",
-    specificColor: 1,
-    image: "/glasses.jpg",
-    soldOut: true,
-  },
-  {
-    id: 16,
-    name: "Leather Belt",
-    category: "car",
-    specificColor: 1,
-    image: "/belt.jpg",
-  },
-  {
-    id: 17,
-    name: "Bomber Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/jacket.jpg",
-  },
-  {
-    id: 18,
-    name: "Green Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/green-jacket.jpg",
-  },
-  {
-    id: 19,
-    name: "Green Jacket",
-    category: "car",
-    specificColor: 1,
-    image: "/green-jacket.jpg",
-  },
-];
-const ProductGrid = () => {
+import { IProduct, IProductGrid } from "@/types/interface";
+
+const ProductGrid = ({ products }: IProductGrid) => {
   const column = useGridStore((state) => state.column);
   const mobileColumn = useGridStore((state) => state.mobileColumn);
   const [isMobile, setIsMobile] = useState(false);
@@ -168,7 +25,7 @@ const ProductGrid = () => {
       }}
     >
       {products.map((product) => (
-        <ProductCard key={product.id} {...product} />
+        <ProductCard key={product._id} {...product} />
       ))}
     </div>
   );

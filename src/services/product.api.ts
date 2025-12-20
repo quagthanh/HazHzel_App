@@ -1,13 +1,29 @@
 "use client";
 import { api } from "@/utils/api";
 
-export async function getProducts({
+export async function getProductsForAdmin({
   current,
   pageSize,
 }: {
   current: number;
   pageSize: number;
 }): Promise<any> {
+  try {
+    const result = await api.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/admin?current=${current}&pageSize=${pageSize}`
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function getProducts({
+  current,
+  pageSize,
+}: {
+  current: number;
+  pageSize: number;
+}) {
   try {
     const result = await api.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?current=${current}&pageSize=${pageSize}`

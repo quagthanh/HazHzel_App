@@ -56,8 +56,18 @@ export const itemsSidebar: MenuItem[] = [
       },
       {
         key: "users",
-        label: <Link href="/admin/dashboard/user">Users</Link>,
+        label: "Users",
         icon: <TeamOutlined />,
+        children: [
+          {
+            key: "user-list",
+            label: <Link href="/admin/dashboard/user/list">User List</Link>,
+          },
+          {
+            key: "user-detail",
+            label: <Link href="">User Overview</Link>,
+          },
+        ],
       },
       {
         key: "order",

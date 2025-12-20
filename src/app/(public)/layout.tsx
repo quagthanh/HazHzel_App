@@ -1,6 +1,6 @@
-import PublicContent from "@/components/layout/public/customer.content";
-import PublicFooter from "@/components/layout/public/customer.footer";
-import PublicHeader from "@/components/layout/public/customer.header";
+import PublicContent from "@/components/layout/public/client-layout/customer.content";
+import PublicFooter from "@/components/layout/public/client-layout/customer.footer";
+import PublicHeader from "@/components/layout/public/client-layout/customer.header";
 import { ConfigProvider, Layout } from "antd";
 
 const PublicLayout = ({

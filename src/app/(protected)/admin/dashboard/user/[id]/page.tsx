@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import React from "react";
 export default async function DetailUserPage({
   params,

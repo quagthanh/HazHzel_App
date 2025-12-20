@@ -1,6 +1,6 @@
 "use server";
 import { signIn } from "@/auth";
-import { FormData } from "@/components/common/admin/login-form/login-form";
+import { FormData } from "@/components/common/auth/login-form/login-form";
 import { auth } from "@/auth";
 
 export async function authenticate(formData: FormData) {

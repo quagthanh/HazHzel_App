@@ -1,8 +1,6 @@
-"use client";
-
 import PublicCollectionPage from "@/components/layout/public/public.collection";
 
 const CollectionLayout = () => {
-  return <PublicCollectionPage></PublicCollectionPage>;
+  return <PublicCollectionPage />;
 };
 export default CollectionLayout;

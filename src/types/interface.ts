@@ -77,15 +77,6 @@ export interface INewBrand {
   label: string;
   description: string;
 }
-// export interface IProduct {
-//   id: number;
-//   name: string;
-//   slug?: string;
-//   image: string;
-//   soldOut?: boolean;
-//   category?: string;
-//   specificColor?: number;
-// }
 
 export interface SearchDrawerProps {
   open: boolean;
@@ -210,4 +201,20 @@ export interface ISupplier {
 }
 export interface IProductGrid {
   products: IProduct[];
+}
+export interface TopSupplier {
+  supplierId: string;
+  totalViews: number;
+  totalProducts: number;
+  supplier: {
+    name: string;
+    slug: string;
+    images: {
+      secure_url: string;
+      width?: number;
+      height?: number;
+    }[];
+    description?: string;
+    status: string;
+  };
 }

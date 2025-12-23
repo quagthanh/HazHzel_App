@@ -15,19 +15,10 @@ export function SessionProviders({ children }: { children: React.ReactNode }) {
 }
 function SessionGate({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
-  const pathname = usePathname();
 
-  const { reloaded, markReloaded }: any = useAppStore();
+  if (status === "loading") {
+    return <div></div>;
+  }
 
-  useEffect(() => {
-    const isLoginPage = pathname.startsWith("/auth/login");
-
-    if (!isLoginPage && status === "unauthenticated" && !reloaded) {
-      markReloaded();
-      window.location.reload();
-    }
-  }, [status, pathname, reloaded]);
-
-  if (status === "loading") return null;
   return <>{children}</>;
 }

@@ -19,5 +19,5 @@ export class InactiveAccountError extends AuthError {
 }
 
 export class SystemError extends AuthError {
-  static type = "Internal se123rver error";
+  static type = "Internal server error";
 }

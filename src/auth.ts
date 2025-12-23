@@ -1,6 +1,10 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { InactiveAccountError, InvalidEmailPasswordError } from "./utils/error";
+import {
+  InactiveAccountError,
+  InvalidEmailPasswordError,
+  SystemError,
+} from "./utils/error";
 import { IUser } from "./types/next-auth";
 import { IBackendRes, ILogin, loginDTO } from "./types/backend";
 import { handleLogin } from "./services/auth.api";
@@ -30,7 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         } else if (res?.response?.status === 400) {
           throw new InactiveAccountError();
         } else {
-          throw new Error("Internal server error");
+          throw new SystemError();
         }
       },
     }),
@@ -51,9 +55,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.access_token = token.access_token;
       return session;
     },
-    authorized: async ({ auth }) => {
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth;
+    authorized: async ({ auth, request: { nextUrl } }) => {
+      const isLoggedIn = !!auth;
+      const pathname = nextUrl.pathname;
+      const protectedPaths = [
+        "/admin",
+        "/profile",
+        "/checkout",
+        "/orders",
+        "/settings",
+      ];
+      const isProtected = protectedPaths.some((path) =>
+        pathname.startsWith(path)
+      );
+
+      if (isProtected) {
+        return isLoggedIn;
+      }
+
+      return true;
     },
   },
 });

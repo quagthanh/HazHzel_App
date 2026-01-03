@@ -1,49 +1,59 @@
-"use client";
-import { api } from "@/utils/api";
+import { sendRequest } from "@/utils/api";
+import { IUserTable } from "@/types/backend";
+
+interface UserResponseData {
+  meta: {
+    current: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+  };
+  result: IUserTable[];
+}
 
 export async function getUser({
   current,
   pageSize,
+  accessToken,
 }: {
   current: number;
   pageSize: number;
-}): Promise<any> {
-  try {
-    const result = await api.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/users?current=${current}&pageSize=${pageSize}`
-    );
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  accessToken?: string;
+}) {
+  return sendRequest<UserResponseData>({
+    url: "/users",
+    method: "GET",
+    accessToken,
+    queryParams: {
+      current,
+      pageSize,
+    },
+  });
 }
-export async function handleCreateUser({
-  name,
-  email,
-  password,
-}: {
+
+export async function handleCreateUser(data: {
   name: string;
   email: string;
   password: string;
 }) {
-  try {
-    const result = await api.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users`,
-      { name, email, password }
-    );
-    return result.data;
-  } catch (error) {
-    throw error;
-  }
+  return sendRequest<IUserTable>({
+    url: "/users",
+    method: "POST",
+    body: data,
+  });
 }
+
 export async function handleEditUser(data: any) {
-  try {
-    const result = await api.patch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users`,
-      data
-    );
-    return result.data;
-  } catch (error) {
-    throw error;
-  }
+  return sendRequest<IUserTable>({
+    url: "/users",
+    method: "PATCH",
+    body: data,
+  });
+}
+
+export async function handleDeleteUser(id: string) {
+  return sendRequest<any>({
+    url: `/users/${id}`,
+    method: "DELETE",
+  });
 }

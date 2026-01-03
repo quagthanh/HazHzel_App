@@ -1,20 +1,38 @@
-"use client";
+import ListingCategoryClient from "@/components/layout/public/client-listing-layout/listing-category-layout/listing-category-layout";
+import { getProductsByCategory } from "@/services/product.api";
+import { ListPageProps } from "@/types/interface";
+import category_banner from "@/assets/categories_banner.jpg";
+export default async function CatgoryPage({
+  params,
+  searchParams,
+}: ListPageProps) {
+  const { slug } = params;
+  const title = slug.replace(/-/g, " ").toUpperCase();
 
-import TitleHeaderCenter from "@/components/common/customer/title-center";
-import FilterBar from "@/components/common/customer/filter-bar";
-import ProductGrid from "@/components/common/customer/product-grid";
-import { Pagination } from "antd";
+  const current = Number(searchParams?.current) || 1;
+  const pageSize = Number(searchParams?.pageSize) || 12;
 
-export default function CategoryPage() {
+  let products = [];
+  let meta = { current: 1, pageSize: 12, total: 0, pages: 0 };
+
+  try {
+    const res = await getProductsByCategory(slug, { current, pageSize });
+    const backendData = res?.data?.data;
+
+    if (backendData) {
+      products = backendData.result || [];
+      meta = backendData.meta || meta;
+    }
+  } catch (error) {
+    console.error("Fetch store products error:", error);
+  }
+
   return (
-    <>
-      <TitleHeaderCenter title="Women" />
-      <FilterBar />
-
-      <div>
-        <ProductGrid />
-        <Pagination total={500} />
-      </div>
-    </>
+    <ListingCategoryClient
+      banner={category_banner}
+      title={title}
+      initialProducts={products}
+      initialMeta={meta}
+    />
   );
 }

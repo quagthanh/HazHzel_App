@@ -1,6 +1,6 @@
 import PublicCartPage from "@/components/common/customer/cart/public.cart";
 
 const CartPage = () => {
-  return <PublicCartPage></PublicCartPage>;
+  return <PublicCartPage />;
 };
 export default CartPage;

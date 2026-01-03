@@ -1,6 +1,8 @@
 import { StaticImageData } from "next/image";
 import { IUser } from "./next-auth";
 import { statusProduct } from "./enum";
+import { EntityType } from "./collection";
+import { GenderType } from "./product";
 
 export interface Promo {
   href: string;
@@ -159,9 +161,10 @@ export interface IProduct {
   status: statusProduct.ACTIVE | statusProduct.INACTIVE;
   isHot: boolean;
   isSale: boolean;
+  gender: GenderType;
   originalPrice: number;
   discountPrice?: number;
-  currentPrice?: number;
+  currentPrice: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -217,4 +220,8 @@ export interface TopSupplier {
     description?: string;
     status: string;
   };
+}
+export interface ListPageProps {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }

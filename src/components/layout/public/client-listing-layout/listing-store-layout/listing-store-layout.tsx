@@ -1,71 +1,50 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Pagination, Spin } from "antd";
-
+import { useTransition } from "react";
 import TitleHeaderCenter from "@/components/common/customer/title-center";
 import FilterBar from "@/components/common/customer/filter-bar";
 import ProductGrid from "@/components/common/customer/product-grid";
-import { getProducts } from "@/services/product.api";
 import { IProduct } from "@/types/interface";
 
 import styles from "@/components/layout/public/client-listing-layout/listing-store-layout/listing-store-layout.module.scss";
-
-export default function ListingStoreClient({ title }: { title: string }) {
+import { ListingClientProps } from "@/types/product";
+export default function ListingStoreClient({
+  banner,
+  title,
+  initialProducts,
+  initialMeta,
+}: ListingClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  const current = Number(searchParams.get("current")) || 1;
-  const pageSize = Number(searchParams.get("pageSize")) || 12;
+  const [isPending, startTransition] = useTransition();
 
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [meta, setMeta] = useState({
-    current: 1,
-    pageSize: 12,
-    total: 0,
-  });
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const res = await getProducts({ current, pageSize });
-        setProducts(res.data.data.result);
-        setMeta(res.data.data.meta);
-      } catch (e) {
-        console.error("Fetch products error:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [current, pageSize]);
+  const products = initialProducts;
+  const meta = initialMeta;
 
   const onPageChange = (page: number, size: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("current", page.toString());
     params.set("pageSize", size.toString());
-    router.replace(`${pathname}?${params.toString()}`);
+
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`);
+    });
   };
 
   return (
     <>
-      <TitleHeaderCenter title={title} />
+      <TitleHeaderCenter banner={banner} title={title} />
       <FilterBar />
 
       <div className={styles.wrapper}>
-        {loading ? (
-          <div className={styles.loading}>
-            <Spin size="large" />
-          </div>
-        ) : (
-          <>
-            <ProductGrid products={products} />
+        <Spin spinning={isPending} size="large" tip="Loading products...">
+          <ProductGrid products={products} />
 
+          {products.length > 0 && (
             <div className={styles.pagination}>
               <Pagination
                 current={meta.current}
@@ -75,8 +54,14 @@ export default function ListingStoreClient({ title }: { title: string }) {
                 showSizeChanger
               />
             </div>
-          </>
-        )}
+          )}
+
+          {products.length === 0 && !isPending && (
+            <div style={{ textAlign: "center", padding: "50px" }}>
+              No products found.
+            </div>
+          )}
+        </Spin>
       </div>
     </>
   );

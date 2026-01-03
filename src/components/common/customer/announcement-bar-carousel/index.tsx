@@ -4,8 +4,10 @@ import { Carousel } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useRef } from "react";
 import styles from "@/components/common/customer/announcement-bar-carousel/style.module.scss";
-
-const AnnouncementBar = () => {
+interface Props {
+  messages: string[];
+}
+const AnnouncementBar = ({ messages }: Props) => {
   const carouselRef = useRef<any>(null);
   const handlePrev = () => {
     carouselRef.current?.prev();
@@ -13,10 +15,6 @@ const AnnouncementBar = () => {
   const handleNext = () => {
     carouselRef.current?.next();
   };
-  const announcements = [
-    "extra 30% off sale | code EXTRA30",
-    "free shipping on all orders over $99",
-  ];
   return (
     <div className={styles.announcementBar}>
       <button onClick={handlePrev} className={styles.navButton}>
@@ -31,7 +29,7 @@ const AnnouncementBar = () => {
         ref={carouselRef}
         className={styles.carousel}
       >
-        {announcements.map((msg, index) => (
+        {messages.map((msg, index) => (
           <div key={index}>
             <p className={styles.carouselText}>{msg}</p>
           </div>

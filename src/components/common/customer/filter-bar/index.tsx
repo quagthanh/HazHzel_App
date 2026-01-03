@@ -88,7 +88,7 @@ const FilterBar = () => {
         />
       </div>
 
-      <div className={styles.allProductCount}>139 PRODUCTS</div>
+      <div className={styles.allProductCount}>PRODUCTS</div>
       <div className={styles.allProductCountMobile}>FILTER</div>
 
       <div className={styles.sortBy}>

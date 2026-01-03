@@ -1,24 +1,49 @@
-import axios from "axios";
-import { useAuthStore } from "@/library/stores/useAuthStore";
-export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-});
-api.interceptors.request.use(
-  async (config) => {
-    const token = useAuthStore.getState().accessToken;
-    config.headers["Content-Type"] = "application/json";
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  function (error) {
-    return Promise.reject(error);
+import { AxiosRequestConfig, Method } from "axios";
+import http from "@/utils/axios-server";
+
+export interface IBackendRes<T> {
+  statusCode: number;
+  message: string;
+  data: T;
+}
+
+interface IRequest {
+  url: string;
+  method: Method;
+  body?: any;
+  queryParams?: any;
+  accessToken?: string;
+  headers?: any;
+  useCache?: boolean;
+}
+
+export const sendRequest = async <T>(props: IRequest) => {
+  const {
+    url,
+    method,
+    body,
+    queryParams,
+    accessToken,
+    headers = {},
+    useCache = false,
+  } = props;
+
+  const config: AxiosRequestConfig = {
+    url,
+    method,
+    params: queryParams,
+    data: body,
+    headers: {
+      ...headers,
+      Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+    },
+  };
+
+  if (!useCache && (method === "GET" || method === "get")) {
+    config.headers = {
+      ...config.headers,
+    };
   }
-);
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+
+  return http.request<IBackendRes<T>>(config);
+};

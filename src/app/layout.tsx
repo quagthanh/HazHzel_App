@@ -3,7 +3,8 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Montserrat } from "next/font/google";
 import "@/scss/partial/_body.scss";
 import PreventFlash from "@/components/common/preventFlash";
-import { SessionProviders } from "./provider";
+import { auth } from "@/auth";
+import AuthProvider from "./provider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -14,18 +15,18 @@ export const metadata: Metadata = {
   title: "AccounFreak",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <SessionProviders>
-          <PreventFlash />
+        <AuthProvider session={session}>
           <AntdRegistry>{children}</AntdRegistry>
-        </SessionProviders>
+        </AuthProvider>
       </body>
     </html>
   );

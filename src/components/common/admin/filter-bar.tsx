@@ -19,7 +19,6 @@ const FilterBar = ({ onSearch, onFilter, selectOptions }: FilterBarProps) => {
         gap: 16,
       }}
     >
-      {/* Search input */}
       <Input
         placeholder="Search for ..."
         prefix={<SearchOutlined style={{ color: "#bfbfbf" }} />}
@@ -27,7 +26,6 @@ const FilterBar = ({ onSearch, onFilter, selectOptions }: FilterBarProps) => {
         style={{ maxWidth: 300 }}
       />
 
-      {/* Right side filters */}
       <div style={{ display: "flex", gap: 12 }}>
         <Select
           placeholder="Select"

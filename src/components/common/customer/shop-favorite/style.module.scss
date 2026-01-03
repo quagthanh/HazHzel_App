@@ -49,10 +49,19 @@
   font-weight: medium;
   margin-bottom: 0.5rem;
 }
-
-.itemPrice {
+.link{
   color: #666;
+}
+
+.itemPriceLineThrough {
+  color: #666;
+  text-decoration: line-through;
   font-size: 0.875rem;
+  margin-right: 13px;
+}
+.itemPrice {
+  color: #f32424;
+  font-size: 0.9rem;
 }
 .sectionStack {
   display: block;

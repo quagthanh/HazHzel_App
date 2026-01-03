@@ -10,13 +10,7 @@ const PublicContent = ({
 
   return (
     <Content>
-      <div
-        style={{
-          backgroundColor: "white",
-        }}
-      >
-        {children}
-      </div>
+      <div>{children}</div>
     </Content>
   );
 };

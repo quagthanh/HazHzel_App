@@ -1,49 +1,57 @@
 "use client";
 
 import { IUserTable as IUser } from "@/types/backend";
-import { Table, TableProps, Popconfirm, message, Spin } from "antd";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import UserEditModal from "./modal.edit.user";
-import { getUser } from "@/services/user.api";
+import { Table, TableProps, Spin } from "antd";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useMemo, useState, useTransition } from "react";
+// import UserEditModal from "./modal.edit.user"; // Giữ nguyên modal của bạn
+// import UserCreateModal from "./modal.create.user"; // Giữ nguyên modal của bạn
 
 import PageHeader from "../page-header";
 import ActionMenu from "../action-menu";
 import FilterBar from "../filter-bar";
 import PaginationInfo from "../pagination-info";
-import { Meta, UserListProps } from "@/types/interface";
-import { useFetchList } from "@/utils/hooks/fetchList";
 
-const UserListClient = ({ initialMeta }: UserListProps) => {
+interface UserListClientProps {
+  initialUsers: IUser[];
+  initialMeta: {
+    current: number;
+    pageSize: number;
+    total: number;
+  };
+}
+
+const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const paramCurrent =
-    Number(searchParams.get("current")) || initialMeta?.current || 1;
-  const paramPageSize =
-    Number(searchParams.get("pageSize")) || initialMeta?.pageSize || 20;
+  // Loading state khi chuyển trang
+  const [isPending, startTransition] = useTransition();
 
+  // Modal State
   const [isUserCreateModalOpen, setIsUserCreateModalOpen] = useState(false);
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false);
   const [dataUpdate, setDataUpdate] = useState<IUser | null>(null);
-  const {
-    data: users,
-    meta,
-    loading,
-  } = useFetchList<IUser>(getUser, {
-    current: paramCurrent,
-    pageSize: paramPageSize,
-  });
+
+  // Data lấy từ Props (Server truyền xuống)
+  const users = initialUsers;
+  const meta = initialMeta;
 
   const onClickCreate = () => setIsUserCreateModalOpen(true);
 
+  // Logic chuyển trang (Update URL -> Server fetch lại -> Client update)
   const onChange = (pagination: any) => {
     const params = new URLSearchParams(searchParams);
     params.set("current", pagination.current?.toString() ?? "1");
-    params.set("pageSize", meta?.pageSize ?? paramPageSize);
-    router.replace(`${pathname}?${params.toString()}`);
+    params.set(
+      "pageSize",
+      pagination.pageSize?.toString() ?? meta.pageSize.toString()
+    );
+
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`);
+    });
   };
 
   const dataSource = useMemo(
@@ -62,7 +70,6 @@ const UserListClient = ({ initialMeta }: UserListProps) => {
         dataIndex: "_id",
         key: "_id",
         width: 150,
-        sorter: true,
       },
       {
         title: "Name",
@@ -96,23 +103,11 @@ const UserListClient = ({ initialMeta }: UserListProps) => {
         width: 250,
       },
       {
-        title: "Status",
-        key: "status",
-        width: 120,
-        render: () => (
-          <span
-            style={{
-              padding: "4px 12px",
-              borderRadius: 6,
-              background: "#d4edda",
-              color: "#155724",
-              fontSize: 12,
-              fontWeight: 500,
-            }}
-          >
-            Active
-          </span>
-        ),
+        title: "Role", // Thêm cột Role nếu cần
+        dataIndex: "role",
+        key: "role",
+        width: 150,
+        render: (role) => role?.name || "N/A",
       },
       {
         title: "Action",
@@ -126,7 +121,7 @@ const UserListClient = ({ initialMeta }: UserListProps) => {
               setDataUpdate(record);
             }}
             onDelete={() => {
-              // handle delete logic
+              console.log("Delete", record._id);
             }}
           />
         ),
@@ -139,11 +134,11 @@ const UserListClient = ({ initialMeta }: UserListProps) => {
     <div style={{ padding: "24px", background: "#fff", minHeight: "100vh" }}>
       <PageHeader
         title="Users List"
-        subtitle="Follow your website's account"
-        breadcrumb={["Ecommerce", "Users List"]}
+        subtitle="Manage system users"
+        breadcrumb={["Admin", "Users"]}
         onExport={() => console.log("Export")}
         onAdd={onClickCreate}
-        addButtonText="Add Product"
+        addButtonText="Add User"
       />
 
       <FilterBar
@@ -151,42 +146,42 @@ const UserListClient = ({ initialMeta }: UserListProps) => {
         onFilter={() => console.log("Filter clicked")}
       />
 
-      {loading ? (
-        <div style={{ textAlign: "center", padding: 60 }}>
-          <Spin size="large" />
-        </div>
-      ) : (
-        <>
-          <Table
-            bordered
-            dataSource={dataSource}
-            columns={columns}
-            rowKey="_id"
-            onChange={onChange}
-            pagination={false}
-            style={{
-              borderRadius: 8,
-              overflow: "hidden",
-            }}
-            rowSelection={{
-              type: "checkbox",
-            }}
-          />
+      {/* Bọc Table trong Spin với trạng thái isPending */}
+      <Spin spinning={isPending} size="large">
+        <Table
+          bordered
+          dataSource={dataSource}
+          columns={columns}
+          rowKey="_id"
+          pagination={false} // Tắt pagination mặc định của Antd
+          style={{ borderRadius: 8, overflow: "hidden" }}
+        />
 
-          <PaginationInfo
-            current={meta.current}
-            pageSize={meta.pageSize}
-            total={meta.total}
-            onPageChange={(page) => {
-              onChange({ current: page, pageSize: meta.pageSize });
-            }}
-          />
-        </>
-      )}
+        <PaginationInfo
+          current={meta.current}
+          pageSize={meta.pageSize}
+          total={meta.total}
+          onPageChange={(page) => {
+            onChange({ current: page, pageSize: meta.pageSize });
+          }}
+        />
+      </Spin>
 
-      {/* Modals - giữ nguyên logic */}
-      {/* <UserCreateModal isUserCreateModalOpen={isUserCreateModalOpen} setIsUserCreateModalOpen={setIsUserCreateModalOpen} /> */}
-      {/* <UserEditModal isUserEditModalOpen={isUserEditModalOpen} setIsUserEditModalOpen={setIsUserEditModalOpen} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate} /> */}
+      {/* Modals */}
+      {/* Bạn cần đảm bảo component UserCreateModal và UserEditModal 
+        đã được import đúng và hoạt động.
+        Khi create/edit thành công -> gọi router.refresh() để reload lại list 
+      */}
+      {/* <UserCreateModal
+        isUserCreateModalOpen={isUserCreateModalOpen}
+        setIsUserCreateModalOpen={setIsUserCreateModalOpen}
+      />
+      <UserEditModal
+        isUserEditModalOpen={isUserEditModalOpen}
+        setIsUserEditModalOpen={setIsUserEditModalOpen}
+        setDataUpdate={setDataUpdate}
+        dataUpdate={dataUpdate}
+      /> */}
     </div>
   );
 };

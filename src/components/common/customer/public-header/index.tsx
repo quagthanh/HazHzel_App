@@ -13,11 +13,13 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { NavItem } from "@/types/interface";
-import imgexam from "@/../public/assets/exam.jpg";
 import CartDrawer from "../drawer/cart-drawer";
 import SearchDrawer from "../drawer/search-drawer";
-const NavBar: React.FC = () => {
+import { NavMenuItem } from "@/types/navbar";
+interface NavBarProps {
+  items: NavMenuItem[];
+}
+const NavBar: React.FC<NavBarProps> = ({ items }) => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openCart, setOpenCart] = useState<boolean>(false);
@@ -28,110 +30,6 @@ const NavBar: React.FC = () => {
   const showDrawerSearch = () => {
     setOpenSearch(true);
   };
-  const navItems: NavItem[] = [
-    {
-      href: "/collections/men",
-      label: "Men",
-      data_title: "Men",
-      children: [
-        {
-          label: "Clothing",
-          href: "/men-clothing",
-          subChildren: [
-            { label: "Jeans", href: "/men-clothing-jeans" },
-            { label: "Jackets", href: "/men-clothing-jackets" },
-          ],
-        },
-        {
-          label: "Accessories",
-          href: "/men-accessories",
-          subChildren: [
-            { label: "Perfumes", href: "/men-accessories-perfumes" },
-          ],
-        },
-        { label: "Sale", href: "/men-sale" },
-      ],
-      promos: [
-        {
-          href: "#",
-          image: imgexam,
-          data_title: "kore studios",
-          subtitle: "Euro Summer Vibes",
-        },
-      ],
-    },
-    {
-      href: "/collections/women",
-      label: "Women",
-      data_title: "Women",
-      children: [
-        {
-          label: "abc",
-          href: "/men-clothing",
-          subChildren: [
-            { label: "Jeans", href: "/men-clothing-jeans" },
-            { label: "Jackets", href: "/men-clothing-jackets" },
-          ],
-        },
-        {
-          label: "ede",
-          href: "/men-accessories",
-          subChildren: [
-            { label: "Perfumes", href: "/men-accessories-perfumes" },
-          ],
-        },
-        { label: "Sdqdale", href: "/men-sale" },
-      ],
-    },
-    {
-      href: "/brands",
-      label: "BRANDS",
-      data_title: "BRANDS",
-    },
-
-    {
-      href: "/new-arrivals",
-      label: "New Arrivals",
-      data_title: "New Arrivals",
-      children: [
-        {
-          label: "New Girl",
-          href: "/new-arrivals-menwears",
-          subChildren: [{ label: "Dresses", href: "/arrival/dresses" }],
-        },
-        {
-          label: "abc",
-          href: "/new-arrivals-womanwears",
-          subChildren: [{ label: "Dresses", href: "/arrival/dresses" }],
-        },
-      ],
-    },
-    {
-      href: "/gift-cards",
-      label: "Gift Cards",
-      data_title: "Gift Cards",
-    },
-    {
-      href: "/home-wares",
-      label: "Homewares",
-      data_title: "Homewares",
-    },
-    {
-      href: "/art-work",
-      label: "Artwork",
-      data_title: "Artwork",
-    },
-    {
-      href: "/sale",
-      label: "sALE",
-      data_title: "sALE",
-    },
-    {
-      href: "/locale-rewards",
-      label: "Locale Rewards",
-      data_title: "Locale Rewards",
-    },
-  ];
 
   const headerStyle: React.CSSProperties = {
     position: "sticky",
@@ -147,7 +45,12 @@ const NavBar: React.FC = () => {
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     textTransform: "uppercase",
   };
-
+  const hasMegaMenu = (item: NavMenuItem) => {
+    return (
+      (item.childrenColumns && item.childrenColumns.length > 0) ||
+      (item.promos && item.promos.length > 0)
+    );
+  };
   return (
     <Header style={headerStyle} className={styles.headerMain}>
       <div className={styles.headerLogo}>
@@ -159,68 +62,96 @@ const NavBar: React.FC = () => {
         </div>
         <div className={styles.centerLogo}>
           <Link href="/" className={styles.headerLogo}>
-            <Image style={{ objectFit: "contain" }} alt="" src={logo} />
+            <Image style={{ objectFit: "contain" }} alt="Logo" src={logo} />
           </Link>
         </div>
       </div>
       <nav className={styles.headerPrimaryNav}>
         <ul className={styles.unstyledList}>
-          {navItems.map((item) => (
+          {items.map((item) => (
             <li
               key={item.href}
               className={styles.headerPrimaryNavItem}
-              data-title={item.data_title}
-              onMouseEnter={() => item.children && setOpenDropdown(item.href)}
+              onMouseEnter={() =>
+                hasMegaMenu(item) && setOpenDropdown(item.href)
+              }
               onMouseLeave={() => setOpenDropdown(null)}
             >
-              <div className={styles.megaMenuDisclosure}>
-                <div className={styles.headerMenuDisclosure}>
-                  <div className={styles.h6}>
-                    <Link
-                      href={item.href}
-                      className={`${styles.h6} ${styles.underline} ${
-                        pathname === item.href ? styles.active : ""
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  </div>
-                  {openDropdown === item.href && (
-                    <div className={styles.megaMenu}>
-                      <ul
-                        className={`${styles.megaMenuLinkList} ${styles.unstyledList}`}
-                      >
-                        {item.children?.map((child) => (
-                          <li
-                            key={child.href}
-                            className={`${styles.vStack} ${styles.justifyItemsStart} ${styles.gap5}`}
-                          >
-                            <Link href={child.href} className={styles.h6}>
-                              {child.label}
-                            </Link>
-                            {child.subChildren && (
-                              <ul
-                                className={`${styles.vStack} ${styles.gap25} ${styles.unstyledList}`}
-                              >
-                                {child.subChildren.map((subChild) => (
-                                  <li key={subChild.href}>
-                                    <Link
-                                      href={subChild.href}
-                                      className={styles.linkFaded}
-                                    >
-                                      {subChild.label}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+              <div className={styles.h6}>
+                <Link
+                  href={item.href}
+                  className={`${styles.h6} ${styles.underline} ${
+                    pathname === item.href ? styles.active : ""
+                  }`}
+                >
+                  {item.label}
+                </Link>
               </div>
+
+              {/* === MEGA MENU RENDER === */}
+              {hasMegaMenu(item) && (
+                <div
+                  className={`${styles.megaMenu} ${
+                    openDropdown === item.href ? styles.megaMenuActive : ""
+                  }`}
+                >
+                  <div className={styles.megaMenuContainer}>
+                    {/* KHU VỰC 1: CỘT TEXT (Text Columns) */}
+                    {item.childrenColumns && (
+                      <div className={styles.menuColumnsWrapper}>
+                        {item.childrenColumns.map((col, idx) => (
+                          <div key={idx} className={styles.menuColumn}>
+                            <h4 className={styles.columnTitle}>{col.title}</h4>
+                            <ul className={styles.columnList}>
+                              {col.links.map((link) => (
+                                <li key={link.href}>
+                                  <Link
+                                    href={link.href}
+                                    className={styles.linkFaded}
+                                  >
+                                    {link.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* KHU VỰC 2: HÌNH ẢNH (Promo Images) */}
+                    {item.promos && (
+                      <div className={styles.menuPromosWrapper}>
+                        {item.promos.map((promo, idx) => (
+                          <Link
+                            href={promo.href}
+                            key={idx}
+                            className={styles.promoCard}
+                          >
+                            <div className={styles.promoImageContainer}>
+                              <Image
+                                src={promo.image}
+                                alt={promo.title}
+                                fill
+                                style={{ objectFit: "cover" }}
+                              />
+                            </div>
+                            <div className={styles.promoContent}>
+                              <span className={styles.promoBrand}>
+                                {promo.store}
+                              </span>
+                              <span className={styles.promoTitle}>
+                                {promo.title}
+                              </span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              {/* === END MEGA MENU === */}
             </li>
           ))}
         </ul>

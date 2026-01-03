@@ -1,13 +1,9 @@
-"use client";
-import { api } from "@/utils/api";
+import { sendRequest } from "@/utils/api";
+import { TopSupplier } from "@/types/interface";
 
 export async function getTopSuppliers() {
-  try {
-    const result = await api.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/suppliers/top/3`
-    );
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  return sendRequest<TopSupplier[]>({
+    url: "/suppliers/top/3",
+    method: "GET",
+  });
 }

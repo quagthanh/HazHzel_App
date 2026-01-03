@@ -1,5 +1,5 @@
 import { ILogin, loginDTO } from "@/types/backend";
-import { api } from "@/utils/api";
+import http from "@/utils/axios-server";
 
 // export async function handleQuery<T>(arg: T): Promise<T> {
 //   return arg;
@@ -15,7 +15,7 @@ export type retryActiveDTO = {
 
 export async function handleLogin(loginDTO: loginDTO): Promise<any> {
   try {
-    const result = await api.post(
+    const result = await http.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
       loginDTO
     );
@@ -33,7 +33,7 @@ export async function handleRetryActive(
   retryActive: retryActiveDTO
 ): Promise<any> {
   try {
-    const result = await api.post(
+    const result = await http.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/retry-active`,
       retryActive
     );
@@ -44,7 +44,7 @@ export async function handleRetryActive(
 }
 export async function handleCheckCode(checkCode: checkCodeDTO): Promise<any> {
   try {
-    const result = await api.post(
+    const result = await http.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/check-code`,
       checkCode
     );

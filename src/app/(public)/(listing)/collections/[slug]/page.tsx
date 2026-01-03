@@ -1,0 +1,39 @@
+import ListingCollectionClient from "@/components/layout/public/client-listing-layout/listing-collection-layout/listing-collection-layout";
+import { getProductsByCollection } from "@/services/product.api";
+import { ListPageProps } from "@/types/interface";
+import collection_banner from "@/assets/nike_banner_collection_croped.jpg";
+
+export default async function CollectionPage({
+  params,
+  searchParams,
+}: ListPageProps) {
+  const { slug } = params;
+  const title = slug.replace(/-/g, " ").toUpperCase();
+
+  const current = Number(searchParams?.current) || 1;
+  const pageSize = Number(searchParams?.pageSize) || 12;
+
+  let products = [];
+  let meta = { current: 1, pageSize: 12, total: 0, pages: 0 };
+
+  try {
+    const res = await getProductsByCollection(slug, { current, pageSize });
+    const backendData = res?.data?.data;
+
+    if (backendData) {
+      products = backendData.result || [];
+      meta = backendData.meta || meta;
+    }
+  } catch (error) {
+    console.error("Fetch collection products error:", error);
+  }
+
+  return (
+    <ListingCollectionClient
+      banner={collection_banner}
+      title={title}
+      initialProducts={products}
+      initialMeta={meta}
+    />
+  );
+}

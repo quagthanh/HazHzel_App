@@ -23,6 +23,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           password: credentials.password,
         } as loginDTO;
         const res = await handleLogin(login);
+        console.log("Login Response:", res);
 
         if (res?.data?.statusCode === 201) {
           return {

@@ -1,15 +1,11 @@
 "use client";
-import Image from "next/image";
-import example from "@/../public/assets/fortune_cardigan.webp";
-import exampl2 from "@/../public/assets/Maison_Balzac_Olive_test.jpg";
-
-import styles from "@/components/common/customer/product-card/style.module.scss";
-import { IProduct } from "@/types/interface";
-import { PlusOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { PlusOutlined } from "@ant-design/icons";
 import { ROUTE_CONFIG } from "@/shared/configs/route";
-import { Noto_Sans_Old_Sogdian } from "next/font/google";
 import { statusProduct } from "@/types/enum";
+import { IProduct } from "@/types/interface";
+import styles from "@/components/common/customer/product-card/style.module.scss";
+import AppImage from "../../image/image";
 
 const ProductCard = ({
   name,
@@ -17,11 +13,9 @@ const ProductCard = ({
   images,
   categoryId,
   status,
-  supplierId,
-  isHot,
+  isSale,
   originalPrice,
   currentPrice,
-  isSale,
 }: IProduct) => {
   const isInactive = status === statusProduct.INACTIVE;
   const mainImage = images?.[0]?.secure_url;
@@ -31,17 +25,27 @@ const ProductCard = ({
     <Link href={`${ROUTE_CONFIG.product}/${slug}`}>
       <div className={`${styles.card} ${isInactive ? styles.soldOut : ""}`}>
         <div className={styles.imageWrapper}>
-          <Image src={mainImage} alt={name} fill className={styles.image} />
-          <Image
+          <AppImage
+            src={mainImage}
+            alt={name}
+            className={styles.image}
+            style={{ objectFit: "cover" }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+
+          <AppImage
             src={hoverImage}
             alt={`${name} hover`}
-            fill
             className={`${styles.image} ${styles.hoverImage}`}
+            style={{ objectFit: "cover" }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
+
           <button className={styles.addToCart}>
             <PlusOutlined size={18} className={styles.plusIcon} />
           </button>
         </div>
+
         <div className={styles.productInfo}>
           <div className={styles.categoryTag}>{categoryId?.name}</div>
           <h3 className={styles.productName}>{name}</h3>

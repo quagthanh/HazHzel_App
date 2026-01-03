@@ -1,44 +1,47 @@
 "use client";
 
 import { Table, TableProps, Spin } from "antd";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useMemo, useTransition } from "react";
 
-import { useFetchList } from "@/utils/hooks/fetchList";
-import { IProduct, UserListProps } from "@/types/interface";
+import { IProduct } from "@/types/interface";
 import ActionMenu from "../../action-menu";
 import PageHeader from "../../page-header";
 import FilterBar from "../../filter-bar";
 import PaginationInfo from "../../pagination-info";
-import { getProductsForAdmin } from "@/services/product.api";
 
-const ProductListClient = ({ initialMeta }: UserListProps) => {
+interface ProductListClientProps {
+  initialData: IProduct[];
+  initialMeta: {
+    current: number;
+    pageSize: number;
+    total: number;
+    pages: number;
+  };
+}
+
+const ProductListClient = ({
+  initialData,
+  initialMeta,
+}: ProductListClientProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
-  const paramCurrent =
-    Number(searchParams.get("current")) || initialMeta?.current || 1;
-  const paramPageSize =
-    Number(searchParams.get("pageSize")) || initialMeta?.pageSize || 10;
-
-  const {
-    data: products,
-    meta,
-    loading,
-  } = useFetchList<IProduct>(getProductsForAdmin, {
-    current: paramCurrent,
-    pageSize: paramPageSize,
-  });
+  const products = initialData || [];
+  const meta = initialMeta;
 
   const onChange = (pagination: any) => {
     const params = new URLSearchParams(searchParams);
     params.set("current", pagination.current?.toString() ?? "1");
-    params.set(
-      "pageSize",
-      meta?.pageSize?.toString() ?? paramPageSize.toString()
-    );
-    router.replace(`${pathname}?${params.toString()}`);
+    params.set("pageSize", meta?.pageSize?.toString() ?? "10");
+
+    const targetUrl = `${pathname}?${params.toString()}`;
+
+    startTransition(() => {
+      router.replace(targetUrl);
+    });
   };
 
   const dataSource = useMemo(
@@ -66,6 +69,7 @@ const ProductListClient = ({ initialMeta }: UserListProps) => {
                 objectFit: "cover",
                 borderRadius: 6,
               }}
+              alt="product"
             />
           ) : (
             "—"
@@ -142,30 +146,24 @@ const ProductListClient = ({ initialMeta }: UserListProps) => {
         onFilter={() => console.log("Filter")}
       />
 
-      {loading ? (
-        <div style={{ textAlign: "center", padding: 60 }}>
-          <Spin size="large" />
-        </div>
-      ) : (
-        <>
-          <Table
-            bordered
-            dataSource={dataSource}
-            columns={columns}
-            pagination={false}
-            rowKey="_id"
-          />
+      <Spin spinning={isPending} size="large">
+        <Table
+          bordered
+          dataSource={dataSource}
+          columns={columns}
+          pagination={false}
+          rowKey="_id"
+        />
 
-          <PaginationInfo
-            current={meta.current}
-            pageSize={meta.pageSize}
-            total={meta.total}
-            onPageChange={(page) =>
-              onChange({ current: page, pageSize: meta.pageSize })
-            }
-          />
-        </>
-      )}
+        <PaginationInfo
+          current={meta.current}
+          pageSize={meta.pageSize}
+          total={meta.total}
+          onPageChange={(page) =>
+            onChange({ current: page, pageSize: meta.pageSize })
+          }
+        />
+      </Spin>
     </div>
   );
 };

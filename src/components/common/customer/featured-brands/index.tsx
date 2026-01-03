@@ -1,35 +1,16 @@
-"use client";
-
-import { useEffect, useState } from "react";
+// KHÔNG DÙNG "use client" NỮA (trừ khi CustomButton bắt buộc dùng)
 import styles from "@/components/common/customer/featured-brands/style.module.scss";
 import Link from "next/link";
-import Image from "next/image";
 import CustomButton from "@/components/common/customer/public-button";
-import { getTopSuppliers } from "@/services/supplier.api";
 import { TopSupplier } from "@/types/interface";
 import AppImage from "@/components/common/image/image";
 
-const FeaturedBrands = () => {
-  const [brands, setBrands] = useState<TopSupplier[]>([]);
-  const [loading, setLoading] = useState(false);
+interface FeaturedBrandsProps {
+  brands: TopSupplier[];
+}
 
-  useEffect(() => {
-    const fetchTopSuppliers = async () => {
-      setLoading(true);
-      try {
-        const res = await getTopSuppliers();
-        setBrands(res.data.data);
-      } catch (error) {
-        console.error("Fetch top suppliers error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTopSuppliers();
-  }, []);
-
-  if (loading) return null;
+const FeaturedBrands = ({ brands }: FeaturedBrandsProps) => {
+  if (!brands || brands.length === 0) return null;
 
   return (
     <section id="featured-brands">
@@ -42,7 +23,7 @@ const FeaturedBrands = () => {
 
               return (
                 <Link
-                  href={`/stores/${item.supplier.slug}`}
+                  href={`/stores/${supplier.slug}`}
                   key={item.supplierId}
                   className={styles.collectionCard}
                 >

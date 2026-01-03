@@ -1,24 +1,26 @@
 "use client";
-import { useAppStore } from "@/library/stores/useAppStore";
-import TokenSync from "@/library/tokenSync";
-import { SessionProvider, useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+
 import { useEffect } from "react";
+import axios from "axios";
+import { SessionProvider } from "next-auth/react";
 
-export function SessionProviders({ children }: { children: React.ReactNode }) {
-  return (
-    <SessionProvider>
-      <TokenSync />
-      <SessionGate>{children}</SessionGate>
-    </SessionProvider>
-  );
-}
-function SessionGate({ children }: { children: React.ReactNode }) {
-  const { status } = useSession();
+export default function AuthProvider({
+  children,
+  session,
+}: {
+  children: React.ReactNode;
+  session: any;
+}) {
+  useEffect(() => {
+    if (session?.user?.access_token) {
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${session.user.access_token}`;
+      console.log("Axios Client Token Set!");
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }, [session]);
 
-  if (status === "loading") {
-    return <div></div>;
-  }
-
-  return <>{children}</>;
+  return <SessionProvider session={session}>{children}</SessionProvider>;
 }

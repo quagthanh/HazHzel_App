@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import PreventFlash from "@/components/common/preventFlash";
 import AdminDashBoardLayout from "@/components/layout/admin_layout/admin.index";
 import { ConfigProvider } from "antd";
 
@@ -10,6 +11,7 @@ const AdminLayout = async ({
   const session = await auth();
   return (
     <>
+      <PreventFlash />
       <AdminDashBoardLayout session={session}>{children}</AdminDashBoardLayout>
     </>
   );

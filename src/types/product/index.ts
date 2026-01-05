@@ -1,5 +1,5 @@
 import { StaticImageData } from "next/image";
-import { IProduct } from "../interface";
+import { IProduct, IProductDetail, IProductVariant } from "../interface";
 
 export interface ListingClientProps {
   banner: StaticImageData;
@@ -15,4 +15,11 @@ export enum GenderType {
   MEN = "MEN",
   WOMEN = "WOMEN",
   UNISEX = "UNISEX",
+}
+export interface ProductInfoProps {
+  product: IProductDetail;
+  currentVariant: IProductVariant | null;
+  uniqueAttributes: { name: string; values: string[] }[];
+  selectedOptions: Record<string, string>;
+  onOptionChange: (k: string, v: string) => void;
 }

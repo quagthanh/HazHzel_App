@@ -29,7 +29,7 @@ export async function getProductsForAdmin({
     },
   });
 }
-//Product not populate with category and supplier
+//Product by gender
 export async function getProducts(
   gender: string,
   params: {
@@ -46,6 +46,17 @@ export async function getProducts(
     url: "/products",
     method: "GET",
     queryParams: { gender, current: params.current, pageSize: params.pageSize },
+  });
+}
+//GET detail product
+export async function getDetailProduct(
+  slug: string,
+  state: { color: string; size: string }
+) {
+  return sendRequest<ProductResponseData>({
+    url: `/products/${slug}?color=${state.color}&size=${state.size}`,
+    method: "GET",
+    queryParams: {},
   });
 }
 //Product by store(supplier)

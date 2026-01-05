@@ -8,7 +8,7 @@ import { UnisexItem } from "@/types/interface";
 const UnisexCollections = () => {
   const collections: UnisexItem[] = [
     {
-      href: "/collections/shop-women",
+      href: "/products?gender=women",
       label: "Women",
       image: [
         {
@@ -22,7 +22,7 @@ const UnisexCollections = () => {
       ],
     },
     {
-      href: "/collections/shop-men",
+      href: "/products?gender=men",
       label: "Men",
       image: [
         {

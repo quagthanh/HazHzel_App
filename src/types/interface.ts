@@ -146,9 +146,36 @@ export interface IProductSupplier {
   createdAt: string;
   updatedAt: string;
 }
-
-export interface IProductVariant {}
-
+export interface IVariantAttribute {
+  k: string;
+  v: string;
+}
+export interface IProductVariant {
+  _id: string;
+  name: string;
+  stock: number;
+  currentPrice: number;
+  originalPrice: number;
+  discountPrice: number;
+  attributes: IVariantAttribute[];
+  images: IProductImage[];
+}
+export interface IProductDetail {
+  _id: string;
+  name: string;
+  description: string;
+  slug: string;
+  images: IProductImage[];
+  supplierId: { name: string; _id: string; slug: string };
+  categoryId: { name: string; _id: string; slug: string };
+  variants: IProductVariant[];
+  currentPrice: number;
+  originalPrice: number;
+  discountPrice?: number;
+  isSale?: boolean;
+  isHot?: boolean;
+  stock?: number;
+}
 export interface IProduct {
   _id: string;
   name: string;

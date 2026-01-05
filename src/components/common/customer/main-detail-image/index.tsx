@@ -1,13 +1,6 @@
 "use client";
 import styles from "@/components/common/customer/main-detail-image/style.module.scss";
-const MainImage = () => {
-  const images = [
-    "/assets/img1.webp",
-    "/assets/img2.webp",
-    "/assets/img3.webp",
-    "/assets/img4.webp",
-  ];
-
+export const MainImage = ({ images }: { images: string[] }) => {
   return (
     <div className={styles.mainImage}>
       {images.map((src, index) => (
@@ -15,11 +8,10 @@ const MainImage = () => {
           key={index}
           id={`main-image-${index}`}
           src={src}
-          alt={`main-${index}`}
           className={styles.mainImageItem}
+          alt="main"
         />
       ))}
     </div>
   );
 };
-export default MainImage;

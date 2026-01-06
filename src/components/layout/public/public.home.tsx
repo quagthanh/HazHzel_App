@@ -20,7 +20,6 @@ const PublicHomePage = async () => {
     const res = resultTopSupplier.value;
     if (res?.data) {
       topSuppliers = res.data.data || [];
-      console.log("Top suppliers data:", topSuppliers);
     }
   } else {
     console.error(

@@ -11,6 +11,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { IProduct } from "@/types/interface";
+import { formatPriceHelper } from "@/utils/helper";
 
 interface ShopFavoritesProps {
   products?: IProduct[];
@@ -18,10 +19,6 @@ interface ShopFavoritesProps {
 
 const ShopFavorites = ({ products = [] }: ShopFavoritesProps) => {
   if (!products || products.length === 0) return null;
-  const formatPrice = (price: number) => {
-    if (!price) return "LIEN HE";
-    return price.toLocaleString("vi-VN") + " ₫";
-  };
 
   return (
     <section id="shop-favorites">
@@ -84,15 +81,15 @@ const ShopFavorites = ({ products = [] }: ShopFavoritesProps) => {
                         {item.isSale ? (
                           <>
                             <span className={styles.itemPriceLineThrough}>
-                              {formatPrice(item.originalPrice)}
+                              {formatPriceHelper(item.originalPrice)}
                             </span>
                             <span className={styles.itemPrice}>
-                              {formatPrice(item.currentPrice)}
+                              {formatPriceHelper(item.currentPrice)}
                             </span>
                           </>
                         ) : (
                           <p className={styles.itemPrice}>
-                            {formatPrice(item.currentPrice)}
+                            {formatPriceHelper(item.currentPrice)}
                           </p>
                         )}
                       </div>

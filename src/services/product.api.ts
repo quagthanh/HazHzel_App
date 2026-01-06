@@ -62,61 +62,60 @@ export async function getDetailProduct(
 //Product by store(supplier)
 export async function getProductsByStore(
   slug: string,
-  params: { current: number; pageSize: number }
+  params: {
+    current: number;
+    pageSize: number;
+    category?: string;
+    size?: string;
+    minPrice?: string | number;
+    maxPrice?: string | number;
+    inStock?: string;
+    sort?: string;
+  }
 ) {
-  console.log(
-    "Fetching products for store slug:",
-    slug,
-    "with params:",
-    params
-  );
   return sendRequest<ProductResponseData>({
     url: `/products/by-supplier/${slug}`,
     method: "GET",
-    queryParams: {
-      current: params.current,
-      pageSize: params.pageSize,
-    },
+    queryParams: params,
   });
 }
 //Product by category
 export async function getProductsByCategory(
   slug: string,
-  params: { current: number; pageSize: number }
+  params: {
+    current: number;
+    pageSize: number;
+    minPrice?: string | number;
+    maxPrice?: string | number;
+    sort?: string;
+    size?: string;
+    brand?: string;
+  }
 ) {
-  console.log(
-    "Fetching products for category slug:",
-    slug,
-    "with params:",
-    params
-  );
+  console.log("Fetch products by category with params:", params);
   return sendRequest<ProductResponseData>({
     url: `/products/by-category/${slug}`,
     method: "GET",
-    queryParams: {
-      current: params.current,
-      pageSize: params.pageSize,
-    },
+    queryParams: params,
   });
 }
 //Product by collection
 export async function getProductsByCollection(
   slug: string,
-  params: { current: number; pageSize: number }
+  params: {
+    current: number;
+    pageSize: number;
+    minPrice?: string | number;
+    maxPrice?: string | number;
+    sort?: string;
+    size?: string;
+    brand?: string;
+  }
 ) {
-  console.log(
-    "Fetching products for collection slug:",
-    slug,
-    "with params:",
-    params
-  );
   return sendRequest<ProductResponseData>({
     url: `/products/by-collection/${slug}`,
     method: "GET",
-    queryParams: {
-      current: params.current,
-      pageSize: params.pageSize,
-    },
+    queryParams: params,
   });
 }
 

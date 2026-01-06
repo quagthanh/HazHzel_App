@@ -2,6 +2,7 @@ import ListingStoreClient from "@/components/layout/public/client-listing-layout
 import { getProductsByStore } from "@/services/product.api"; // Import hàm mới
 import { ListPageProps } from "@/types/interface";
 import store_banner from "@/assets/store-banner.png";
+import { getParam } from "@/utils/helper";
 
 export default async function StorePage({
   params,
@@ -9,17 +10,23 @@ export default async function StorePage({
 }: ListPageProps) {
   const { slug } = params;
   const title = slug.replace(/-/g, " ").toUpperCase();
-
-  const current = Number(searchParams?.current) || 1;
-  const pageSize = Number(searchParams?.pageSize) || 12;
+  const filters = {
+    current: Number(getParam(searchParams?.current)) || 1,
+    pageSize: Number(getParam(searchParams?.pageSize)) || 12,
+    category: getParam(searchParams?.filterCategory),
+    size: getParam(searchParams?.filterSize),
+    minPrice: getParam(searchParams?.minPrice),
+    maxPrice: getParam(searchParams?.maxPrice),
+    inStock: getParam(searchParams?.inStock),
+    sort: getParam(searchParams?.sort),
+  };
 
   let products = [];
   let meta = { current: 1, pageSize: 12, total: 0, pages: 0 };
 
   try {
-    const res = await getProductsByStore(slug, { current, pageSize });
+    const res = await getProductsByStore(slug, filters);
     const backendData = res?.data?.data;
-
     if (backendData) {
       products = backendData.result || [];
       meta = backendData.meta || meta;

@@ -36,7 +36,7 @@ const CartSummary = () => {
         {isFreeShipping ? (
           <p className={styles.progressTextSuccess}>
             <CheckCircleFilled style={{ color: "#52c41a", marginRight: 5 }} />
-            Congratulations! You've got <strong>Free Shipping</strong>.
+            Congratulations! You have got <strong>Free Shipping</strong>.
           </p>
         ) : (
           <p className={styles.progressText}>

@@ -1,5 +1,4 @@
 "use client";
-import { useHasMounted } from "@/utils/customHook";
 import { Input, Modal, Steps, Form, Button, notification, Result } from "antd";
 import {
   SmileOutlined,
@@ -13,6 +12,7 @@ import {
   retryActiveDTO,
 } from "@/services/auth.api";
 import styles from "@/components/common/auth/reactive-model/style.module.scss";
+import { useHasMounted } from "@/utils/hooks/useHasMounted";
 export default function ModalReactive(props: any) {
   const { isModalOpen, onClose, userEmail } = props;
   const [current, setCurrent] = useState(0);
@@ -164,6 +164,7 @@ export default function ModalReactive(props: any) {
               subTitle="Now you can go back to login page"
               extra={[
                 <Button
+                  key={`${current}`}
                   type="primary"
                   onClick={handleOk}
                   className={styles.submitButton}

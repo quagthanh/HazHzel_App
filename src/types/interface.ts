@@ -252,3 +252,6 @@ export interface ListPageProps {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
+export interface PageProps {
+  searchParams: { [key: string]: string | string[] | undefined };
+}

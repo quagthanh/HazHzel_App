@@ -2,21 +2,28 @@ import ListingCategoryClient from "@/components/layout/public/client-listing-lay
 import { getProductsByCategory } from "@/services/product.api";
 import { ListPageProps } from "@/types/interface";
 import category_banner from "@/assets/categories_banner.jpg";
+import { getParam } from "@/utils/helper";
 export default async function CatgoryPage({
   params,
   searchParams,
 }: ListPageProps) {
   const { slug } = params;
   const title = slug.replace(/-/g, " ").toUpperCase();
-
-  const current = Number(searchParams?.current) || 1;
-  const pageSize = Number(searchParams?.pageSize) || 12;
+  const filters = {
+    current: Number(getParam(searchParams?.current)) || 1,
+    pageSize: Number(getParam(searchParams?.pageSize)) || 12,
+    minPrice: getParam(searchParams?.minPrice),
+    maxPrice: getParam(searchParams?.maxPrice),
+    sort: getParam(searchParams?.sort),
+    size: getParam(searchParams?.filterSize),
+    brand: getParam(searchParams?.filterBrand),
+  };
 
   let products = [];
   let meta = { current: 1, pageSize: 12, total: 0, pages: 0 };
 
   try {
-    const res = await getProductsByCategory(slug, { current, pageSize });
+    const res = await getProductsByCategory(slug, filters);
     const backendData = res?.data?.data;
 
     if (backendData) {

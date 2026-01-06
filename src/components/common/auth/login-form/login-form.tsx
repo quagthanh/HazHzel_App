@@ -167,7 +167,7 @@ const LoginForm = () => {
 
             <div className={styles.loginLink}>
               <Text className={styles.loginLinkText}>
-                Don't have an account?
+                Do not have an account?
                 <Link
                   href={"/auth/register"}
                   className={styles.loginLinkAction}

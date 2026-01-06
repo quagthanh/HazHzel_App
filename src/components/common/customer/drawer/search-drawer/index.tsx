@@ -1,46 +1,84 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Drawer, Col, Row, Input, Empty } from "antd";
+import { Drawer, Col, Row, Input, Empty, Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { SearchOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  CloseOutlined,
+  ArrowRightOutlined,
+} from "@ant-design/icons";
 import styles from "@/components/common/customer/drawer/search-drawer/style.module.scss";
 import logo from "@/../public/assets/test6.png";
 import { SearchDrawerProps } from "@/types/interface";
+import { useDebounce } from "@/utils/hooks/useDebounce";
 import {
-  MOCK_PRODUCTS,
-  MOCK_SUGGESTIONS,
-  MOCK_COLLECTIONS,
-} from "@/shared/mockdata"; // Import data giả
+  PRODUCT_LIMIT,
+  SearchCollectionResult,
+  SearchProductResult,
+} from "@/types/search";
+import {
+  getTopViewedProducts,
+  searchCollections,
+  searchProducts,
+} from "@/services/search.api";
+import { formatPriceHelper } from "@/utils/helper";
+import CustomButton from "../../public-button";
 
 const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedTerm, setDebouncedTerm] = useState("");
+  const debouncedTerm = useDebounce(searchTerm, 500);
   const [activeTab, setActiveTab] = useState<"products" | "collections">(
     "products"
   );
-
-  // Logic Delay 0.5s (Debounce)
+  const [suggestions, setSuggestions] = useState<SearchProductResult[]>([]);
+  const [products, setProducts] = useState<SearchProductResult[]>([]);
+  const [collections, setCollections] = useState<SearchCollectionResult[]>([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedTerm(searchTerm);
-    }, 500);
+    if (open) {
+      const fetchSuggestions = async () => {
+        try {
+          const res = await getTopViewedProducts();
+          if (res?.data.data) setSuggestions(res.data.data);
+        } catch (error) {
+          console.error("Failed to fetch top viewed products", error);
+        }
+      };
+      fetchSuggestions();
+    }
+  }, [open, suggestions.length]);
+  useEffect(() => {
+    if (!debouncedTerm.trim()) {
+      setProducts([]);
+      setCollections([]);
+      return;
+    }
 
-    return () => clearTimeout(handler);
-  }, [searchTerm]);
+    const fetchSearchResults = async () => {
+      setLoading(true);
+      try {
+        const [prodRes, colRes] = await Promise.all([
+          searchProducts(debouncedTerm),
+          searchCollections(debouncedTerm),
+        ]);
 
-  // Filter Data dựa trên debouncedTerm
-  const filteredProducts = debouncedTerm
-    ? MOCK_PRODUCTS.filter((p) =>
-        p.name.toLowerCase().includes(debouncedTerm.toLowerCase())
-      )
-    : []; // Nếu chưa search thì rỗng hoặc hiện gợi ý tuỳ ý
+        if (prodRes?.data.data) setProducts(prodRes.data.data);
+        if (colRes?.data.data) setCollections(colRes.data.data);
+      } catch (error) {
+        console.error("Search error", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const filteredSuggestions = debouncedTerm
-    ? MOCK_SUGGESTIONS.filter((s) => s.includes(debouncedTerm.toLowerCase()))
-    : MOCK_SUGGESTIONS;
-
-  // Hàm highlight text (Bôi đậm phần khớp)
+    fetchSearchResults();
+  }, [debouncedTerm]);
+  useEffect(() => {
+    if (!open) {
+      setSearchTerm("");
+    }
+  }, [open]);
   const getHighlightedText = (text: string, highlight: string) => {
     if (!highlight.trim()) return <span>{text}</span>;
     const parts = text.split(new RegExp(`(${highlight})`, "gi"));
@@ -48,7 +86,7 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
       <span>
         {parts.map((part, i) =>
           part.toLowerCase() === highlight.toLowerCase() ? (
-            <b key={i} style={{ color: "black" }}>
+            <b key={i} style={{ color: "black", fontWeight: 700 }}>
               {part}
             </b>
           ) : (
@@ -65,16 +103,14 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
     <Drawer
       open={open}
       placement="top"
-      height="100vh" // Full màn hình để đẹp giống mẫu
+      height="100vh"
       style={{ backgroundColor: "rgb(255, 251, 245)" }}
       onClose={onClose}
       closable={false}
       maskClosable={true}
     >
-      {/* === HEADER === */}
       <div className={styles.headerWrapper}>
         <Row align="middle" gutter={[16, 0]}>
-          {/* Logo */}
           <Col xs={4} sm={3} md={2}>
             <div className={styles.logoContainer}>
               <Image
@@ -86,7 +122,6 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
             </div>
           </Col>
 
-          {/* Transparent Input */}
           <Col xs={16} sm={19} md={20}>
             <div className={styles.searchBox}>
               <SearchOutlined className={styles.searchIcon} />
@@ -101,112 +136,151 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
             </div>
           </Col>
 
-          {/* Close Button */}
           <Col xs={4} sm={2} md={2} style={{ textAlign: "right" }}>
             <CloseOutlined className={styles.closeIcon} onClick={onClose} />
           </Col>
         </Row>
       </div>
 
-      {/* === BODY CONTENT === */}
       <div className={styles.contentWrapper}>
         <Row gutter={[40, 40]}>
-          {/* LEFT COLUMN: SUGGESTIONS */}
           <Col xs={24} md={6}>
             <h4 className={styles.sectionTitle}>SUGGESTIONS</h4>
             <ul className={styles.suggestionList}>
-              {filteredSuggestions.map((item, index) => (
-                <li key={index} onClick={() => setSearchTerm(item)}>
-                  {" "}
-                  {/* Click gợi ý điền vào input */}
-                  {getHighlightedText(item, debouncedTerm)}
+              {suggestions.map((item) => (
+                <li key={item._id} onClick={() => setSearchTerm(item.name)}>
+                  {searchTerm
+                    ? getHighlightedText(item.name, debouncedTerm)
+                    : item.name}
                 </li>
               ))}
             </ul>
           </Col>
 
-          {/* RIGHT COLUMN: TABS & RESULTS */}
           <Col xs={24} md={18}>
-            {/* Tabs Header */}
-            <div className={styles.tabsHeader}>
-              <button
-                className={`${styles.tabBtn} ${
-                  activeTab === "products" ? styles.active : ""
-                }`}
-                onClick={() => setActiveTab("products")}
-              >
-                PRODUCTS
-              </button>
-              <button
-                className={`${styles.tabBtn} ${
-                  activeTab === "collections" ? styles.active : ""
-                }`}
-                onClick={() => setActiveTab("collections")}
-              >
-                COLLECTIONS
-              </button>
-            </div>
-
-            {/* Tab Content */}
-            <div className={styles.tabContent}>
-              {activeTab === "products" ? (
-                <>
-                  {filteredProducts.length > 0 ? (
-                    <Row gutter={[20, 30]}>
-                      {filteredProducts.slice(0, 4).map((product) => (
-                        <Col key={product.id} xs={12} sm={12} md={6}>
-                          <div className={styles.productCard}>
-                            <div className={styles.productImage}>
-                              <Image
-                                src={product.image}
-                                alt={product.name}
-                                fill
-                              />
-                            </div>
-                            <div className={styles.productInfo}>
-                              <p className={styles.brand}>{product.brand}</p>
-                              <h5 className={styles.name}>{product.name}</h5>
-                              <p className={styles.price}>{product.price}</p>
-                            </div>
-                          </div>
-                        </Col>
-                      ))}
-                    </Row>
-                  ) : (
-                    <Empty
-                      description={
-                        debouncedTerm
-                          ? "No products found"
-                          : "Start typing to search"
-                      }
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    />
-                  )}
-
-                  {/* Nút View All */}
-                  {filteredProducts.length > 0 && (
-                    <div className={styles.viewAllContainer}>
-                      <Link
-                        href={`/search?q=${debouncedTerm}`}
-                        className={styles.viewAllBtn}
-                      >
-                        VIEW ALL RESULTS ({filteredProducts.length})
-                      </Link>
-                    </div>
-                  )}
-                </>
-              ) : (
-                // COLLECTIONS TAB
-                <div className={styles.collectionsList}>
-                  {MOCK_COLLECTIONS.map((col) => (
-                    <div key={col.id} className={styles.collectionItem}>
-                      <h3>{col.title}</h3>
-                      <span>{col.count} items</span>
-                    </div>
-                  ))}
+            {!debouncedTerm && !loading && (
+              <div style={{ opacity: 0.5, marginTop: 50, textAlign: "center" }}>
+                Start typing to see products...
+              </div>
+            )}
+            {loading && (
+              <div style={{ textAlign: "center", padding: "50px 0" }}>
+                <Spin size="large" />
+              </div>
+            )}
+            {debouncedTerm && !loading && (
+              <>
+                <div className={styles.tabsHeader}>
+                  <button
+                    className={`${styles.tabBtn} ${
+                      activeTab === "products" ? styles.active : ""
+                    }`}
+                    onClick={() => setActiveTab("products")}
+                  >
+                    PRODUCTS ({products.length})
+                  </button>
+                  <button
+                    className={`${styles.tabBtn} ${
+                      activeTab === "collections" ? styles.active : ""
+                    }`}
+                    onClick={() => setActiveTab("collections")}
+                  >
+                    COLLECTIONS ({collections.length})
+                  </button>
                 </div>
-              )}
-            </div>
+
+                <div className={styles.tabContent}>
+                  {activeTab === "products" ? (
+                    <>
+                      {products.length > 0 ? (
+                        <Row gutter={[20, 30]}>
+                          {products.slice(0, 4).map((product) => (
+                            <Col key={product._id} xs={12} sm={12} md={6}>
+                              <Link
+                                href={`/products/${product.slug}`}
+                                onClick={onClose}
+                              >
+                                <div className={styles.productCard}>
+                                  <div className={styles.productImage}>
+                                    <Image
+                                      src={
+                                        product.images?.[0]?.secure_url ||
+                                        "/placeholder.webp"
+                                      }
+                                      alt={product.name}
+                                      fill
+                                      sizes="(max-width: 768px) 100vw, 33vw"
+                                      style={{ objectFit: "cover" }}
+                                    />
+                                  </div>
+                                  <div className={styles.productInfo}>
+                                    <p className={styles.brand}>
+                                      {product.supplier}
+                                    </p>
+                                    <h5 className={styles.name}>
+                                      {getHighlightedText(
+                                        product.name,
+                                        debouncedTerm
+                                      )}
+                                    </h5>
+                                    <p className={styles.price}>
+                                      {formatPriceHelper(product.price)}
+                                    </p>
+                                  </div>
+                                </div>
+                              </Link>
+                            </Col>
+                          ))}
+                        </Row>
+                      ) : (
+                        <Empty
+                          description="No products found"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
+                      )}
+
+                      {products.length > PRODUCT_LIMIT && (
+                        <div className={styles.viewAllContainer}>
+                          <Link
+                            href={`/search?keyword=${debouncedTerm}`}
+                            onClick={onClose}
+                          >
+                            <CustomButton>
+                              VIEW ALL PRODUCTS ({products.length})
+                              <ArrowRightOutlined />
+                            </CustomButton>
+                          </Link>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className={styles.collectionsList}>
+                      {collections.length > 0 ? (
+                        collections.map((col) => (
+                          <Link
+                            href={`/collections/${col.slug}`}
+                            key={col._id}
+                            onClick={onClose}
+                          >
+                            <div className={styles.collectionItem}>
+                              <h3>
+                                {getHighlightedText(col.name, debouncedTerm)}
+                              </h3>
+                              <span>View collection &rarr;</span>
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <Empty
+                          description="No collections found"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </Col>
         </Row>
       </div>

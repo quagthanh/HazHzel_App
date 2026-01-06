@@ -7,14 +7,8 @@ const http = axios.create({
   },
 });
 
-// --- REQUEST INTERCEPTOR ---
 http.interceptors.request.use(
   async (config) => {
-    // KHÔNG CÒN LOGIC LẤY TOKEN Ở ĐÂY NỮA
-    // Token sẽ được nạp vào theo 2 cách:
-    // 1. Client: Do AuthProvider tự động set vào defaults.
-    // 2. Server: Do bạn truyền thủ công vào headers khi gọi hàm.
-
     return config;
   },
   (error) => {
@@ -22,11 +16,9 @@ http.interceptors.request.use(
   }
 );
 
-// --- RESPONSE INTERCEPTOR ---
 http.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Xử lý lỗi global (ví dụ log lỗi)
     console.error("Server API Error:", error?.response?.data || error.message);
     return Promise.reject(error);
   }

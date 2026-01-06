@@ -25,10 +25,10 @@ export default function NotFound() {
 
       {/* Nội dung chính */}
       <article className={style.content}>
-        <p>Oops! It looks like you've taken a wrong turn.</p>
+        <p>Oops! It looks like you have taken a wrong turn.</p>
         <p>
-          The page you're looking for isn't available. But don't worry, there
-          are plenty of exciting products waiting for you in our store!
+          The page you have looking for is not available. But do not worry,
+          there are plenty of exciting products waiting for you in our store!
         </p>
         <p>
           <strong>404</strong> error — Page not found.

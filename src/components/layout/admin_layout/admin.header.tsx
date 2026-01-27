@@ -1,12 +1,19 @@
 "use client";
+import AdminDropdown from "@/components/common/admin/user/header/header-dropdown";
 import { userMenu } from "@/shared/configs/menu/adminMenu";
 import { BellOutlined } from "@ant-design/icons";
 import { Avatar, Badge, Dropdown, Layout, Select, Space, Tooltip } from "antd";
+import { signOut } from "next-auth/react";
 
 const { Header } = Layout;
 
 const AdminHeader = ({ session }: any) => {
-  const handleClick = (e: any) => {};
+  const handleClick = (e: any) => {
+    if (e.key === "logout") {
+      console.log("Logout button is clicked");
+      signOut({ callbackUrl: "/auth/login" });
+    }
+  };
   return (
     <Header
       style={{
@@ -41,20 +48,7 @@ const AdminHeader = ({ session }: any) => {
             <BellOutlined style={{ fontSize: 20, color: "white" }} />
           </Badge>
         </Tooltip>
-
-        <Dropdown
-          menu={{
-            onClick: handleClick,
-            items: userMenu,
-          }}
-          placement="bottomRight"
-          trigger={["hover"]}
-        >
-          <Space style={{ cursor: "pointer", color: "white" }}>
-            <Avatar src="https://i.pravatar.cc/150?img=3" />
-            <span>{session?.user?.name}</span>
-          </Space>
-        </Dropdown>
+        <AdminDropdown session={session} />
       </Space>
     </Header>
   );

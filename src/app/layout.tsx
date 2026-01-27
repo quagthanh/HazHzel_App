@@ -5,6 +5,7 @@ import "@/scss/partial/_body.scss";
 import PreventFlash from "@/components/common/preventFlash";
 import { auth } from "@/auth";
 import AuthProvider from "./provider";
+import TopLoader from "@/components/common/progress-bar";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -25,7 +26,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={montserrat.className}>
         <AuthProvider session={session}>
-          <AntdRegistry>{children}</AntdRegistry>
+          <AntdRegistry>
+            <TopLoader />
+            {children}
+          </AntdRegistry>
         </AuthProvider>
       </body>
     </html>

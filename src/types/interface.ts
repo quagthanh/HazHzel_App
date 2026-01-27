@@ -105,7 +105,7 @@ export interface UserListProps {
   initialUsers?: IUser[];
   initialMeta?: Meta;
 }
-export interface IProductImage {
+export interface IImage {
   public_id: string;
   secure_url: string;
   width: number;
@@ -132,17 +132,13 @@ export interface IAddress {
 
 export interface IProductSupplier {
   _id: string;
-
   name: string;
   contactName?: string;
   email?: string;
   phone?: string;
-
   address?: IAddress;
   description?: string;
-
   status: "active" | "inactive";
-
   createdAt: string;
   updatedAt: string;
 }
@@ -158,14 +154,14 @@ export interface IProductVariant {
   originalPrice: number;
   discountPrice: number;
   attributes: IVariantAttribute[];
-  images: IProductImage[];
+  images: IImage[];
 }
 export interface IProductDetail {
   _id: string;
   name: string;
   description: string;
   slug: string;
-  images: IProductImage[];
+  images: IImage[];
   supplierId: { name: string; _id: string; slug: string };
   categoryId: { name: string; _id: string; slug: string };
   variants: IProductVariant[];
@@ -184,7 +180,7 @@ export interface IProduct {
   slug: string;
   categoryId: IProductCategory;
   supplierId: IProductSupplier;
-  images: IProductImage[];
+  images: IImage[];
   status: statusProduct.ACTIVE | statusProduct.INACTIVE;
   isHot: boolean;
   isSale: boolean;
@@ -211,23 +207,25 @@ export interface IProps {
     total: number;
   };
 }
-export interface IImage {
-  public_id: string;
-  secure_url: string;
-  width: number;
-  height: number;
-}
 
 export interface ICategory {
   _id: string;
-  name: string;
-  isActive: boolean;
+  name?: string;
+  slug?: string;
+  status?: string;
+  images?: IImage[];
 }
 
 export interface ISupplier {
   _id: string;
-  name: string;
-  status: string;
+  name?: string;
+  contactName?: string;
+  slug?: string;
+  email?: string;
+  phone?: string;
+  images?: IImage[];
+  address?: string;
+  status?: boolean;
 }
 export interface IProductGrid {
   products: IProduct[];

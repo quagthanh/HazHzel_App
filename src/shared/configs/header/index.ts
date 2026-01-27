@@ -54,7 +54,7 @@ export const navItems = [
   },
   {
     label: "Women",
-    href: "/women",
+    href: "products?gender=WOMEN",
     childrenColumns: [
       {
         title: "Clothing",

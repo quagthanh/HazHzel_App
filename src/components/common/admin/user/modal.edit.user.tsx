@@ -43,18 +43,22 @@ const UserEditModal = (props: any) => {
       } else {
         notification.error({
           message: "Cập nhật thất bại",
-          description: res?.message,
+          description: res?.data.message,
         });
       }
     }
   };
-
+  const handleCancel = () => {
+    form.resetFields();
+    setIsUserEditModalOpen(false);
+  };
   return (
     <Modal
       maskClosable={false}
       title="Edit User"
       open={isUserEditModalOpen}
       onOk={() => form.submit()}
+      onCancel={handleCancel}
       closable={false}
     >
       <Form name="basic" onFinish={onFinish} layout="vertical" form={form}>

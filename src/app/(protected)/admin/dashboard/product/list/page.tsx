@@ -1,25 +1,46 @@
 import ProductListClient from "@/components/common/admin/product/product-list/product.list";
+import { getCategory } from "@/services/category.api";
 import { getProductsForAdmin } from "@/services/product.api";
-import { auth } from "@/auth";
-
-interface PageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
-const ProductListPage = async ({ searchParams }: PageProps) => {
-  const session = await auth();
-  const token = session?.user?.access_token;
-
+import { getSupplier } from "@/services/supplier.api";
+import { AdminPageProps } from "@/types/product";
+const ProductListPage = async ({ searchParams }: AdminPageProps) => {
   const current = Number(searchParams?.current) || 1;
   const pageSize = Number(searchParams?.pageSize) || 10;
 
   let products = [];
+  let categoryName: any = getCategory();
+  let supplierName: any = getSupplier();
+  const [resultCategoryName, resultSupplierName] = await Promise.allSettled([
+    categoryName,
+    supplierName,
+  ]);
+  if (resultCategoryName.status == "fulfilled") {
+    const res = resultCategoryName.value;
+    if (res?.data) {
+      categoryName = res?.data?.data?.result;
+    }
+  } else {
+    console.error(
+      "Error when fetch value of category :",
+      resultCategoryName.reason
+    );
+  }
+  if (resultSupplierName.status == "fulfilled") {
+    const res = resultSupplierName.value;
+    if (res?.data) {
+      supplierName = res?.data?.data?.result;
+    }
+  } else {
+    console.error(
+      "Error when fetch value of supplier :",
+      resultSupplierName.reason
+    );
+  }
   let meta = { current: 1, pageSize: 10, total: 0, pages: 0 };
   try {
     const res = await getProductsForAdmin({
       current,
       pageSize,
-      accessToken: token,
     });
     const backendData = res?.data?.data;
 
@@ -33,7 +54,14 @@ const ProductListPage = async ({ searchParams }: PageProps) => {
     console.error("Error when call API Product:", error?.message);
   }
 
-  return <ProductListClient initialData={products} initialMeta={meta} />;
+  return (
+    <ProductListClient
+      initialData={products}
+      initialMeta={meta}
+      category={categoryName}
+      supplier={supplierName}
+    />
+  );
 };
 
 export default ProductListPage;

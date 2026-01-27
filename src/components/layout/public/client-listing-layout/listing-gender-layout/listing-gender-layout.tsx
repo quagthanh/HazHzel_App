@@ -15,7 +15,6 @@ export default function ListingGenderClient({
 }: ListingClientProps) {
   const searchParams = useSearchParams();
   const gender = searchParams.get("gender");
-  console.log("Check gender", gender);
   const router = useRouter();
   const pathname = usePathname();
 

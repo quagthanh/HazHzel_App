@@ -1,5 +1,6 @@
 import { StaticImageData } from "next/image";
 import { IProduct, IProductDetail, IProductVariant } from "../interface";
+import { GetProp, UploadProps } from "antd";
 
 export interface ListingClientProps {
   banner: StaticImageData;
@@ -23,3 +24,8 @@ export interface ProductInfoProps {
   selectedOptions: Record<string, string>;
   onOptionChange: (k: string, v: string) => void;
 }
+
+export interface AdminPageProps {
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+export type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];

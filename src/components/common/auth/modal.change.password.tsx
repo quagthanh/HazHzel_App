@@ -1,13 +1,13 @@
 "use client";
 
-import { useHasMounted } from "@/utils/customHook";
+import { useHasMounted } from "@/utils/hooks/useHasMounted";
 import { Button, Form, Input, Modal, notification, Steps } from "antd";
 import {
   SmileOutlined,
   SolutionOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { sendRequest } from "@/utils/api";
 import { IBackendRes } from "@/types/backend";
 

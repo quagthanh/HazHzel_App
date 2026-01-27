@@ -1,6 +1,11 @@
 "use client";
-import { Dropdown, MenuProps, Popconfirm } from "antd";
-import { MoreOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button, Dropdown, MenuProps, message, Modal, Popconfirm } from "antd";
+import {
+  MoreOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleFilled,
+} from "@ant-design/icons";
 
 interface ActionMenuProps {
   onEdit?: () => void;
@@ -8,13 +13,29 @@ interface ActionMenuProps {
   deleteConfirmTitle?: string;
   deleteConfirmDescription?: string;
 }
+const { confirm } = Modal;
 
-const ActionMenu = ({
-  onEdit,
-  onDelete,
-  deleteConfirmTitle = "Xóa người dùng",
-  deleteConfirmDescription = "Bạn có chắc chắn muốn xóa?",
-}: ActionMenuProps) => {
+const ActionMenu = ({ onEdit, onDelete }: ActionMenuProps) => {
+  const showConfirm = () => {
+    confirm({
+      title: "Do you want to delete these products?",
+      icon: <ExclamationCircleFilled />,
+      content: "Check againt before you deleted it permanently ",
+
+      async onOk() {
+        if (onDelete) {
+          try {
+            await onDelete();
+            message.success("Delete products successfully");
+          } catch (error) {
+            message.error("Error rise when deleting products");
+            return Promise.reject(error);
+          }
+        }
+      },
+      onCancel() {},
+    });
+  };
   const items: MenuProps["items"] = [
     {
       key: "edit",
@@ -24,19 +45,10 @@ const ActionMenu = ({
     },
     {
       key: "delete",
-      label: (
-        <Popconfirm
-          title={deleteConfirmTitle}
-          description={deleteConfirmDescription}
-          onConfirm={onDelete}
-          okText="Có"
-          cancelText="Không"
-        >
-          <span>Xóa</span>
-        </Popconfirm>
-      ),
+      label: "Xóa",
       icon: <DeleteOutlined />,
       danger: true,
+      onClick: showConfirm,
     },
   ];
 

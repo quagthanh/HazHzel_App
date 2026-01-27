@@ -16,7 +16,7 @@ interface IRequest {
   headers?: any;
   useCache?: boolean;
 }
-
+//for json req
 export const sendRequest = async <T>(props: IRequest) => {
   const {
     url,
@@ -44,6 +44,26 @@ export const sendRequest = async <T>(props: IRequest) => {
       ...config.headers,
     };
   }
+
+  return http.request<IBackendRes<T>>(config);
+};
+//for form data req
+export const sendRequestFile = async <T>(props: IRequest) => {
+  const { url, method, body, queryParams, accessToken, headers = {} } = props;
+
+  const config: AxiosRequestConfig = {
+    url,
+    method,
+    params: queryParams,
+    data: body,
+    headers: {
+      ...headers,
+      Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+      // QUAN TRỌNG: Set Content-Type là undefined để browser tự động
+      // thêm boundary (VD: multipart/form-data; boundary=----WebKitFormBoundary...)
+      "Content-Type": undefined,
+    },
+  };
 
   return http.request<IBackendRes<T>>(config);
 };

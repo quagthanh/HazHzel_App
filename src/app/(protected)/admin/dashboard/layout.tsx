@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import PreventFlash from "@/components/common/preventFlash";
 import AdminDashBoardLayout from "@/components/layout/admin_layout/admin.index";
-import { ConfigProvider } from "antd";
 
 const AdminLayout = async ({
   children,

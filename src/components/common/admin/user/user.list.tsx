@@ -3,15 +3,17 @@
 import { IUserTable as IUser } from "@/types/backend";
 import { Table, TableProps, Spin } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState, useTransition } from "react";
-// import UserEditModal from "./modal.edit.user"; // Giữ nguyên modal của bạn
-// import UserCreateModal from "./modal.create.user"; // Giữ nguyên modal của bạn
+import { useEffect, useMemo, useState, useTransition } from "react";
+import UserEditModal from "./modal.edit.user";
+import UserCreateModal from "./modal.create.user";
+import Image from "next/image";
 
 import PageHeader from "../page-header";
 import ActionMenu from "../action-menu";
 import FilterBar from "../filter-bar";
 import PaginationInfo from "../pagination-info";
 
+import avt_holder from "@/assets/cool_avt.jpg";
 interface UserListClientProps {
   initialUsers: IUser[];
   initialMeta: {
@@ -26,32 +28,31 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Loading state khi chuyển trang
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Modal State
-  const [isUserCreateModalOpen, setIsUserCreateModalOpen] = useState(false);
-  const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [dataUpdate, setDataUpdate] = useState<IUser | null>(null);
 
-  // Data lấy từ Props (Server truyền xuống)
   const users = initialUsers;
   const meta = initialMeta;
 
-  const onClickCreate = () => setIsUserCreateModalOpen(true);
+  const onClickCreate = () => setIsCreateModalOpen(true);
+  useEffect(() => {
+    setIsLoading(false);
+  }, [searchParams]);
 
-  // Logic chuyển trang (Update URL -> Server fetch lại -> Client update)
   const onChange = (pagination: any) => {
+    setIsLoading(true);
+
     const params = new URLSearchParams(searchParams);
     params.set("current", pagination.current?.toString() ?? "1");
     params.set(
       "pageSize",
-      pagination.pageSize?.toString() ?? meta.pageSize.toString()
+      pagination.pageSize?.toString() ?? meta.pageSize.toString(),
     );
 
-    startTransition(() => {
-      router.replace(`${pathname}?${params.toString()}`);
-    });
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   const dataSource = useMemo(
@@ -60,7 +61,7 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
         ...u,
         key: u._id,
       })),
-    [users]
+    [users],
   );
 
   const columns: TableProps<IUser>["columns"] = useMemo(
@@ -72,29 +73,39 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
         width: 150,
       },
       {
+        title: "Image",
+        dataIndex: "images",
+        width: 100,
+        render: (images) =>
+          images?.[0] ? (
+            <img
+              src={images[0].secure_url}
+              style={{
+                width: 50,
+                height: 70,
+                objectFit: "cover",
+                borderRadius: 6,
+              }}
+              alt="user"
+            />
+          ) : (
+            <Image
+              src={avt_holder}
+              alt="user"
+              width={50}
+              height={70}
+              style={{
+                objectFit: "cover",
+                borderRadius: 6,
+              }}
+            />
+          ),
+      },
+      {
         title: "Name",
         dataIndex: "name",
         key: "name",
         width: 250,
-        render: (name: string) => (
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span
-              style={{
-                fontSize: 20,
-                width: 32,
-                height: 32,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "#f0f0f0",
-                borderRadius: 6,
-              }}
-            >
-              👤
-            </span>
-            <span>{name}</span>
-          </div>
-        ),
       },
       {
         title: "Email",
@@ -103,7 +114,7 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
         width: 250,
       },
       {
-        title: "Role", // Thêm cột Role nếu cần
+        title: "Role",
         dataIndex: "role",
         key: "role",
         width: 150,
@@ -117,7 +128,7 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
         render: (_: any, record: IUser) => (
           <ActionMenu
             onEdit={() => {
-              setIsUserEditModalOpen(true);
+              setIsEditModalOpen(true);
               setDataUpdate(record);
             }}
             onDelete={() => {
@@ -127,7 +138,7 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
         ),
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -146,14 +157,13 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
         onFilter={() => console.log("Filter clicked")}
       />
 
-      {/* Bọc Table trong Spin với trạng thái isPending */}
-      <Spin spinning={isPending} size="large">
+      <Spin spinning={isLoading} size="large">
         <Table
           bordered
           dataSource={dataSource}
           columns={columns}
           rowKey="_id"
-          pagination={false} // Tắt pagination mặc định của Antd
+          pagination={false}
           style={{ borderRadius: 8, overflow: "hidden" }}
         />
 
@@ -167,21 +177,16 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
         />
       </Spin>
 
-      {/* Modals */}
-      {/* Bạn cần đảm bảo component UserCreateModal và UserEditModal 
-        đã được import đúng và hoạt động.
-        Khi create/edit thành công -> gọi router.refresh() để reload lại list 
-      */}
-      {/* <UserCreateModal
-        isUserCreateModalOpen={isUserCreateModalOpen}
-        setIsUserCreateModalOpen={setIsUserCreateModalOpen}
+      <UserCreateModal
+        isUserCreateModalOpen={isCreateModalOpen}
+        setIsUserCreateModalOpen={setIsCreateModalOpen}
       />
       <UserEditModal
-        isUserEditModalOpen={isUserEditModalOpen}
-        setIsUserEditModalOpen={setIsUserEditModalOpen}
+        isUserEditModalOpen={isEditModalOpen}
+        setIsUserEditModalOpen={setIsEditModalOpen}
         setDataUpdate={setDataUpdate}
         dataUpdate={dataUpdate}
-      /> */}
+      />
     </div>
   );
 };

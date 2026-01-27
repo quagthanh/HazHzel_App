@@ -1,0 +1,65 @@
+@use "../../../../../scss/dependencies/variables" as *;
+.mobileCollapse {
+  .ant-collapse-header {
+    align-items: center !important;
+    padding: 16px 20px !important;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .ant-collapse-content-box {
+    padding: 10px 20px 20px !important;
+    background-color: #fafafa;
+  }
+}
+
+.mobileMenuHeader {
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #333;
+}
+
+.mobileSubGroup {
+  margin-bottom: 20px;
+}
+
+.mobileSubTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.mobileSubList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobileSubLink {
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  display: block;
+  
+  &:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+}
+
+.mobileViewAllLink {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #000;
+  margin-top: 10px;
+  text-decoration: underline;
+}

@@ -1,11 +1,13 @@
 "use client";
 import {
+  AppstoreAddOutlined,
   AppstoreOutlined,
   CreditCardOutlined,
   LogoutOutlined,
   MailOutlined,
   ProfileOutlined,
   SettingOutlined,
+  ShopOutlined,
   ShoppingCartOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -66,6 +68,40 @@ export const itemsSidebar: MenuItem[] = [
           {
             key: "user-detail",
             label: <Link href="">User Overview</Link>,
+          },
+        ],
+      },
+      {
+        key: "suppliers",
+        label: "Suppliers",
+        icon: <ShopOutlined />,
+        children: [
+          {
+            key: "supplier-list",
+            label: (
+              <Link href="/admin/dashboard/supplier/list">Supplier List</Link>
+            ),
+          },
+          {
+            key: "supplier-detail",
+            label: <Link href="">Supplier Overview</Link>,
+          },
+        ],
+      },
+      {
+        key: "categories",
+        label: "Categories",
+        icon: <AppstoreAddOutlined />,
+        children: [
+          {
+            key: "category-list",
+            label: (
+              <Link href="/admin/dashboard/category/list">Category List</Link>
+            ),
+          },
+          {
+            key: "category-detail",
+            label: <Link href="">Category Overview</Link>,
           },
         ],
       },

@@ -3,8 +3,6 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useCallback } from "react";
 
 export const useProductFilter = () => {
-  console.log("useProductFilter render");
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

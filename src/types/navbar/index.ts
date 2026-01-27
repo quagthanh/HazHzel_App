@@ -21,3 +21,11 @@ export interface NavMenuItem {
   childrenColumns?: NavMenuColumn[];
   promos?: NavMenuPromo[];
 }
+export interface DesktopNavProps {
+  items: NavMenuItem[];
+}
+export interface MobileNavProps {
+  open: boolean;
+  onClose: () => void;
+  items: NavMenuItem[];
+}

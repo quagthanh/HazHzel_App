@@ -1,14 +1,17 @@
+import { auth } from "@/auth";
 import PublicContent from "@/components/layout/public/client-layout/customer.content";
 import PublicFooter from "@/components/layout/public/client-layout/customer.footer";
 import PublicHeader from "@/components/layout/public/client-layout/customer.header";
 import { ConfigProvider, Layout } from "antd";
 
-const PublicLayout = ({
+const PublicLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
   const layoutStyle = {};
+  const session = await auth();
+  console.log("Check session:", session?.user.name);
   return (
     <div>
       <ConfigProvider

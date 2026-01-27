@@ -1,5 +1,7 @@
+"use server";
 import { sendRequest } from "@/utils/api";
 import { IUserTable } from "@/types/backend";
+import { auth } from "@/auth";
 
 interface UserResponseData {
   meta: {
@@ -10,16 +12,18 @@ interface UserResponseData {
   };
   result: IUserTable[];
 }
-
+const getAccesstoken = async () => {
+  const session = await auth();
+  return session?.user?.access_token;
+};
 export async function getUser({
   current,
   pageSize,
-  accessToken,
 }: {
   current: number;
   pageSize: number;
-  accessToken?: string;
 }) {
+  const accessToken = await getAccesstoken();
   return sendRequest<UserResponseData>({
     url: "/users",
     method: "GET",
@@ -36,24 +40,32 @@ export async function handleCreateUser(data: {
   email: string;
   password: string;
 }) {
-  return sendRequest<IUserTable>({
+  const accessToken = await getAccesstoken();
+  return sendRequest<any>({
     url: "/users",
     method: "POST",
     body: data,
+    accessToken,
   });
 }
 
 export async function handleEditUser(data: any) {
-  return sendRequest<IUserTable>({
+  const accessToken = await getAccesstoken();
+
+  return sendRequest<any>({
     url: "/users",
     method: "PATCH",
     body: data,
+    accessToken,
   });
 }
 
 export async function handleDeleteUser(id: string) {
+  const accessToken = await getAccesstoken();
+
   return sendRequest<any>({
     url: `/users/${id}`,
     method: "DELETE",
+    accessToken,
   });
 }

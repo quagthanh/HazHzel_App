@@ -36,7 +36,7 @@ export default function Verify({ id }: any) {
     } else {
       notification.error({
         message: "Verify failed",
-        description: res?.message,
+        description: res?.data?.message,
       });
     }
   };

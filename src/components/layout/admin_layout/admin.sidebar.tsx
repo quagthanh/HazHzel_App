@@ -9,11 +9,12 @@ import { useContext } from "react";
 const AdminSideBar = () => {
   const { Sider } = Layout;
   const context = useContext(AdminDashboadContext);
+  const pathname = usePathname();
+
   if (!context) {
     return null;
   }
   const { collapsed } = context;
-  const pathname = usePathname();
   const checkPoint = (pathname: string) => {
     if (pathname === "/admin/dashboard/product/list") return "product-list";
     if (pathname === "/admin/dashboard/product/grid") return "product-grid";

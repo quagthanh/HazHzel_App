@@ -32,12 +32,12 @@ const ModalChangePassword = (props: any) => {
     });
 
     if (res?.data) {
-      setUserEmail(res?.data?.email);
+      setUserEmail(res?.data?.data?.data?.email);
       setCurrent(1);
     } else {
       notification.error({
         message: "Call APIs error",
-        description: res?.message,
+        description: res?.data?.message,
       });
     }
   };
@@ -67,7 +67,7 @@ const ModalChangePassword = (props: any) => {
     } else {
       notification.error({
         message: "Call APIs error",
-        description: res?.message,
+        description: res?.data?.message,
       });
     }
   };

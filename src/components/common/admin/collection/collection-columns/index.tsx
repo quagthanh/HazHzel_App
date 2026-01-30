@@ -1,29 +1,26 @@
-import { ISupplier } from "@/types/interface";
+import { ICategory, ICollection, ISupplier } from "@/types/interface";
 import { TableProps, Image, Tag, Tooltip } from "antd";
 import ActionMenu from "../../action-menu";
 
-interface GetSupplierColumnsProps {
-  onEdit: (record: ISupplier) => void;
+interface GetCollectionColumnsProps {
+  onEdit: (record: ICollection) => void;
   onDelete: (id: string) => void;
 }
 
-export const getSupplierColumns = ({
+export const getCollectionColumns = ({
   onEdit,
   onDelete,
-}: GetSupplierColumnsProps): TableProps<ISupplier>["columns"] => {
+}: GetCollectionColumnsProps): TableProps<ICollection>["columns"] => {
   return [
     {
       title: "Logo",
       dataIndex: "images",
       width: 80,
       align: "center",
-      render: (images) => {
-        const logoUrl =
-          images?.[0]?.secure_url || images?.[0]?.url || images?.[0];
-
-        return logoUrl ? (
+      render: (images) =>
+        images?.[0]?.secure_url ? (
           <Image
-            src={logoUrl}
+            src={images[0].secure_url}
             width={40}
             height={40}
             style={{
@@ -35,48 +32,35 @@ export const getSupplierColumns = ({
           />
         ) : (
           "—"
-        );
-      },
+        ),
     },
     {
-      title: "Company Name",
+      title: "Collection Name",
       dataIndex: "name",
       width: 200,
       sorter: true,
       render: (name) => <span style={{ fontWeight: 600 }}>{name}</span>,
     },
     {
-      title: "Contact Info",
-      width: 280,
-      render: (_, record) => (
-        <div
-          style={{
-            fontSize: 13,
-            display: "flex",
-            flexDirection: "column",
-            gap: 4,
-          }}
-        >
-          <div>
-            <b>{record.contactName || "N/A"}</b>
-          </div>
-          <div style={{ color: "#555" }}> {record.phone || "—"}</div>
-          <div style={{ color: "#1890ff" }}> {record.email}</div>
-        </div>
-      ),
+      title: "Description Name",
+      dataIndex: "description",
+      width: 200,
+      sorter: true,
+      render: (description) =>
+        description ? (
+          <span style={{ fontWeight: "600" }}> {description}</span>
+        ) : (
+          <Tooltip title="Need to add description">
+            <span style={{ color: "#faad14" }}>None</span>
+          </Tooltip>
+        ),
     },
     {
-      title: "Address",
-      dataIndex: "address",
+      title: "Collection Slug",
+      dataIndex: "slug",
       width: 200,
-      ellipsis: {
-        showTitle: false,
-      },
-      render: (address) => (
-        <Tooltip placement="topLeft" title={address}>
-          {address}
-        </Tooltip>
-      ),
+      sorter: true,
+      render: (slug) => <span style={{ fontWeight: 600 }}>{slug}</span>,
     },
     {
       title: "Status",

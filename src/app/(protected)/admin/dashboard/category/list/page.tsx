@@ -16,12 +16,10 @@ const CategoryListPage = async ({ searchParams }: AdminPageProps) => {
     });
 
     const backendData = res?.data?.data;
-    console.log("Check backendData of category:", backendData);
 
     if (backendData) {
       categories = backendData.result || [];
       meta = backendData.meta || meta;
-      console.log("Check categories:", categories);
     } else {
       console.error("API return 200 but cannot find key 'data.data'");
     }

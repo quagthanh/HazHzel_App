@@ -32,7 +32,6 @@ const ProductListClient = ({
   category,
   supplier,
 }: ProductListClientProps) => {
-  console.log("Check data:", initialData);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();

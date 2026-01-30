@@ -15,7 +15,7 @@ import {
   UploadProps,
 } from "antd";
 import { FileType } from "@/types/product";
-import styles from "./style.module.scss"; // Import file style mới
+import styles from "./style.module.scss";
 
 interface ProductEditFormProps {
   form: FormInstance;
@@ -99,7 +99,6 @@ export const ProductEditForm = ({
         </Row>
       </div>
 
-      {/* --- SECTION 2: Advance Description --- */}
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Advance Description</h3>
 
@@ -113,13 +112,8 @@ export const ProductEditForm = ({
               </Radio.Group>
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={12}>
             <Form.Item label="Stock" name="stockQuantity">
-              <InputNumber className={styles.numberInput} min={0} />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="Quantity" name="quantity">
               <InputNumber className={styles.numberInput} min={0} />
             </Form.Item>
           </Col>
@@ -129,13 +123,11 @@ export const ProductEditForm = ({
           <Col span={12}>
             <Form.Item label="Size" name="size">
               <Select placeholder="Select" options={[]} />
-              {/* Bạn có thể truyền options size từ props nếu cần */}
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label="Colors" name="colors">
               <Select placeholder="Select" options={[]} />
-              {/* Bạn có thể truyền options colors từ props nếu cần */}
             </Form.Item>
           </Col>
         </Row>

@@ -5,7 +5,6 @@ const ThumbnailList = ({ images }: { images: string[] }) => {
     const image = document.getElementById(`main-image-${index}`);
     image?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  console.log("Check images:", images);
   return (
     <div className={styles.thumbnailList}>
       {images.map((src, index) => (

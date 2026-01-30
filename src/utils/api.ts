@@ -59,8 +59,6 @@ export const sendRequestFile = async <T>(props: IRequest) => {
     headers: {
       ...headers,
       Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
-      // QUAN TRỌNG: Set Content-Type là undefined để browser tự động
-      // thêm boundary (VD: multipart/form-data; boundary=----WebKitFormBoundary...)
       "Content-Type": undefined,
     },
   };

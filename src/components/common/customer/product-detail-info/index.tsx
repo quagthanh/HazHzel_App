@@ -6,16 +6,17 @@ import PaymentOptions from "../payment-option";
 import ProductDetailsTabs from "../product-detail-tabs";
 import CustomButton from "@/components/common/customer/public-button";
 import { IProductDetail, IProductVariant } from "@/types/interface";
+import { useState } from "react";
+import { message } from "antd";
 
-// Update Interface Props
 interface ProductInfoProps {
   product: IProductDetail;
   currentVariant: IProductVariant | null;
   uniqueAttributes: { name: string; values: string[] }[];
   selectedOptions: Record<string, string>;
   onOptionChange: (key: string, value: string) => void;
-  // Thêm prop này từ DetailPage truyền xuống
   isOptionDisabled?: (key: string, value: string) => boolean;
+  onAddToCart: (variantId: string, quantity: number) => Promise<void>;
 }
 
 const ProductInfo = ({
@@ -24,8 +25,10 @@ const ProductInfo = ({
   uniqueAttributes,
   selectedOptions,
   onOptionChange,
-  isOptionDisabled, // Nhận prop
+  isOptionDisabled,
+  onAddToCart,
 }: ProductInfoProps) => {
+  const [loading, setLoading] = useState(false);
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -36,7 +39,20 @@ const ProductInfo = ({
     ? currentVariant.currentPrice
     : product.currentPrice || 0;
   const stock = currentVariant ? currentVariant.stock : 0;
+  const handleAddToCartClick = async () => {
+    if (!currentVariant) {
+      message.error("Please select all options");
+      return;
+    }
 
+    setLoading(true);
+    try {
+      // Default quantity is 1 for now
+      await onAddToCart(currentVariant._id, 1);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className={styles.productInfo}>
       <h2>{product.supplierId?.name || "BRAND"}</h2>
@@ -44,7 +60,6 @@ const ProductInfo = ({
 
       <p className={styles.price}>{formatPrice(price)}</p>
 
-      {/* Hiển thị stock */}
       {currentVariant ? (
         stock > 0 ? (
           <p className={styles.stock} style={{ color: "green" }}>
@@ -74,8 +89,15 @@ const ProductInfo = ({
         />
       ))}
 
-      <CustomButton disabled={!currentVariant || stock === 0}>
-        {stock > 0 ? "ADD TO CART" : "OUT OF STOCK"}
+      <CustomButton
+        disabled={!currentVariant || stock === 0}
+        onClick={handleAddToCartClick}
+      >
+        {loading
+          ? "ADDING..."
+          : stock > 0
+            ? "ADD TO CART"
+            : "OUT OF STOCK"}{" "}
       </CustomButton>
 
       <PaymentOptions />

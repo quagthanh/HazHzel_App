@@ -10,6 +10,7 @@ import {
   ShopOutlined,
   ShoppingCartOutlined,
   TeamOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 import { Menu, type MenuProps } from "antd";
 import Link from "next/link";
@@ -102,6 +103,25 @@ export const itemsSidebar: MenuItem[] = [
           {
             key: "category-detail",
             label: <Link href="">Category Overview</Link>,
+          },
+        ],
+      },
+      {
+        key: "collections",
+        label: "Collections",
+        icon: <UnorderedListOutlined />,
+        children: [
+          {
+            key: "collection-list",
+            label: (
+              <Link href="/admin/dashboard/collection/list">
+                Collection List
+              </Link>
+            ),
+          },
+          {
+            key: "collection-detail",
+            label: <Link href="">Collection Overview</Link>,
           },
         ],
       },

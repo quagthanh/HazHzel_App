@@ -149,12 +149,15 @@ export interface IVariantAttribute {
 export interface IProductVariant {
   _id: string;
   name: string;
-  stock: number;
+  productId: string;
+  originalPrice?: number;
+  discountPrice?: number;
   currentPrice: number;
-  originalPrice: number;
-  discountPrice: number;
+  promoCodePrice?: string;
   attributes: IVariantAttribute[];
   images: IImage[];
+  stock: number;
+  sku?: string;
 }
 export interface IProductDetail {
   _id: string;
@@ -226,6 +229,13 @@ export interface ISupplier {
   images?: IImage[];
   address?: string;
   status?: boolean;
+}
+export interface ICollection {
+  _id: string;
+  name?: string;
+  slug?: string;
+  images?: IImage[];
+  status?: string;
 }
 export interface IProductGrid {
   products: IProduct[];

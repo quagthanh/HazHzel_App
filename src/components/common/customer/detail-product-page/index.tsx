@@ -6,8 +6,19 @@ import ThumbnailList from "../thumbnail-list";
 import ProductInfo from "../product-detail-info";
 import { MainImage } from "../main-detail-image";
 import { IProductDetail } from "@/types/interface";
+import { message } from "antd";
+import { addToCartAPI } from "@/services/cart.api";
+import { useRouter } from "next/navigation";
 
-const DetailPage = ({ product }: { product: IProductDetail }) => {
+const DetailPage = ({
+  product,
+  userId,
+}: {
+  product: IProductDetail;
+  userId: string;
+}) => {
+  const router = useRouter();
+
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >(() => {
@@ -43,7 +54,7 @@ const DetailPage = ({ product }: { product: IProductDetail }) => {
 
     return (
       product.variants.find((v) =>
-        v.attributes.every((attr) => selectedOptions[attr.k] === attr.v)
+        v.attributes.every((attr) => selectedOptions[attr.k] === attr.v),
       ) || null
     );
   }, [selectedOptions, product]);
@@ -65,9 +76,35 @@ const DetailPage = ({ product }: { product: IProductDetail }) => {
     const testSelection = { ...selectedOptions, [attributeName]: value };
 
     const matchingVariant = product.variants?.find((variant) =>
-      variant.attributes.every((attr) => testSelection[attr.k] === attr.v)
+      variant.attributes.every((attr) => testSelection[attr.k] === attr.v),
     );
     return !!(matchingVariant && matchingVariant.stock > 0);
+  };
+  const handleAddToCart = async (variantId: string, quantity: number) => {
+    if (!userId) {
+      message.warning("Please login to add items to cart");
+      // router.push('/login');
+      return;
+    }
+
+    try {
+      await addToCartAPI({
+        userId,
+        payload: {
+          items: [
+            {
+              productId: product._id,
+              variantId,
+              quantity,
+            },
+          ],
+        },
+      });
+      message.success("Added to cart successfully!");
+    } catch (error: any) {
+      console.error(error);
+      message.error(error.message || "Failed to add to cart");
+    }
   };
   return (
     <div className={`${styles.productPage} ${styles.colorSchema}`}>
@@ -81,6 +118,7 @@ const DetailPage = ({ product }: { product: IProductDetail }) => {
           selectedOptions={selectedOptions}
           isOptionDisabled={(k, v) => !isOptionAvailable(k, v)}
           onOptionChange={handleOptionChange}
+          onAddToCart={handleAddToCart}
         />
       </div>
     </div>

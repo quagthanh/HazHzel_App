@@ -56,42 +56,19 @@ export const CategoryEditForm = ({
                 { required: true, message: "Please input category name" },
               ]}
             >
-              <Input placeholder="Enter company name" />
+              <Input placeholder="Enter category name" />
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item label="Contact Person" name="contactName">
-              <Input placeholder="Enter contact name" />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={24}>
           <Col span={12}>
             <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ type: "email", message: "Invalid email format" }]}
+              label="Slug"
+              name="slug"
+              rules={[{ required: true, message: "Please input slug" }]}
             >
-              <Input placeholder="example@domain.com" />
+              <Input disabled={true} placeholder="Enter slug" />
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item label="Phone Number" name="phone">
-              <Input placeholder="Enter phone number" />
-            </Form.Item>
-          </Col>
-        </Row>
-      </div>
 
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Location & Settings</h3>
-
-        <Form.Item label="Address" name="address">
-          <Input.TextArea rows={3} placeholder="Enter full address" />
-        </Form.Item>
-
-        <Row gutter={24}>
           <Col span={12}>
             <Form.Item label="Logo">
               <Upload

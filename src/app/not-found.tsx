@@ -3,27 +3,23 @@ import { Button } from "antd";
 import style from "@/components/common/not-found.module.scss"; // Import SCSS module
 
 export default function NotFound() {
-  // Tạo particles động
   const particles1 = Array.from({ length: 20 }, (_, i) => i);
   const particles2 = Array.from({ length: 20 }, (_, i) => i);
 
   return (
     <main className={style.notFoundContainer}>
-      {/* Particles với số 4 */}
       {particles1.map((i) => (
         <span key={`p1-${i}`} className={style.particle}>
           4
         </span>
       ))}
 
-      {/* Particles với số 0 */}
       {particles2.map((i) => (
         <span key={`p2-${i}`} className={style.particle}>
           0
         </span>
       ))}
 
-      {/* Nội dung chính */}
       <article className={style.content}>
         <p>Oops! It looks like you have taken a wrong turn.</p>
         <p>

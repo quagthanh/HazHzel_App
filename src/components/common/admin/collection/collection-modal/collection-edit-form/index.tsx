@@ -14,7 +14,7 @@ import {
 import { FileType } from "@/types/product";
 import styles from "./style.module.scss";
 
-interface SupplierEditFormProps {
+interface CollectionEditFormProps {
   form: FormInstance;
   onFinish: (values: any) => void;
   fileList: UploadFile[];
@@ -23,14 +23,14 @@ interface SupplierEditFormProps {
   beforeUpload: (file: FileType) => boolean;
 }
 
-export const SupplierEditForm = ({
+export const CollectionEditForm = ({
   form,
   onFinish,
   fileList,
   handlePreview,
   handleChange,
   beforeUpload,
-}: SupplierEditFormProps) => {
+}: CollectionEditFormProps) => {
   const uploadButton = (
     <button className={styles.uploadButton} type="button">
       <PlusOutlined />
@@ -40,7 +40,7 @@ export const SupplierEditForm = ({
 
   return (
     <Form
-      name="supplier-edit"
+      name="collection-edit"
       onFinish={onFinish}
       layout="vertical"
       form={form}
@@ -51,10 +51,10 @@ export const SupplierEditForm = ({
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item
-              label="Supplier Name"
+              label="Collection Name"
               name="name"
               rules={[
-                { required: true, message: "Please input supplier name" },
+                { required: true, message: "Please input collection name" },
               ]}
             >
               <Input placeholder="Enter company name" />
@@ -62,43 +62,22 @@ export const SupplierEditForm = ({
           </Col>
           <Col span={12}>
             <Form.Item
-              label="Contact Person"
-              name="contactName"
-              rules={[
-                { required: true, message: "Please input contact person" },
-              ]}
+              label="Slug"
+              name="slug"
+              rules={[{ required: true, message: "Please input slug" }]}
             >
-              <Input placeholder="Enter contact name" />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ type: "email", message: "Invalid email format" }]}
-            >
-              <Input placeholder="example@domain.com" />
+              <Input disabled={true} placeholder="Enter slug" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="Phone Number" name="phone">
-              <Input placeholder="Enter phone number" />
+            <Form.Item
+              label="Description"
+              name="description"
+              rules={[{ required: true }]}
+            >
+              <Input.TextArea rows={4} placeholder="Enter your description" />
             </Form.Item>
           </Col>
-        </Row>
-      </div>
-
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Location & Settings</h3>
-
-        <Form.Item label="Address" name="address">
-          <Input.TextArea rows={3} placeholder="Enter full address" />
-        </Form.Item>
-
-        <Row gutter={24}>
           <Col span={12}>
             <Form.Item label="Logo">
               <Upload
@@ -119,4 +98,4 @@ export const SupplierEditForm = ({
   );
 };
 
-export default SupplierEditForm;
+export default CollectionEditForm;

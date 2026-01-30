@@ -1,38 +1,48 @@
 "use client";
 
+import { updateProductsForAdmin } from "@/services/product.api";
 import {
   Col,
   Form,
+  Input,
   message,
   Modal,
   notification,
   Row,
+  Select,
+  Radio,
+  InputNumber,
+  Upload,
   UploadFile,
   UploadProps,
   Image,
 } from "antd";
 import { useEffect, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { FileType } from "@/types/product";
 import { getBase64 } from "@/utils/helper";
 import styles from "./style.module.scss";
-import { updateCategory } from "@/services/category.api";
-import CategoryEditForm from "../category-edit-form";
+import { CollectionEditForm } from "../collection-edit-form";
+import { updateCollection } from "@/services/collection.api";
 
-const CategoryEditModal = (props: any) => {
-  const { isOk, isCancel, dataUpdate, setDataUpdate, category } = props;
+const CollectionEditModal = (props: any) => {
+  const { isOk, isCancel, dataUpdate, setDataUpdate, category, collection } =
+    props;
   const [form] = Form.useForm();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   useEffect(() => {
     if (dataUpdate) {
+      // Set form values
       form.setFieldsValue({
         name: dataUpdate.name,
         slug: dataUpdate.slug,
+        description: dataUpdate.description,
         status: dataUpdate.status ?? true,
       });
 
+      // Set existing images
       if (dataUpdate.images && dataUpdate.images.length > 0) {
         const existingFiles = dataUpdate.images.map(
           (img: any, index: number) => ({
@@ -61,6 +71,8 @@ const CategoryEditModal = (props: any) => {
       const formData = new FormData();
       if (values.name) formData.append("name", values.name);
       if (values.slug) formData.append("slug", values.slug);
+      if (values.description)
+        formData.append("description", values.description);
 
       fileList.forEach((file) => {
         if (file.originFileObj) {
@@ -68,14 +80,14 @@ const CategoryEditModal = (props: any) => {
         }
       });
 
-      const res = await updateCategory({
+      const res = await updateCollection({
         _id: dataUpdate._id,
         formData,
       });
 
       if (res?.data) {
         handleCloseUpdateModal();
-        message.success("Update category successfully");
+        message.success("Update collection successfully");
       } else {
         notification.error({
           message: "Update failed",
@@ -120,7 +132,7 @@ const CategoryEditModal = (props: any) => {
     <>
       <Modal
         maskClosable={true}
-        title="Edit Category"
+        title="Edit Collection"
         open={isOk}
         onOk={() => form.submit()}
         onCancel={handleCancel}
@@ -128,12 +140,12 @@ const CategoryEditModal = (props: any) => {
         width={1200}
       >
         <div className={styles.subtitle}>
-          Please update the form below to edit category information.
+          Please update the form below to edit collection information.
         </div>
 
         <Row gutter={24}>
           <Col span={16}>
-            <CategoryEditForm
+            <CollectionEditForm
               form={form}
               onFinish={onFinish}
               fileList={fileList}
@@ -161,4 +173,4 @@ const CategoryEditModal = (props: any) => {
   );
 };
 
-export default CategoryEditModal;
+export default CollectionEditModal;

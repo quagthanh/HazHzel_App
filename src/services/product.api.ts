@@ -125,7 +125,7 @@ export async function getProductsByCollection(
 }
 
 export async function getHomeProductBySupplier() {
-  const slug = "oas-company";
+  const slug = "local-supply";
   return sendRequest<ProductResponseData>({
     url: `/products/home-new-brand/${slug}`,
     method: "GET",

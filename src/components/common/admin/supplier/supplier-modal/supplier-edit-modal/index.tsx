@@ -34,7 +34,6 @@ const SupplierEditModal = (props: any) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   useEffect(() => {
     if (dataUpdate) {
-      // Set form values
       form.setFieldsValue({
         name: dataUpdate.name,
         contactName: dataUpdate.contactName,
@@ -44,7 +43,6 @@ const SupplierEditModal = (props: any) => {
         status: dataUpdate.status ?? true,
       });
 
-      // Set existing images
       if (dataUpdate.images && dataUpdate.images.length > 0) {
         const existingFiles = dataUpdate.images.map(
           (img: any, index: number) => ({
@@ -67,7 +65,6 @@ const SupplierEditModal = (props: any) => {
     setFileList([]);
     isCancel();
   };
-
   const onFinish = async (values: any) => {
     if (dataUpdate) {
       const formData = new FormData();
@@ -77,27 +74,40 @@ const SupplierEditModal = (props: any) => {
       if (values.email) formData.append("email", values.email);
       if (values.phone) formData.append("phone", values.phone);
       if (values.address) formData.append("address", values.address);
+      formData.append("status", values.status ? "true" : "false");
 
-      // Add new images
+      // --- LOGIC QUAN TRỌNG ĐỂ XÓA ẢNH CŨ ---
+
+      // 1. Duyệt qua fileList hiện tại trên UI
       fileList.forEach((file) => {
         if (file.originFileObj) {
+          // A. Nếu là file mới upload -> Gửi dạng binary 'files'
           formData.append("files", file.originFileObj);
+        } else if (file.url) {
+          // B. Nếu là file cũ (không có originFileObj nhưng có url) -> Gửi dạng string 'images'
+          // Backend cần hứng field 'images' này để biết ảnh nào ĐƯỢC GIỮ LẠI.
+          // Ảnh nào có trong DB nhưng không có trong mảng này -> Backend xóa đi.
+          formData.append("images", file.url);
         }
       });
-
-      const res = await updateSupplier({
-        _id: dataUpdate._id,
-        formData,
-      });
-
-      if (res?.data) {
-        handleCloseUpdateModal();
-        message.success("Update supplier successfully");
-      } else {
-        notification.error({
-          message: "Update failed",
-          description: res?.data?.message,
+      try {
+        const res = await updateSupplier({
+          _id: dataUpdate._id,
+          formData,
         });
+
+        if (res?.data) {
+          message.success("Update supplier successfully");
+          handleCloseUpdateModal();
+          window.location.reload();
+        } else {
+          notification.error({
+            message: "Update failed",
+            description: res?.message || "Something went wrong",
+          });
+        }
+      } catch (error) {
+        message.error("System Error");
       }
     }
   };

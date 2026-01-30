@@ -4,18 +4,17 @@ import { Table, TableProps, Spin } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-import { ISupplier } from "@/types/interface";
+import { ICollection } from "@/types/interface";
 import PageHeader from "../../page-header";
 import FilterBar from "../../filter-bar";
 import PaginationInfo from "../../pagination-info";
-import { deleteSupplier } from "@/services/supplier.api";
-import { getSupplierColumns } from "../supplier-columns";
+import { getCollectionColumns } from "../collection-columns";
+import CollectionEditModal from "../collection-modal/collection-edit-modal";
+import CollectionCreateModal from "../collection-modal/collection-create-modal";
+import { deleteCollection } from "@/services/collection.api";
 
-import SupplierCreateModal from "../supplier-modal/supplier-create-modal";
-import SupplierEditModal from "../supplier-modal/supplier-edit-modal";
-
-interface SupplierListClientProps {
-  initialData: ISupplier[];
+interface CollectionListClientProps {
+  initialData: ICollection[];
   initialMeta: {
     current: number;
     pageSize: number;
@@ -24,10 +23,10 @@ interface SupplierListClientProps {
   };
 }
 
-const SupplierListClient = ({
+const CollectionListClient = ({
   initialData,
   initialMeta,
-}: SupplierListClientProps) => {
+}: CollectionListClientProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -35,7 +34,7 @@ const SupplierListClient = ({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataUpdate, setDataUpdate] = useState<any>(null);
-  const suppliers = initialData || [];
+  const collections = initialData || [];
   const meta = initialMeta;
 
   useEffect(() => {
@@ -54,16 +53,16 @@ const SupplierListClient = ({
 
   const dataSource = useMemo(
     () =>
-      suppliers.map((s) => ({
-        ...s,
-        key: s._id,
+      collections.map((c) => ({
+        ...c,
+        key: c._id,
       })),
-    [suppliers],
+    [collections],
   );
 
-  const handleDeleteSupplier = async (id: string) => {
+  const handleDeleteCollection = async (id: string) => {
     try {
-      await deleteSupplier(id);
+      await deleteCollection(id);
     } catch {
     } finally {
       setTimeout(() => {
@@ -73,17 +72,17 @@ const SupplierListClient = ({
     }
   };
 
-  const handleEditSupplier = (record: ISupplier) => {
+  const handleEditCollection = (record: ICollection) => {
     setDataUpdate(record);
-    setIsEditModalOpen(true); // Mở Modal Edit
+    setIsEditModalOpen(true);
   };
 
-  const columns = getSupplierColumns({
-    onEdit: handleEditSupplier,
-    onDelete: handleDeleteSupplier,
+  const columns = getCollectionColumns({
+    onEdit: handleEditCollection,
+    onDelete: handleDeleteCollection,
   });
 
-  const rowSelection: TableProps<ISupplier>["rowSelection"] = {
+  const rowSelection: TableProps<ICollection>["rowSelection"] = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(selectedRows);
     },
@@ -92,11 +91,11 @@ const SupplierListClient = ({
   return (
     <div style={{ padding: 24, background: "#fff", minHeight: "100vh" }}>
       <PageHeader
-        title="Supplier List"
-        subtitle="Manage your suppliers"
-        breadcrumb={["Ecommerce", "Suppliers"]}
-        onAdd={() => setIsCreateModalOpen(true)} // Mở Modal Create
-        addButtonText="Add Supplier"
+        title="Collection List"
+        subtitle="Manage your collections"
+        breadcrumb={["Ecommerce", "Collections"]}
+        onAdd={() => setIsCreateModalOpen(true)}
+        addButtonText="Add Collection"
       />
 
       <FilterBar
@@ -124,14 +123,12 @@ const SupplierListClient = ({
         />
       </Spin>
 
-      {/* MODAL TẠO MỚI */}
-      <SupplierCreateModal
+      <CollectionCreateModal
         isOk={isCreateModalOpen}
         isCancel={() => setIsCreateModalOpen(false)}
       />
 
-      {/* MODAL CHỈNH SỬA */}
-      <SupplierEditModal
+      <CollectionEditModal
         isOk={isEditModalOpen}
         isCancel={() => {
           setIsEditModalOpen(false);
@@ -143,4 +140,4 @@ const SupplierListClient = ({
   );
 };
 
-export default SupplierListClient;
+export default CollectionListClient;

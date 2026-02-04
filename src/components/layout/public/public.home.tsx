@@ -8,6 +8,10 @@ import { getHomeProductBySupplier } from "@/services/product.api";
 import { getTopSuppliers } from "@/services/supplier.api";
 
 const PublicHomePage = async () => {
+  console.log(
+    "Rendering Public Home Page",
+    process.env.NEXT_PUBLIC_BACKEND_URL,
+  );
   let topSuppliers: any = [];
   let productSuppliers: any = [];
   const topSuppliersData = getTopSuppliers();
@@ -23,7 +27,7 @@ const PublicHomePage = async () => {
     }
   } else {
     console.error(
-      `Error when fetch top suppliers : ${resultTopSupplier.reason}`
+      `Error when fetch top suppliers : ${resultTopSupplier.reason}`,
     );
   }
   if (resultProductSuppliers.status === "fulfilled") {
@@ -33,7 +37,7 @@ const PublicHomePage = async () => {
     }
   } else {
     console.error(
-      `Error fetching home products:${resultProductSuppliers.reason}`
+      `Error fetching home products:${resultProductSuppliers.reason}`,
     );
   }
   return (

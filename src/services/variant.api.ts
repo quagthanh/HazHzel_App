@@ -8,33 +8,12 @@ const getAccesstoken = async () => {
   return session?.user?.access_token;
 };
 export async function getVariantsByProductId(productId: string) {
-  try {
-    const accessToken = await getAccesstoken();
-
-    const res = await sendRequest<any>({
-      url: `/variants/by-product/${productId}`,
-      method: "GET",
-      accessToken,
-    });
-    if (!res) return [];
-
-    let cleanData: any = [];
-
-    if (Array.isArray(res)) {
-      cleanData = res;
-      console.log("Fetched variants (array):", cleanData);
-    } else if (res.data.data && Array.isArray(res.data.data)) {
-      cleanData = res.data.data;
-    }
-    console.log("Fetched variants (arra12y):", cleanData);
-
-    // 3. NUCLEAR OPTION: "Tẩy rửa" hoàn toàn object bằng JSON parse/stringify
-    // Cách này loại bỏ mọi function, circular ref, header ẩn của Axios
-    return JSON.parse(JSON.stringify(cleanData));
-  } catch (error) {
-    console.error("Error fetching variants:", error);
-    return []; // Luôn trả về mảng rỗng nếu lỗi, không throw error object
-  }
+  const res = await sendRequest<any>({
+    url: `/variants/by-product/${productId}`,
+    method: "GET",
+  });
+  console.log("Check variant by _id product:", res);
+  return res;
 }
 export async function createVariant(formData: FormData) {
   const session = await auth();

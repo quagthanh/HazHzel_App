@@ -6,6 +6,7 @@ import {
   DeleteOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
 
 interface ActionMenuProps {
   onEdit?: () => void;
@@ -16,6 +17,7 @@ interface ActionMenuProps {
 const { confirm } = Modal;
 
 const ActionMenu = ({ onEdit, onDelete }: ActionMenuProps) => {
+  const router = useRouter();
   const showConfirm = () => {
     confirm({
       title: "Do you want to delete these products?",
@@ -27,6 +29,7 @@ const ActionMenu = ({ onEdit, onDelete }: ActionMenuProps) => {
           try {
             await onDelete();
             message.success("Delete products successfully");
+            router.refresh();
           } catch (error) {
             message.error("Error rise when deleting products");
             return Promise.reject(error);

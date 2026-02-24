@@ -18,6 +18,7 @@ import {
   UploadProps,
   Image,
 } from "antd";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface SupplierCreateModalProps {
@@ -31,7 +32,7 @@ const SupplierCreateModal = ({ isOk, isCancel }: SupplierCreateModalProps) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+  const router = useRouter();
   const onFinish = async (values: any) => {
     setLoading(true);
 
@@ -51,12 +52,10 @@ const SupplierCreateModal = ({ isOk, isCancel }: SupplierCreateModalProps) => {
 
     try {
       const res = await createSupplier(formData);
-      console.log("Check res created:", res);
       if (res?.data) {
         message.success("Create supplier successfully");
+        router.refresh();
         handleCancel();
-        // Reload trang để cập nhật dữ liệu
-        window.location.reload();
       } else {
         notification.error({
           message: "Create failed",

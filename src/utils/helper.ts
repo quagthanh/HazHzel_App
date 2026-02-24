@@ -2,7 +2,7 @@ import { NavMenuItem } from "@/types/navbar";
 import { FileType } from "@/types/product";
 
 export const getParam = (
-  param: string | string[] | undefined
+  param: string | string[] | undefined,
 ): string | undefined => {
   if (Array.isArray(param)) {
     return param[0];
@@ -36,3 +36,5 @@ export const getBase64 = (file: FileType): Promise<string> =>
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
+export const getAttr = (attrs: any[], key: string) =>
+  attrs?.find((a) => a.k === key)?.v;

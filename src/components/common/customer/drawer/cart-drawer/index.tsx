@@ -6,7 +6,6 @@ import styles from "@/components/common/customer/drawer/cart-drawer/style.module
 import CartItem from "../../list-cart-item";
 import { useRouter } from "next/navigation";
 import { CartDrawerProps } from "@/types/interface";
-import Link from "next/link";
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
   const router = useRouter();
@@ -29,7 +28,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
       maskClosable={true}
       onClose={onClose}
       open={open}
-      bodyStyle={{ padding: "0 1.5rem" }}
+      styles={{
+        body: {
+          padding: "0 1.5rem",
+        },
+      }}
       closeIcon={false}
       style={{ backgroundColor: "rgb(255, 251, 245)" }}
       extra={
@@ -40,7 +43,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
     >
       <div className={styles.container}>
         <div className={styles.content}>
-          <CartItem></CartItem>
+          <CartItem />
         </div>
         <div className={styles.drawerFooter}>
           <CustomButton onClick={handleCloseCartDrawer}>View cart</CustomButton>

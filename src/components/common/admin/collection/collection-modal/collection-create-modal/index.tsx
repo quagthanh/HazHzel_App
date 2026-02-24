@@ -50,7 +50,6 @@ const CollectionCreateModal = ({
 
     try {
       const res = await createCollection(formData);
-      console.log("Check res created:", res);
       if (res?.data) {
         message.success("Create collection successfully");
         handleCancel();

@@ -13,19 +13,16 @@ import { useCartStore } from "@/library/stores/useCartStore";
 import styles from "./style.module.scss";
 
 const CartSummary = () => {
-  const { getTotalPrice } = useCartStore();
-  const subtotal = getTotalPrice();
+  const subtotal = useCartStore((state) => state.getTotalPrice());
 
-  // CẤU HÌNH NGƯỠNG FREESHIP (2.000.000đ)
   const FREE_SHIPPING_THRESHOLD = 2000000;
   const SHIPPING_COST = 50000;
 
-  // Logic tính toán
   const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
   const gap = FREE_SHIPPING_THRESHOLD - subtotal;
   const progressPercent = Math.min(
     (subtotal / FREE_SHIPPING_THRESHOLD) * 100,
-    100
+    100,
   );
   const total = subtotal + (isFreeShipping ? 0 : SHIPPING_COST);
 
@@ -40,8 +37,8 @@ const CartSummary = () => {
           </p>
         ) : (
           <p className={styles.progressText}>
-            Add <strong>{gap.toLocaleString("vi-VN")}đ</strong> more to get{" "}
-            <span className={styles.highlight}>Free Shipping</span>
+            Add <strong>{gap?.toLocaleString("vi-VN") || "Nan"}đ</strong> more
+            to get <span className={styles.highlight}>Free Shipping</span>
           </p>
         )}
 
@@ -59,7 +56,7 @@ const CartSummary = () => {
 
       <div className={styles.summaryRow}>
         <span>Subtotal</span>
-        <span>{subtotal.toLocaleString("vi-VN")}đ</span>
+        <span>{subtotal?.toLocaleString("vi-VN") || "Nan"}đ</span>
       </div>
 
       <div className={styles.summaryRow}>
@@ -74,7 +71,7 @@ const CartSummary = () => {
         {isFreeShipping ? (
           <span className={styles.freeText}>Free</span>
         ) : (
-          <span>{SHIPPING_COST.toLocaleString("vi-VN")}đ</span>
+          <span>{SHIPPING_COST?.toLocaleString("vi-VN") || "Nan"}đ</span>
         )}
       </div>
 
@@ -82,7 +79,7 @@ const CartSummary = () => {
 
       <div className={`${styles.summaryRow} ${styles.totalRow}`}>
         <span>TOTAL</span>
-        <span>{total.toLocaleString("vi-VN")}đ</span>
+        <span>{total?.toLocaleString("vi-VN") || "Nan"}đ</span>
       </div>
 
       <div className={styles.checkoutAction}>

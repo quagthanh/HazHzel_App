@@ -8,10 +8,6 @@ import { getHomeProductBySupplier } from "@/services/product.api";
 import { getTopSuppliers } from "@/services/supplier.api";
 
 const PublicHomePage = async () => {
-  console.log(
-    "Rendering Public Home Page",
-    process.env.NEXT_PUBLIC_BACKEND_URL,
-  );
   let topSuppliers: any = [];
   let productSuppliers: any = [];
   const topSuppliersData = getTopSuppliers();
@@ -21,9 +17,9 @@ const PublicHomePage = async () => {
     homeProductsData,
   ]);
   if (resultTopSupplier.status === "fulfilled") {
-    const res = resultTopSupplier.value;
-    if (res?.data) {
-      topSuppliers = res.data.data || [];
+    const res1 = resultTopSupplier.value;
+    if (res1?.data) {
+      topSuppliers = res1.data || [];
     }
   } else {
     console.error(
@@ -32,8 +28,9 @@ const PublicHomePage = async () => {
   }
   if (resultProductSuppliers.status === "fulfilled") {
     const res = resultProductSuppliers.value;
+
     if (res?.data) {
-      productSuppliers = res.data.data.result || [];
+      productSuppliers = res?.data?.result || [];
     }
   } else {
     console.error(

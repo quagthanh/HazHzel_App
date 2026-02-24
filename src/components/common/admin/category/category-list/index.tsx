@@ -64,10 +64,6 @@ const CategoryListClient = ({
     try {
       await deleteCategory(id);
     } catch {
-    } finally {
-      setTimeout(() => {
-        window.location.reload();
-      }, 0);
       setIsLoading(false);
     }
   };

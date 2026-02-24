@@ -50,8 +50,7 @@ const LoginForm = () => {
           return;
         }
         notification.error({
-          message: "Lỗi trong quá trình xác thực tài khoản",
-          description: res?.error,
+          message: res?.error,
         });
       } else {
         router.push("/admin/dashboard");

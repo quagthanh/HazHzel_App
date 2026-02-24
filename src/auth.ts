@@ -23,16 +23,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           password: credentials.password,
         } as loginDTO;
         const res = await handleLogin(login);
-        console.log("Login Response:", res);
-
-        if (res?.data?.statusCode === 201) {
+        if (res?.statusCode === 201) {
           return {
-            ...res?.data?.data?.user,
-            access_token: res?.data?.data?.access_token,
+            ...res?.data?.user,
+            access_token: res?.data?.access_token,
           } as IUser;
-        } else if (res?.response?.status === 401) {
+        } else if (res?.statusCode === 401) {
           throw new InvalidEmailPasswordError();
-        } else if (res?.response?.status === 400) {
+        } else if (res?.statusCode === 400) {
           throw new InactiveAccountError();
         } else {
           throw new SystemError();
@@ -67,7 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         "/settings",
       ];
       const isProtected = protectedPaths.some((path) =>
-        pathname.startsWith(path)
+        pathname.startsWith(path),
       );
 
       if (isProtected) {

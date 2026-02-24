@@ -29,3 +29,12 @@ export interface AdminPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 export type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+export interface ProductResponseData {
+  meta: {
+    current: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+  };
+  result: any[];
+}

@@ -41,13 +41,12 @@ const ProductInfo = ({
   const stock = currentVariant ? currentVariant.stock : 0;
   const handleAddToCartClick = async () => {
     if (!currentVariant) {
-      message.error("Please select all options");
+      message.error("Please select options");
       return;
     }
 
     setLoading(true);
     try {
-      // Default quantity is 1 for now
       await onAddToCart(currentVariant._id, 1);
     } finally {
       setLoading(false);
@@ -93,11 +92,7 @@ const ProductInfo = ({
         disabled={!currentVariant || stock === 0}
         onClick={handleAddToCartClick}
       >
-        {loading
-          ? "ADDING..."
-          : stock > 0
-            ? "ADD TO CART"
-            : "OUT OF STOCK"}{" "}
+        {loading ? "ADDING..." : stock > 0 ? "ADD TO CART" : "OUT OF STOCK"}
       </CustomButton>
 
       <PaymentOptions />

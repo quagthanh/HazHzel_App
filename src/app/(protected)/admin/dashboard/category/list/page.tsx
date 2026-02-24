@@ -15,7 +15,7 @@ const CategoryListPage = async ({ searchParams }: AdminPageProps) => {
       pageSize,
     });
 
-    const backendData = res?.data?.data;
+    const backendData = res?.data;
 
     if (backendData) {
       categories = backendData.result || [];

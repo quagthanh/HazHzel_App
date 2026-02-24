@@ -15,7 +15,7 @@ const ManageUserPage = async ({ searchParams }: AdminPageProps) => {
       pageSize,
     });
 
-    const backendData = res?.data?.data;
+    const backendData = res?.data;
     if (backendData) {
       users = backendData.result || [];
       meta = backendData.meta || meta;

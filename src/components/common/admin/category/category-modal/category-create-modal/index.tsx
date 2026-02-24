@@ -17,6 +17,7 @@ import {
   UploadProps,
   Image,
 } from "antd";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface CategoryCreateModalProps {
@@ -30,7 +31,7 @@ const CategoryCreateModal = ({ isOk, isCancel }: CategoryCreateModalProps) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+  const router = useRouter();
   const onFinish = async (values: any) => {
     setLoading(true);
 
@@ -49,11 +50,10 @@ const CategoryCreateModal = ({ isOk, isCancel }: CategoryCreateModalProps) => {
 
     try {
       const res = await createCategory(formData);
-      console.log("Check res created:", res);
       if (res?.data) {
         message.success("Create category successfully");
+        router.refresh();
         handleCancel();
-        window.location.reload();
       } else {
         notification.error({
           message: "Create failed",

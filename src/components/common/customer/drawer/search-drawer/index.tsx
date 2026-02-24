@@ -29,7 +29,7 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedTerm = useDebounce(searchTerm, 500);
   const [activeTab, setActiveTab] = useState<"products" | "collections">(
-    "products"
+    "products",
   );
   const [suggestions, setSuggestions] = useState<SearchProductResult[]>([]);
   const [products, setProducts] = useState<SearchProductResult[]>([]);
@@ -40,7 +40,7 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
       const fetchSuggestions = async () => {
         try {
           const res = await getTopViewedProducts();
-          if (res?.data.data) setSuggestions(res.data.data);
+          if (res?.data) setSuggestions(res?.data);
         } catch (error) {
           console.error("Failed to fetch top viewed products", error);
         }
@@ -63,8 +63,8 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
           searchCollections(debouncedTerm),
         ]);
 
-        if (prodRes?.data.data) setProducts(prodRes.data.data);
-        if (colRes?.data.data) setCollections(colRes.data.data);
+        if (prodRes?.data) setProducts(prodRes.data);
+        if (colRes?.data) setCollections(colRes.data);
       } catch (error) {
         console.error("Search error", error);
       } finally {
@@ -93,7 +93,7 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
             <span key={i} style={{ color: "#777" }}>
               {part}
             </span>
-          )
+          ),
         )}
       </span>
     );
@@ -220,7 +220,7 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
                                     <h5 className={styles.name}>
                                       {getHighlightedText(
                                         product.name,
-                                        debouncedTerm
+                                        debouncedTerm,
                                       )}
                                     </h5>
                                     <p className={styles.price}>

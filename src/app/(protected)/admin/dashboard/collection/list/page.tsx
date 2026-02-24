@@ -12,7 +12,7 @@ const CollectionListPage = async ({ searchParams }: AdminPageProps) => {
       current,
       pageSize,
     });
-    const backendData = res?.data?.data;
+    const backendData = res?.data;
     if (backendData) {
       collections = backendData.result || [];
       meta = backendData.meta || meta;

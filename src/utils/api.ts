@@ -17,7 +17,9 @@ interface IRequest {
   useCache?: boolean;
 }
 //for json req
-export const sendRequest = async <T>(props: IRequest) => {
+export const sendRequest = async <T>(
+  props: IRequest,
+): Promise<IBackendRes<T>> => {
   const {
     url,
     method,
@@ -44,11 +46,13 @@ export const sendRequest = async <T>(props: IRequest) => {
       ...config.headers,
     };
   }
-
-  return http.request<IBackendRes<T>>(config);
+  const res = await http.request<IBackendRes<T>>(config);
+  return res as unknown as IBackendRes<T>;
 };
 //for form data req
-export const sendRequestFile = async <T>(props: IRequest) => {
+export const sendRequestFile = async <T>(
+  props: IRequest,
+): Promise<IBackendRes<T>> => {
   const { url, method, body, queryParams, accessToken, headers = {} } = props;
 
   const config: AxiosRequestConfig = {
@@ -63,5 +67,6 @@ export const sendRequestFile = async <T>(props: IRequest) => {
     },
   };
 
-  return http.request<IBackendRes<T>>(config);
+  const res = await http.request<IBackendRes<T>>(config);
+  return res as unknown as IBackendRes<T>;
 };

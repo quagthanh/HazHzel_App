@@ -1,11 +1,10 @@
 "use client";
 
-import { IUserTable as IUser } from "@/types/backend";
-import { Table, TableProps, Spin } from "antd";
+import { Table, TableProps, Spin, Tag } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
-import UserEditModal from "./modal.edit.user";
-import UserCreateModal from "./modal.create.user";
+import UserEditModal from "./modals/modal-edit-user/modal.edit.user";
+import UserCreateModal from "./modals/modal-create-user/modal.create.user";
 import Image from "next/image";
 
 import PageHeader from "../page-header";
@@ -14,6 +13,9 @@ import FilterBar from "../filter-bar";
 import PaginationInfo from "../pagination-info";
 
 import avt_holder from "@/assets/cool_avt.jpg";
+import { handleDeleteUserForAdmin } from "@/services/user.api";
+import { getUserColumns } from "./user-columns";
+import { IUser } from "@/types/next-auth";
 interface UserListClientProps {
   initialUsers: IUser[];
   initialMeta: {
@@ -27,32 +29,25 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const users = initialUsers || [];
+  const meta = initialMeta;
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [dataUpdate, setDataUpdate] = useState<IUser | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [dataUpdate, setDataUpdate] = useState<any>(null);
 
-  const users = initialUsers;
-  const meta = initialMeta;
-
-  const onClickCreate = () => setIsCreateModalOpen(true);
   useEffect(() => {
     setIsLoading(false);
   }, [searchParams]);
 
   const onChange = (pagination: any) => {
     setIsLoading(true);
-
     const params = new URLSearchParams(searchParams);
     params.set("current", pagination.current?.toString() ?? "1");
-    params.set(
-      "pageSize",
-      pagination.pageSize?.toString() ?? meta.pageSize.toString(),
-    );
-
-    router.replace(`${pathname}?${params.toString()}`);
+    params.set("pageSize", meta.pageSize?.toString() ?? "10");
+    const targetUrl = `${pathname}?${params.toString()}`;
+    router.replace(targetUrl);
   };
 
   const dataSource = useMemo(
@@ -64,81 +59,33 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
     [users],
   );
 
-  const columns: TableProps<IUser>["columns"] = useMemo(
-    () => [
-      {
-        title: "User ID",
-        dataIndex: "_id",
-        key: "_id",
-        width: 150,
-      },
-      {
-        title: "Image",
-        dataIndex: "images",
-        width: 100,
-        render: (images) =>
-          images?.[0] ? (
-            <img
-              src={images[0].secure_url}
-              style={{
-                width: 50,
-                height: 70,
-                objectFit: "cover",
-                borderRadius: 6,
-              }}
-              alt="user"
-            />
-          ) : (
-            <Image
-              src={avt_holder}
-              alt="user"
-              width={50}
-              height={70}
-              style={{
-                objectFit: "cover",
-                borderRadius: 6,
-              }}
-            />
-          ),
-      },
-      {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
-        width: 250,
-      },
-      {
-        title: "Email",
-        dataIndex: "email",
-        key: "email",
-        width: 250,
-      },
-      {
-        title: "Role",
-        dataIndex: "role",
-        key: "role",
-        width: 150,
-        render: (role) => role?.name || "N/A",
-      },
-      {
-        title: "Action",
-        key: "action",
-        width: 100,
-        align: "center",
-        render: (_: any, record: IUser) => (
-          <ActionMenu
-            onEdit={() => {
-              setIsEditModalOpen(true);
-              setDataUpdate(record);
-            }}
-            onDelete={() => {
-              console.log("Delete", record._id);
-            }}
-          />
-        ),
-      },
-    ],
-    [],
+  const handleDeleteUser = async (id: string) => {
+    try {
+      await handleDeleteUserForAdmin(id);
+    } catch {
+      setIsLoading(false);
+    }
+  };
+  const handleEditUser = (record: IUser) => {
+    setDataUpdate(record);
+    setIsEditModalOpen(true);
+  };
+  const columns = getUserColumns({
+    onEdit: handleEditUser,
+    onDelete: handleDeleteUser,
+  });
+
+  const rowSelection: TableProps<IUser>["rowSelection"] = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: IUser[]) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        "selectedRows: ",
+        selectedRows,
+      );
+    },
+  };
+  const [selectionType, setSelectionType] = useState<"checkbox" | "radio">(
+    "checkbox",
   );
 
   return (
@@ -148,7 +95,7 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
         subtitle="Manage system users"
         breadcrumb={["Admin", "Users"]}
         onExport={() => console.log("Export")}
-        onAdd={onClickCreate}
+        onAdd={() => setIsCreateModalOpen(true)}
         addButtonText="Add User"
       />
 
@@ -159,6 +106,7 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
 
       <Spin spinning={isLoading} size="large">
         <Table
+          rowSelection={{ type: selectionType, ...rowSelection }}
           bordered
           dataSource={dataSource}
           columns={columns}
@@ -178,13 +126,15 @@ const UserListClient = ({ initialUsers, initialMeta }: UserListClientProps) => {
       </Spin>
 
       <UserCreateModal
-        isUserCreateModalOpen={isCreateModalOpen}
-        setIsUserCreateModalOpen={setIsCreateModalOpen}
+        isOk={isCreateModalOpen}
+        isCancel={() => setIsCreateModalOpen(false)}
       />
       <UserEditModal
-        isUserEditModalOpen={isEditModalOpen}
-        setIsUserEditModalOpen={setIsEditModalOpen}
-        setDataUpdate={setDataUpdate}
+        isOk={isEditModalOpen}
+        isCancel={() => {
+          setIsEditModalOpen(false);
+          setDataUpdate(null);
+        }}
         dataUpdate={dataUpdate}
       />
     </div>

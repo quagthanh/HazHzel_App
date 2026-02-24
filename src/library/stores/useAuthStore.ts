@@ -1,9 +1,19 @@
+import { getCartByUserId } from "@/services/cart.api";
 import { create } from "zustand";
+
 interface AuthState {
-  accessToken: string | null;
-  setToken: (token: string | null) => void;
+  userDetail: any;
+  userId: string;
+  isLoading: boolean;
+  setUser: (user: any) => Promise<void>;
 }
+
 export const useAuthStore = create<AuthState>((set) => ({
-  accessToken: null,
-  setToken: (token) => set({ accessToken: token }),
+  userDetail: null,
+  userId: "",
+  isLoading: false,
+
+  setUser: async (user: any) => {
+    set({ userDetail: user, userId: user?._id, isLoading: true });
+  },
 }));

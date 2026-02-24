@@ -3,14 +3,8 @@ import Image from "next/image";
 import logo from "@/../public/assets/test6.png";
 import styles from "@/components/common/customer/public-header/style.module.scss";
 import { Header } from "antd/es/layout/layout";
-import { Button, Collapse, Drawer } from "antd";
-import {
-  MenuOutlined,
-  RightOutlined,
-  SearchOutlined,
-  ShoppingCartOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { Button } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";

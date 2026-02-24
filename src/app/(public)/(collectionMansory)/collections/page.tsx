@@ -15,10 +15,9 @@ export default async function CollectionPage({ searchParams }: SearchParams) {
 
   try {
     const res = await getTitleAggregation({ current, pageSize });
-
     if (res?.data) {
-      items = res.data.data.result || [];
-      meta = res.data.data.meta || meta;
+      items = res?.data?.result || [];
+      meta = res?.data?.meta || meta;
     }
   } catch (error) {
     console.error("Fetch aggregation data error:", error);

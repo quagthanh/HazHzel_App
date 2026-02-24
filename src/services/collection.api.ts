@@ -3,18 +3,12 @@ import { auth } from "@/auth";
 import { IBackendRes, sendRequest, sendRequestFile } from "@/utils/api";
 import { TopSupplier } from "@/types/interface";
 import { revalidatePath } from "next/cache";
-const getAccesstoken = async () => {
-  const session = await auth();
-  return session?.user?.access_token;
-};
 
 export async function getCollectionsForAdmin(params: any) {
-  const accessToken = await getAccesstoken();
   return sendRequest<any>({
     url: `/collections?sort=-createdAt`,
     method: "GET",
     queryParams: params,
-    accessToken,
   });
 }
 
@@ -125,10 +119,8 @@ export async function updateCollection({
 }
 
 export async function deleteCollection(_id: string) {
-  const accessToken = await getAccesstoken();
   return sendRequest<any>({
     url: `/collections/${_id}`,
     method: "DELETE",
-    accessToken: accessToken,
   });
 }

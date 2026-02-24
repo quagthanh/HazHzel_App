@@ -26,7 +26,7 @@ export default async function StorePage({
 
   try {
     const res = await getProductsByStore(slug, filters);
-    const backendData = res?.data?.data;
+    const backendData = res?.data;
     if (backendData) {
       products = backendData.result || [];
       meta = backendData.meta || meta;

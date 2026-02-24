@@ -7,8 +7,8 @@ import ProductInfo from "../product-detail-info";
 import { MainImage } from "../main-detail-image";
 import { IProductDetail } from "@/types/interface";
 import { message } from "antd";
-import { addToCartAPI } from "@/services/cart.api";
-import { useRouter } from "next/navigation";
+import { addToCart } from "@/services/cart.api";
+import { isMissingUserId } from "@/constants";
 
 const DetailPage = ({
   product,
@@ -17,8 +17,6 @@ const DetailPage = ({
   product: IProductDetail;
   userId: string;
 }) => {
-  const router = useRouter();
-
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >(() => {
@@ -81,14 +79,14 @@ const DetailPage = ({
     return !!(matchingVariant && matchingVariant.stock > 0);
   };
   const handleAddToCart = async (variantId: string, quantity: number) => {
-    if (!userId) {
+    if (!userId || userId == isMissingUserId) {
       message.warning("Please login to add items to cart");
       // router.push('/login');
       return;
     }
 
     try {
-      await addToCartAPI({
+      await addToCart({
         userId,
         payload: {
           items: [

@@ -12,7 +12,7 @@ const SupplierListPage = async ({ searchParams }: AdminPageProps) => {
       current,
       pageSize,
     });
-    const backendData = res?.data?.data;
+    const backendData = res?.data;
     if (backendData) {
       suppliers = backendData.result || [];
       meta = backendData.meta || meta;

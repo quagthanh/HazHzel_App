@@ -11,7 +11,6 @@ const PublicLayout = async ({
 }>) => {
   const layoutStyle = {};
   const session = await auth();
-  console.log("Check session:", session?.user.name);
   return (
     <div>
       <ConfigProvider

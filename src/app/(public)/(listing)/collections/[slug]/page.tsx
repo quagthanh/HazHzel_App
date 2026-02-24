@@ -25,7 +25,7 @@ export default async function CollectionPage({
 
   try {
     const res = await getProductsByCollection(slug, filters);
-    const backendData = res?.data?.data;
+    const backendData = res?.data;
 
     if (backendData) {
       products = backendData.result || [];

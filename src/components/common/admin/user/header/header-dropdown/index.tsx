@@ -34,7 +34,6 @@ const AdminDropdown = ({ session }: IAdminDropdown) => {
       label: "Đăng xuất",
       icon: <LogoutOutlined />,
       onClick: async () => {
-        console.log("Đang đăng xuất...");
         await signOut({ callbackUrl: "/auth/login" });
         message.success("Đăng xuất thành công!");
       },

@@ -35,12 +35,15 @@ const ProductEditModal = (props: any) => {
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   useEffect(() => {
+    const supplierId = dataUpdate?.supplierId?._id;
     if (dataUpdate) {
       form.setFieldsValue({
         name: dataUpdate.name,
         description: dataUpdate.description,
         category: dataUpdate.categoryId?._id,
-        supplier: dataUpdate.supplierId?._id,
+        supplier: supplier.some((x: any) => x._id == supplierId)
+          ? supplierId
+          : undefined,
         gender: dataUpdate.gender,
         stock: dataUpdate.stockQuantity,
         status: dataUpdate.status,
@@ -98,7 +101,7 @@ const ProductEditModal = (props: any) => {
         message.success("Update product successfully");
       } else {
         notification.error({
-          message: "Update failed",
+          message: "Update product failed",
           description: res?.message,
         });
       }
@@ -140,7 +143,6 @@ const ProductEditModal = (props: any) => {
       key: "info",
       label: "Product Info",
       children: (
-        // Bọc nội dung cũ (Form + Preview) vào đây
         <div style={{ paddingTop: 10 }}>
           <div className={styles.subtitle}>
             Please update the form below to edit product information.
@@ -175,7 +177,6 @@ const ProductEditModal = (props: any) => {
       label: "Variants Management",
       children: (
         <div style={{ paddingTop: 10 }}>
-          {/* Nhúng Component VariantList vào đây */}
           {dataUpdate?._id ? (
             <VariantList productId={dataUpdate._id} />
           ) : (
@@ -191,17 +192,14 @@ const ProductEditModal = (props: any) => {
   return (
     <>
       <Modal
-        maskClosable={false}
+        maskClosable={true}
         title="Edit Product"
         open={isOk}
-        // Lưu ý: Nút OK của Modal này chỉ trigger submit cho form Product Info (Tab 1)
-        // Variant (Tab 2) sẽ có nút Save riêng bên trong VariantList/Modal con của nó
         onOk={() => form.submit()}
         onCancel={handleCancel}
         closable={false}
         width={1200}
       >
-        {/* Thay thế nội dung cũ bằng Tabs */}
         <Tabs defaultActiveKey="info" items={tabItems} />
       </Modal>
 

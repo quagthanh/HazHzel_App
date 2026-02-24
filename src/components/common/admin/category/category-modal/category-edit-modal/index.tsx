@@ -18,6 +18,7 @@ import { getBase64 } from "@/utils/helper";
 import styles from "./style.module.scss";
 import { updateCategory } from "@/services/category.api";
 import CategoryEditForm from "../category-edit-form";
+import { useRouter } from "next/navigation";
 
 const CategoryEditModal = (props: any) => {
   const { isOk, isCancel, dataUpdate, setDataUpdate, category } = props;
@@ -25,6 +26,7 @@ const CategoryEditModal = (props: any) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const router = useRouter();
   useEffect(() => {
     if (dataUpdate) {
       form.setFieldsValue({
@@ -76,6 +78,7 @@ const CategoryEditModal = (props: any) => {
       if (res?.data) {
         handleCloseUpdateModal();
         message.success("Update category successfully");
+        router.refresh();
       } else {
         notification.error({
           message: "Update failed",

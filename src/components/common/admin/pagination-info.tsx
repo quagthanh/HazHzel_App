@@ -1,7 +1,8 @@
 "use client";
-import { Button } from "antd";
+import { Button, InputNumber } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-
+import { useState } from "react";
+import { Select } from "antd";
 interface PaginationInfoProps {
   current: number;
   pageSize: number;
@@ -15,43 +16,83 @@ const PaginationInfo = ({
   total,
   onPageChange,
 }: PaginationInfoProps) => {
+  const [jumpPage, setJumpPage] = useState<number | null>(null);
+
   const totalPages = Math.ceil(total / pageSize);
-  const startIndex = (current - 1) * pageSize + 1;
+  const startIndex = total === 0 ? 0 : (current - 1) * pageSize + 1;
   const endIndex = Math.min(current * pageSize, total);
+
+  const handleJump = () => {
+    if (!jumpPage) return;
+
+    const page = Math.max(1, Math.min(jumpPage, totalPages));
+    onPageChange(page);
+    setJumpPage(null);
+  };
 
   const renderPageNumbers = () => {
     const pages: JSX.Element[] = [];
-    const maxVisiblePages = 2;
+    const delta = 1;
 
-    for (let i = 1; i <= totalPages; i++) {
-      if (
-        i === 1 ||
-        i === totalPages ||
-        (i >= current - 1 && i <= current + 1)
-      ) {
-        pages.push(
-          <Button
-            key={i}
-            type={i === current ? "primary" : "default"}
-            onClick={() => onPageChange(i)}
-            style={{
-              minWidth: 32,
-              height: 32,
-            }}
-          >
-            {i}
-          </Button>
-        );
-      } else if (pages[pages.length - 1]?.key !== "ellipsis") {
-        pages.push(
-          <span
-            key={`ellipsis-${i}`}
-            style={{ padding: "0 8px", color: "#8c8c8c" }}
-          >
-            ...
-          </span>
-        );
-      }
+    const rangeStart = Math.max(2, current - delta);
+    const rangeEnd = Math.min(totalPages - 1, current + delta);
+
+    // first
+    pages.push(
+      <Button
+        key={1}
+        type={current === 1 ? "primary" : "default"}
+        onClick={() => onPageChange(1)}
+        style={{ minWidth: 32, height: 32 }}
+      >
+        1
+      </Button>,
+    );
+
+    // left ...
+    if (rangeStart > 2) {
+      pages.push(
+        <span key="left-ellipsis" style={{ padding: "0 8px" }}>
+          ...
+        </span>,
+      );
+    }
+
+    // middle
+    for (let i = rangeStart; i <= rangeEnd; i++) {
+      pages.push(
+        <Button
+          key={i}
+          type={i === current ? "primary" : "default"}
+          onClick={() => onPageChange(i)}
+          style={{ minWidth: 32, height: 32 }}
+        >
+          {i}
+        </Button>,
+      );
+    }
+
+    // right ...
+    if (rangeEnd < totalPages - 1) {
+      pages.push(
+        <span key="right-ellipsis" style={{ padding: "0 8px" }}>
+          ...
+        </span>,
+      );
+    }
+
+    // last
+    if (totalPages > 1) {
+      pages.push(
+        <Button
+          key={totalPages}
+          type={current === totalPages ? "primary" : "default"}
+          onClick={() => onPageChange(totalPages)}
+          style={{ minWidth: 32, height: 32 }}
+        >
+          {totalPages}
+        </Button>,
+      );
     }
 
     return pages;
@@ -67,12 +108,12 @@ const PaginationInfo = ({
         padding: "12px 0",
       }}
     >
-      {/* Results info */}
+      {/* info */}
       <div style={{ fontSize: 14, color: "#595959" }}>
         Showing {startIndex} - {endIndex} of {total} Results
       </div>
 
-      {/* Pagination controls */}
+      {/* controls */}
       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
         <Button
           icon={<LeftOutlined />}
@@ -93,6 +134,23 @@ const PaginationInfo = ({
           Next
           <RightOutlined />
         </Button>
+
+        {/* Jump to page */}
+        {totalPages > 1 && (
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <span>Page</span>
+            <Select
+              value={current}
+              style={{ width: 90 }}
+              onChange={(page) => onPageChange(page)}
+              options={Array.from({ length: totalPages }, (_, i) => ({
+                label: i + 1,
+                value: i + 1,
+              }))}
+              showSearch
+            />
+          </div>
+        )}
       </div>
     </div>
   );

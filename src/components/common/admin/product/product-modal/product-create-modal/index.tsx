@@ -24,6 +24,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import styles from "./style.module.scss";
+import { useRouter } from "next/navigation";
 
 const ProductCreateModal = (props: any) => {
   const [form] = Form.useForm();
@@ -31,11 +32,11 @@ const ProductCreateModal = (props: any) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const router = useRouter();
 
   const { isOk, isCancel, category, supplier } = props;
 
   const onFinish = async (values: any) => {
-    console.log("Check values of create form:", values);
     if (fileList.length === 0) {
       message.error("Please choose atleast 1 picture");
       return;
@@ -58,9 +59,9 @@ const ProductCreateModal = (props: any) => {
     });
 
     const res = await createProductsForAdmin(formData);
-
     if (res?.data) {
       message.success("Create product successfully");
+      router.refresh();
       handleCancel();
     } else {
       notification.error({

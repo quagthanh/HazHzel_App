@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import {
   Button,
   Table,
@@ -9,46 +10,49 @@ import {
   Image,
   Tag,
   Tooltip,
-  Spin,
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { getVariantsByProductId, deleteVariant } from "@/services/variant.api";
 import { IProductVariant } from "@/types/interface";
 import VariantModal from "../variant-modal";
-import useSWR from "swr";
+
 interface VariantListProps {
   productId: string;
 }
 
 const VariantList = ({ productId }: VariantListProps) => {
-  // State cho Modal (Giữ nguyên)
+  const [variants, setVariants] = useState<IProductVariant[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentVariant, setCurrentVariant] = useState<IProductVariant | null>(
     null,
   );
-
-  // 2. Định nghĩa hàm fetcher để gọi Server Action
-  const fetcher = async (id: string) => {
-    const res = await getVariantsByProductId(id);
-    // Đảm bảo luôn trả về mảng
-    return Array.isArray(res) ? res : [];
+  const fetchVariants = async () => {
+    try {
+      setLoading(true);
+      const res = await getVariantsByProductId(productId);
+      setVariants(Array.isArray(res?.data) ? res?.data : []);
+    } catch (error) {
+      message.error("Failed to load variants");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // 3. Dùng useSWR thay thế useEffect + useState
-  // key là `productId`, khi key đổi -> SWR tự chạy lại fetcher
-  const {
-    data: variants,
-    error,
-    isLoading,
-    mutate,
-  } = useSWR(productId, fetcher, {
-    revalidateOnFocus: false, // Tắt tự fetch khi click lại tab (tùy chọn)
-  });
+  useEffect(() => {
+    if (productId) {
+      fetchVariants();
+    }
+  }, [productId]);
 
   const handleDelete = async (id: string) => {
-    await deleteVariant(id);
-    message.success("Deleted variant");
-    mutate(); // 4. Gọi mutate để reload lại danh sách ngay lập tức
+    try {
+      await deleteVariant(id);
+      message.success("Deleted variant");
+      await fetchVariants();
+    } catch {
+      message.error("Delete failed");
+    }
   };
 
   const columns = [
@@ -101,7 +105,7 @@ const VariantList = ({ productId }: VariantListProps) => {
     },
     {
       title: "Stock",
-      render: (_: any, r: IProductVariant) => r.stock ?? r.stock,
+      render: (_: any, r: IProductVariant) => r.stock ?? 0,
     },
     {
       title: "Action",
@@ -129,8 +133,6 @@ const VariantList = ({ productId }: VariantListProps) => {
     },
   ];
 
-  if (error) return <div>Failed to load variants</div>;
-
   return (
     <div style={{ marginTop: 10 }}>
       <div
@@ -155,10 +157,10 @@ const VariantList = ({ productId }: VariantListProps) => {
       </div>
 
       <Table
-        dataSource={variants || []} // Data lấy trực tiếp từ SWR
+        dataSource={variants}
         columns={columns}
         rowKey="_id"
-        loading={isLoading} // Loading lấy từ SWR
+        loading={loading}
         pagination={false}
         bordered
         size="small"
@@ -167,7 +169,7 @@ const VariantList = ({ productId }: VariantListProps) => {
       <VariantModal
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
-        onReload={() => mutate()} // 5. Truyền mutate vào onReload để modal gọi khi xong
+        onReload={fetchVariants} // reload local
         productId={productId}
         dataUpdate={currentVariant}
       />

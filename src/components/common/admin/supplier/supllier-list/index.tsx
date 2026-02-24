@@ -75,7 +75,7 @@ const SupplierListClient = ({
 
   const handleEditSupplier = (record: ISupplier) => {
     setDataUpdate(record);
-    setIsEditModalOpen(true); // Mở Modal Edit
+    setIsEditModalOpen(true);
   };
 
   const columns = getSupplierColumns({

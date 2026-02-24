@@ -39,7 +39,6 @@ export default function ModalReactive(props: any) {
   const onFinishStep0 = async (value: any) => {
     const { email } = value;
     const res = await handleRetryActive({ email });
-    console.log("Check res step 0", res);
     if (res?.data) {
       setUserId(res?.data?.data?._id);
       setCurrent(1);
@@ -52,7 +51,6 @@ export default function ModalReactive(props: any) {
   };
 
   const onFinishStep1 = async (value: any) => {
-    console.log(value);
     const { code } = value;
     if (!userId) {
       return null;

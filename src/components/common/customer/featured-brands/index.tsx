@@ -29,7 +29,7 @@ const FeaturedBrands = ({ brands }: FeaturedBrandsProps) => {
                 >
                   <div className={styles.contentOverMedia}>
                     <AppImage
-                      src={image?.secure_url || "/placeholder.webp"}
+                      src={image?.secure_url}
                       alt={supplier.name}
                       className={styles.zoomImage}
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

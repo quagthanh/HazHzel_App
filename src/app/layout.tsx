@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Montserrat } from "next/font/google";
 import "@/scss/partial/_body.scss";
-import PreventFlash from "@/components/common/preventFlash";
 import { auth } from "@/auth";
-import AuthProvider from "./provider";
 import TopLoader from "@/components/common/progress-bar";
+import AuthInitializer from "@/utils/authInitializer";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -25,12 +24,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <AuthProvider session={session}>
-          <AntdRegistry>
-            <TopLoader />
-            {children}
-          </AntdRegistry>
-        </AuthProvider>
+        <AntdRegistry>
+          <TopLoader />
+          <AuthInitializer user={session?.user} />
+          {children}
+        </AntdRegistry>
       </body>
     </html>
   );

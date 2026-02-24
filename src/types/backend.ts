@@ -41,6 +41,7 @@ export interface IUser {
   _id: string;
   name: string;
   email: string;
+  roles: any[];
   password?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -49,4 +50,5 @@ export interface IUserTable {
   _id: string;
   name: string;
   email: string;
+  roles: any[];
 }

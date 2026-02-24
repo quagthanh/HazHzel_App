@@ -1,73 +1,89 @@
 "use client";
 
-import Image from "next/image";
 import styles from "@/components/common/customer/order-summary/style.module.scss";
-import product1 from "@/../public/assets/Boston_Clogs_in_Antique_White_test.jpg";
-import product2 from "@/../public/assets/Maison_Balzac_Olive_test.jpg";
 import CustomButton from "../public-button";
-
+import OrderItem from "../checkout-item";
+import CouponInput from "../checkout-coupon-input";
+import SummaryRow from "../checkout-summary-row";
+import { useCartStore } from "@/library/stores/useCartStore";
+import { useEffect } from "react";
+import { Checkout } from "@/services/order.api";
+import { message } from "antd";
+import { useRouter } from "next/navigation";
+enum PaymentMethodType {
+  COD = "COD",
+  BANK_TRANSFER = "BANK_TRANSFER",
+}
 export default function OrderSummary() {
+  const { items, fetchCart, getTotalPrice, isLoading } = useCartStore();
+  const router = useRouter();
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
+  const subtotal = getTotalPrice();
+  const shippingFee = 30000;
+  const total = subtotal + shippingFee;
+
+  const formatPrice = (amount: number) =>
+    new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+
+  if (isLoading && items.length === 0) return <div>Loading cart...</div>;
+  const handlePayNow = async () => {
+    const payload = {
+      shippingAddress: {
+        name: "Nguyễn Văn A",
+        phone: "0987654321",
+        street: "123 Đường ABC",
+        ward: "Phường 1",
+        city: "Hồ Chí Minh",
+      },
+      paymentMethod: "BANK_TRANSFER",
+    };
+
+    const res = await Checkout(payload);
+    if (res.statusCode == 201) {
+      message.success("Your order is successfully created");
+      router.push("/");
+    }
+  };
   return (
     <div className={styles.orderSummary}>
-      <div className={styles.item}>
-        <div className={styles.imgWrapper}>
-          <Image
-            src={product1}
-            alt="Signature Chain Bracelet"
-            width={60}
-            height={60}
-          />
-          <span className={styles.qty}>1</span>
-        </div>
-        <div className={styles.info}>
-          <p className={styles.name}>
-            Signature Chain Bracelet - Sterling Silver
-          </p>
-          <p className={styles.price}>₫1,745,000</p>
-        </div>
-      </div>
+      {items.map((item) => (
+        <OrderItem
+          key={item._id}
+          image={item.variantId?.images?.[0]?.secure_url || "/placeholder.webp"}
+          name={item.productId?.name}
+          price={formatPrice(item.variantId?.currentPrice)}
+          quantity={item.quantity}
+        />
+      ))}
 
-      <div className={styles.item}>
-        <div className={styles.imgWrapper}>
-          <Image
-            src={product2}
-            alt="Saschia Knit Cardigan"
-            width={60}
-            height={60}
-          />
-          <span className={styles.qty}>2</span>
-        </div>
-        <div className={styles.info}>
-          <p className={styles.name}>Saschia Knit Cardigan - White Marle</p>
-          <p className={styles.price}>₫4,345,000</p>
-        </div>
-      </div>
+      <CouponInput />
 
-      <div className={styles.couponRow}>
-        <input type="text" placeholder="Discount code or gift card" />
-        <button>Apply</button>
-      </div>
+      <SummaryRow
+        label={`Subtotal · ${items.length} items`}
+        value={formatPrice(subtotal)}
+      />
 
-      <div className={styles.summaryRow}>
-        <span>Subtotal · 2 items</span>
-        <span>₫6,090,000</span>
-      </div>
+      <SummaryRow label="Shipping" value={formatPrice(shippingFee)} />
 
-      <div className={styles.summaryRow}>
-        <span>
-          Shipping <span title="Shipping info">ⓘ</span>
-        </span>
-        <span>₫331,000</span>
-      </div>
+      <SummaryRow
+        label="Total"
+        value={
+          <>
+            <small>VND</small> {formatPrice(total)}
+          </>
+        }
+        isTotal
+      />
 
-      <div className={`${styles.summaryRow} ${styles.totalRow}`}>
-        <span>Total</span>
-        <span>
-          <small>VND</small> ₫6,421,000
-        </span>
-      </div>
       <div className={styles.checkoutBtn}>
-        <CustomButton>pay now</CustomButton>
+        <CustomButton onClick={handlePayNow} disabled={items.length === 0}>
+          pay now
+        </CustomButton>
       </div>
     </div>
   );

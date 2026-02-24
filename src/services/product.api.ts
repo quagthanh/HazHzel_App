@@ -1,21 +1,10 @@
 "use server";
 import { auth } from "@/auth";
-import { sendRequest } from "@/utils/api";
+import { ResponseData } from "@/types/interface";
+import { ProductResponseData } from "@/types/product";
+import { sendRequest, sendRequestFile } from "@/utils/api";
 import { revalidatePath } from "next/cache";
 
-interface ProductResponseData {
-  meta: {
-    current: number;
-    pageSize: number;
-    pages: number;
-    total: number;
-  };
-  result: any[];
-}
-const getAccesstoken = async () => {
-  const session = await auth();
-  return session?.user?.access_token;
-};
 export async function getProductsForAdmin({
   current,
   pageSize,
@@ -23,11 +12,9 @@ export async function getProductsForAdmin({
   current: number;
   pageSize: number;
 }) {
-  const accessToken = await getAccesstoken();
-  return sendRequest<ProductResponseData>({
+  return sendRequest<ResponseData<any>>({
     url: "/products/admin",
     method: "GET",
-    accessToken: accessToken,
     queryParams: {
       current,
       pageSize,
@@ -45,9 +32,8 @@ export async function getProducts(
   if (gender) {
     gender = gender.toUpperCase();
   }
-  console.log("Check query:", gender);
 
-  return sendRequest<ProductResponseData>({
+  return sendRequest<ResponseData<any>>({
     url: "/products",
     method: "GET",
     queryParams: { gender, current: params.current, pageSize: params.pageSize },
@@ -97,7 +83,6 @@ export async function getProductsByCategory(
     brand?: string;
   },
 ) {
-  console.log("Fetch products by category with params:", params);
   return sendRequest<ProductResponseData>({
     url: `/products/by-category/${slug}`,
     method: "GET",
@@ -133,53 +118,11 @@ export async function getHomeProductBySupplier() {
 }
 
 export async function createProductsForAdmin(formData: FormData) {
-  const session = await auth();
-  const token = session?.user?.access_token;
-
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      try {
-        const errorJson = JSON.parse(errorText);
-        return {
-          statusCode: res.status,
-          message: errorJson.message || errorJson.error || "Upload failed",
-          data: null,
-        };
-      } catch {
-        return {
-          statusCode: res.status,
-          message: errorText,
-          data: null,
-        };
-      }
-    }
-
-    const payload = await res.json();
-
-    revalidatePath("/admin/dashboard/product/list");
-
-    return {
-      statusCode: 201,
-      message: "Success",
-      data: payload,
-    };
-  } catch (error) {
-    console.log("Error create product:", error);
-    return {
-      statusCode: 500,
-      message: "Internal Server Error",
-      data: null,
-    };
-  }
+  return sendRequestFile<any>({
+    url: "/products",
+    method: "POST",
+    body: formData,
+  });
 }
 
 export async function updateProductsForAdmin({
@@ -189,62 +132,15 @@ export async function updateProductsForAdmin({
   _id: string;
   formData: FormData;
 }) {
-  const session = await auth();
-  const token = session?.user?.access_token;
-
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${_id}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      },
-    );
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      try {
-        const errorJson = JSON.parse(errorText);
-        return {
-          statusCode: res.status,
-          message: errorJson.message || errorJson.error || "Upload failed",
-          data: null,
-        };
-      } catch {
-        return {
-          statusCode: res.status,
-          message: errorText,
-          data: null,
-        };
-      }
-    }
-
-    const payload = await res.json();
-
-    revalidatePath("/admin/dashboard/product/list");
-
-    return {
-      statusCode: 201,
-      message: "Success",
-      data: payload,
-    };
-  } catch (error) {
-    console.log("Error edit product:", error);
-    return {
-      statusCode: 500,
-      message: "Internal Server Error",
-      data: null,
-    };
-  }
+  return sendRequestFile<any>({
+    url: `/products/${_id}`,
+    method: "PATCH",
+    body: formData,
+  });
 }
 export async function deleteProductsForAdmin(_id: string) {
-  const accessToken = await getAccesstoken();
   return sendRequest<any>({
     url: `/products/${_id}`,
     method: "DELETE",
-    accessToken: accessToken,
   });
 }

@@ -1,3 +1,4 @@
+"use server";
 import { sendRequest } from "@/utils/api";
 import { IMasonryItem } from "@/types/collection";
 

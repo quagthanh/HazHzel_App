@@ -1,28 +1,37 @@
 "use server";
 
-import http from "@/utils/axios-server";
-interface AddToCartDTO {
-  userId: string;
-  payload: {
-    items: {
-      productId: string;
-      variantId: string;
-      quantity: number;
-    }[];
-  };
+import { AddToCartDTO } from "@/types/cart";
+import { sendRequest } from "@/utils/api";
+
+export async function addToCart({ userId, payload }: AddToCartDTO) {
+  const res = await sendRequest<any>({
+    url: `/cart/${userId}`,
+    method: "POST",
+    body: payload,
+  });
+  return res;
 }
-export async function addToCartAPI({
-  userId,
-  payload,
-}: AddToCartDTO): Promise<any> {
-  try {
-    const result = await http.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/${userId}`,
-      payload,
-    );
-    console.log("Check result of add to card :", result.data);
-    return result.data;
-  } catch (error) {
-    return error;
-  }
+export async function getCartByUserId() {
+  const res = await sendRequest<any>({
+    url: `/cart`,
+    method: "GET",
+  });
+  console.log("Check cart api:", res);
+  return res;
+}
+export async function updateCartItem(cartItemId: string, quantity: number) {
+  const res = await sendRequest<any>({
+    url: `/cart-item/${cartItemId}`,
+    method: "PATCH",
+    body: { quantity },
+  });
+  return res;
+}
+export async function deleteCartItem(cartItemId: string) {
+  const res = await sendRequest<any>({
+    url: `/cart-item`,
+    method: "DELETE",
+    body: { cartItemId },
+  });
+  return res;
 }

@@ -11,7 +11,7 @@ export default async function GenderPage({ searchParams }: ListPageProps) {
   let meta = { current: 1, pageSize: 12, total: 0, pages: 0 };
   try {
     const res = await getProducts(gender, { current, pageSize });
-    const backendData = res?.data?.data;
+    const backendData = res?.data;
 
     if (backendData) {
       products = backendData.result || [];

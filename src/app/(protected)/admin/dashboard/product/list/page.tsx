@@ -14,26 +14,28 @@ const ProductListPage = async ({ searchParams }: AdminPageProps) => {
     categoryName,
     supplierName,
   ]);
+
   if (resultCategoryName.status == "fulfilled") {
     const res = resultCategoryName.value;
     if (res?.data) {
-      categoryName = res?.data?.data?.result;
+      categoryName = res?.data?.result;
     }
   } else {
     console.error(
       "Error when fetch value of category :",
-      resultCategoryName.reason
+      resultCategoryName.reason,
     );
   }
   if (resultSupplierName.status == "fulfilled") {
     const res = resultSupplierName.value;
+
     if (res?.data) {
-      supplierName = res?.data?.data?.result;
+      supplierName = res?.data?.result;
     }
   } else {
     console.error(
       "Error when fetch value of supplier :",
-      resultSupplierName.reason
+      resultSupplierName.reason,
     );
   }
   let meta = { current: 1, pageSize: 10, total: 0, pages: 0 };
@@ -42,8 +44,7 @@ const ProductListPage = async ({ searchParams }: AdminPageProps) => {
       current,
       pageSize,
     });
-    const backendData = res?.data?.data;
-
+    const backendData = res?.data;
     if (backendData) {
       products = backendData.result || [];
       meta = backendData.meta || meta;

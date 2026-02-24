@@ -35,12 +35,14 @@ const ProductListClient = ({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const products = initialData || [];
+  const meta = initialMeta;
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataUpdate, setDataUpdate] = useState<any>(null);
-  const products = initialData || [];
-  const meta = initialMeta;
+
   useEffect(() => {
     setIsLoading(false);
   }, [searchParams]);
@@ -50,9 +52,7 @@ const ProductListClient = ({
     const params = new URLSearchParams(searchParams);
     params.set("current", pagination.current?.toString() ?? "1");
     params.set("pageSize", meta?.pageSize?.toString() ?? "10");
-
     const targetUrl = `${pathname}?${params.toString()}`;
-
     router.replace(targetUrl);
   };
   const dataSource = useMemo(
@@ -63,21 +63,20 @@ const ProductListClient = ({
       })),
     [products],
   );
+
   const handleDeleteProduct = async (id: string) => {
     try {
       await deleteProductsForAdmin(id);
     } catch {
-    } finally {
-      setTimeout(() => {
-        window.location.reload();
-      }, 0);
       setIsLoading(false);
     }
   };
+
   const handleEditProduct = (record: IProduct) => {
     setDataUpdate(record);
     setIsEditModalOpen(true);
   };
+
   const columns = getProductColumns({
     onEdit: handleEditProduct,
     onDelete: handleDeleteProduct,
@@ -100,7 +99,7 @@ const ProductListClient = ({
       <PageHeader
         title="Products List"
         subtitle="Manage your store products"
-        breadcrumb={["Ecommerce", "Products"]}
+        breadcrumb={["Admin", "Products"]}
         onAdd={() => setIsCreateModalOpen(true)}
         addButtonText="Add Product"
       />
@@ -140,7 +139,7 @@ const ProductListClient = ({
         isOk={isEditModalOpen}
         isCancel={() => {
           setIsEditModalOpen(false);
-          setDataUpdate(null); // Reset luôn ở cha cho chắc
+          setDataUpdate(null);
         }}
         category={category}
         supplier={supplier}

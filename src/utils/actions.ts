@@ -13,6 +13,7 @@ export async function authenticate(formData: FormData) {
     });
     return r;
   } catch (error) {
+    console.log("CHeck error name:", error);
     if ((error as any).name === "InvalidEmailPasswordError") {
       return {
         error: (error as any).type,
@@ -27,9 +28,4 @@ export async function authenticate(formData: FormData) {
       return { error: "Internal server error", code: 0 };
     }
   }
-}
-
-export async function getSessionToken() {
-  const session = await auth();
-  return session?.user?.access_token;
 }

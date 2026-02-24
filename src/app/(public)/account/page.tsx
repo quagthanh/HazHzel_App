@@ -1,4 +1,3 @@
-"use client";
 import { Avatar, Button, Card, Col, Row, Tabs } from "antd";
 import {
   UserOutlined,
@@ -7,12 +6,13 @@ import {
 } from "@ant-design/icons";
 import styles from "./style.module.scss";
 import { signOut, useSession } from "next-auth/react";
+import { auth } from "@/auth";
 
 const AccountPage = async () => {
   const onChange = (key: string) => {
     console.log(key);
   };
-  const { data: session } = useSession();
+  const session = await auth();
 
   const items = [
     {

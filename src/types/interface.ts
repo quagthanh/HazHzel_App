@@ -247,11 +247,7 @@ export interface TopSupplier {
   supplier: {
     name: string;
     slug: string;
-    images: {
-      secure_url: string;
-      width?: number;
-      height?: number;
-    }[];
+    images: IImage[];
     description?: string;
     status: string;
   };
@@ -262,4 +258,13 @@ export interface ListPageProps {
 }
 export interface PageProps {
   searchParams: { [key: string]: string | string[] | undefined };
+}
+export interface ResponseData<T> {
+  meta: {
+    current: number;
+    pageSize: number;
+    pages: number;
+    total: number;
+  };
+  result: T[];
 }

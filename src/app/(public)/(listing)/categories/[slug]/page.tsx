@@ -24,7 +24,7 @@ export default async function CatgoryPage({
 
   try {
     const res = await getProductsByCategory(slug, filters);
-    const backendData = res?.data?.data;
+    const backendData = res?.data;
 
     if (backendData) {
       products = backendData.result || [];

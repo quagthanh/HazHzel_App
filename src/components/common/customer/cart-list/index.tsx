@@ -5,52 +5,72 @@ import { DeleteOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../cart/style.module.scss";
-import { CartItemType, useCartStore } from "@/library/stores/useCartStore";
+import { useCartStore } from "@/library/stores/useCartStore";
+import { getAttr } from "@/utils/helper";
+import { useState } from "react";
 
 const CartList = () => {
   const { items, updateQuantity, removeItem } = useCartStore();
-
+  const [tempQty, setTempQty] = useState<{ [key: string]: number }>({});
   const columns = [
     {
       title: "PRODUCT",
       dataIndex: "product",
       key: "product",
-      width: "55%",
-      render: (_: any, record: CartItemType) => (
-        <div className={styles.productCell}>
-          <div className={styles.imageWrapper}>
-            <Image
-              src={record.image}
-              alt={record.name}
-              width={100}
-              height={140}
-              style={{ objectFit: "cover" }}
-            />
+      width: "45%",
+      render: (_: any, record: any) => {
+        return (
+          <div className={styles.productCell}>
+            <div className={styles.imageWrapper}>
+              <Image
+                src={record?.productId?.images[0].secure_url}
+                alt={record?.productId?.name}
+                width={100}
+                height={140}
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+            <div className={styles.productMeta}>
+              <Link href="#" className={styles.brand}>
+                {record.productId?.supplierId?.name}
+              </Link>
+              <Link href="#" className={styles.name}>
+                {record?.productId?.name}
+              </Link>
+              <span className={styles.priceMobile}>
+                {record?.variantId?.currentPrice?.toLocaleString("vi-VN") || 0}đ
+              </span>
+            </div>
           </div>
-          <div className={styles.productMeta}>
-            <Link href="#" className={styles.brand}>
-              {record.brand}
-            </Link>
-            <Link href="#" className={styles.name}>
-              {record.name}
-            </Link>
-            <span className={styles.size}>Size: {record.size}</span>
-            <span className={styles.priceMobile}>
-              {record.price.toLocaleString("vi-VN")}đ
-            </span>
-          </div>
-        </div>
-      ),
+        );
+      },
+    },
+    {
+      title: "ATRIBUTE",
+      dataIndex: "atribute",
+      key: "atribute",
+      width: "15%",
+      responsive: ["md"] as any,
+      render: (_: any, record: any) => {
+        const size = getAttr(record?.variantId?.attributes, "Size");
+        const color = getAttr(record?.variantId?.attributes, "Color");
+        return (
+          <>
+            <span className={styles.size}>Size: {size}</span>
+            <span className={styles.size}>Color: {color}</span>
+          </>
+        );
+      },
     },
     {
       title: "PRICE",
       dataIndex: "price",
       key: "price",
       width: "15%",
-      responsive: ["md"] as any, // Ẩn trên mobile
-      render: (price: number) => (
+      responsive: ["md"] as any,
+      render: (_: any, record: any) => (
         <span className={styles.priceText}>
-          {price.toLocaleString("vi-VN")}đ
+          {record?.variantId?.currentPrice?.toLocaleString("vi-VN") || 0}đ
         </span>
       ),
     },
@@ -58,27 +78,46 @@ const CartList = () => {
       title: "QUANTITY",
       dataIndex: "quantity",
       key: "quantity",
-      width: "30%",
-      render: (_: any, record: CartItemType) => (
-        <div className={styles.quantityWrapper}>
-          <InputNumber
-            min={1}
-            max={record.maxStock}
-            value={record.quantity}
-            onChange={(val) => val && updateQuantity(record.id, val)}
-            className={styles.inputNumber}
-          />
-          <Button
-            type="text"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={() => removeItem(record.id)}
-            className={styles.removeBtn}
-          >
-            Remove
-          </Button>
-        </div>
-      ),
+      width: "25%",
+      render: (_: any, record: any) => {
+        return (
+          <div className={styles.quantityWrapper}>
+            <InputNumber
+              min={1}
+              max={record?.variantId?.stock}
+              value={tempQty[record._id] ?? record.quantity}
+              // khi gõ input
+              onChange={(val) => {
+                if (val) {
+                  setTempQty((prev) => ({
+                    ...prev,
+                    [record._id]: val,
+                  }));
+                }
+              }}
+              // khi nhấn enter
+              onPressEnter={(e) => {
+                const value = Number((e.target as HTMLInputElement).value);
+                updateQuantity(record._id, value);
+              }}
+              // khi bấm nút + -
+              onStep={(value) => {
+                updateQuantity(record._id, value);
+              }}
+              className={styles.inputNumber}
+            />
+            <Button
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => removeItem(record._id)}
+              className={styles.removeBtn}
+            >
+              Remove
+            </Button>
+          </div>
+        );
+      },
     },
   ];
 
@@ -88,7 +127,7 @@ const CartList = () => {
         columns={columns}
         dataSource={items}
         pagination={false}
-        rowKey="id"
+        rowKey="_id"
         className={styles.customTable}
       />
     </div>

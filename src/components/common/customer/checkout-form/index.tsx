@@ -1,24 +1,16 @@
 "use client";
 import Image from "next/image";
-import {
-  Button,
-  Form,
-  Input,
-  Select,
-  Radio,
-  Checkbox,
-  Divider,
-  Space,
-  Popconfirm,
-} from "antd";
+import { Form, Input, Select, Radio, Divider, Space, Popconfirm } from "antd";
 import visa from "@/../public/assets/visa-removebg-preview.png";
 import mastercard from "@/../public/assets/mastercard.svg";
-import { GoogleOutlined, MoreOutlined } from "@ant-design/icons";
+import { MoreOutlined } from "@ant-design/icons";
 import styles from "@/components/common/customer/checkout-form/style.module.scss";
-import CustomButton from "../public-button";
+import { useAuthStore } from "@/library/stores/useAuthStore";
 export default function CheckoutForm() {
   const [form] = Form.useForm();
   const text = "Do you sure to log out?";
+
+  const userEmail = useAuthStore((state) => state?.userDetail?.email);
   return (
     <div className={styles.checkoutForm}>
       <div className={styles.expressCheckout}>
@@ -41,7 +33,7 @@ export default function CheckoutForm() {
       <Divider>OR</Divider>
       <div className={styles.emailSection}>
         <div className={styles.emailTittle}>
-          <p>dinhquangthanh11@gmail.com</p>
+          <p>{userEmail}</p>
         </div>
         <div>
           <Popconfirm

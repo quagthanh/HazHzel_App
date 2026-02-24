@@ -22,7 +22,7 @@ const PublicCartPage = () => {
     );
   }
 
-  if (items.length === 0) {
+  if (items?.length === 0) {
     return (
       <div className={styles.emptyContainer}>
         <Empty description="Your cart is currently empty." />

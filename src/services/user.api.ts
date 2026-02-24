@@ -1,21 +1,9 @@
 "use server";
-import { sendRequest } from "@/utils/api";
+import { sendRequest, sendRequestFile } from "@/utils/api";
 import { IUserTable } from "@/types/backend";
 import { auth } from "@/auth";
+import { ResponseData } from "@/types/interface";
 
-interface UserResponseData {
-  meta: {
-    current: number;
-    pageSize: number;
-    pages: number;
-    total: number;
-  };
-  result: IUserTable[];
-}
-const getAccesstoken = async () => {
-  const session = await auth();
-  return session?.user?.access_token;
-};
 export async function getUser({
   current,
   pageSize,
@@ -23,11 +11,9 @@ export async function getUser({
   current: number;
   pageSize: number;
 }) {
-  const accessToken = await getAccesstoken();
-  return sendRequest<UserResponseData>({
+  return sendRequest<ResponseData<IUserTable>>({
     url: "/users",
     method: "GET",
-    accessToken,
     queryParams: {
       current,
       pageSize,
@@ -35,37 +21,31 @@ export async function getUser({
   });
 }
 
-export async function handleCreateUser(data: {
-  name: string;
-  email: string;
-  password: string;
-}) {
-  const accessToken = await getAccesstoken();
-  return sendRequest<any>({
+export async function handleCreateUser(formData: any) {
+  return sendRequestFile<any>({
     url: "/users",
     method: "POST",
-    body: data,
-    accessToken,
+    body: formData,
   });
 }
 
-export async function handleEditUser(data: any) {
-  const accessToken = await getAccesstoken();
-
-  return sendRequest<any>({
-    url: "/users",
+export async function handleEditUser({
+  _id,
+  formData,
+}: {
+  _id: any;
+  formData: any;
+}) {
+  return sendRequestFile<any>({
+    url: `/users/${_id}`,
     method: "PATCH",
-    body: data,
-    accessToken,
+    body: formData,
   });
 }
 
-export async function handleDeleteUser(id: string) {
-  const accessToken = await getAccesstoken();
-
+export async function handleDeleteUserForAdmin(id: string) {
   return sendRequest<any>({
     url: `/users/${id}`,
     method: "DELETE",
-    accessToken,
   });
 }

@@ -6,7 +6,9 @@ import ListingGenderClient from "@/components/layout/public/client-listing-layou
 export default async function GenderPage({ searchParams }: ListPageProps) {
   const current = Number(searchParams?.current) || 1;
   const pageSize = Number(searchParams?.pageSize) || 12;
-  const gender = String(searchParams?.gender) || "";
+  const gender = searchParams?.gender
+    ? String(searchParams?.gender)
+    : undefined;
   let products = [];
   let meta = { current: 1, pageSize: 12, total: 0, pages: 0 };
   try {

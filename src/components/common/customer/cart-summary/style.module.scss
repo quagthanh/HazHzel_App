@@ -17,7 +17,6 @@
   letter-spacing: 0.5px;
 }
 
-// === FREESHIP BAR ===
 .shippingProgress {
   margin-bottom: 25px;
   background: #f5f5f5;
@@ -41,15 +40,14 @@
 }
 
 .highlight {
-  color: #d48806; // Màu vàng cam nhấn mạnh
+  color: #d48806; 
   font-weight: 700;
 }
 
 .progressBar {
-  line-height: 1; // Fix lỗi căn chỉnh mặc định của Antd
+  line-height: 1; 
 }
 
-// === COST DETAILS ===
 .divider {
   margin: 20px 0;
   border-color: #eee;
@@ -92,7 +90,6 @@
   margin-bottom: 25px;
 }
 
-// === CHECKOUT & TRUST ===
 .checkoutBtn {
   height: 52px;
   font-weight: 700;
@@ -145,8 +142,6 @@
     align-items: center;
     font-size: 18px;
     color: #555;
-    
-    // Nếu dùng text (COD)
     font-size: 10px; 
     font-weight: 700; 
   }

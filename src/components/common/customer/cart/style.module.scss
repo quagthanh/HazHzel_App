@@ -20,6 +20,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  background-color: white;
 }
 
 .cartListContainer {
@@ -145,7 +147,7 @@
 }
 
 .freeText {
-  color: #28a745; // Màu xanh lá
+  color: #28a745; 
   font-weight: 600;
 }
 

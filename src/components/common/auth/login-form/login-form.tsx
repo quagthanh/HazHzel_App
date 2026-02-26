@@ -20,7 +20,7 @@ import styles from "@/components/common/auth/login-form/style.module.scss";
 import { handleLogin } from "@/services/auth.api";
 import { authenticate } from "@/utils/actions";
 import ModalChangePassword from "@/components/common/auth/modal.change.password";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ModalReactive from "@/components/common/auth/reactive-model/modal.reactive";
 const { Title, Text, Link } = Typography;
 
@@ -36,12 +36,13 @@ const LoginForm = () => {
   const [showChangePassModal, setChangePassModal] = useState(false);
   const router = useRouter();
   const [userEmail, setUserEmail] = useState("");
-
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const onFinish = async (values: FormData) => {
     try {
       setLoading(true);
       const { username } = values;
-      const res = await authenticate(values);
+      const res = await authenticate(values, callbackUrl);
       setLoading(false);
       if (res?.error) {
         if (res?.code == 2) {
@@ -53,7 +54,7 @@ const LoginForm = () => {
           message: res?.error,
         });
       } else {
-        router.push("/admin/dashboard");
+        router.push("/");
       }
     } catch (error) {
       throw error;

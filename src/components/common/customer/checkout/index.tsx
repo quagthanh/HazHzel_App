@@ -12,10 +12,10 @@ const CheckoutPage = () => {
           <div className={styles.checkoutWrapper}>
             <Row>
               <Col span={12} className={styles.leftCol}>
-                <CheckoutForm></CheckoutForm>
+                <CheckoutForm />
               </Col>
               <Col span={12} className={styles.rightCol}>
-                <OrderSummary></OrderSummary>
+                <OrderSummary />
               </Col>
             </Row>
           </div>

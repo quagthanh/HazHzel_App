@@ -16,7 +16,6 @@ export async function getCartByUserId() {
     url: `/cart`,
     method: "GET",
   });
-  console.log("Check cart api:", res);
   return res;
 }
 export async function updateCartItem(cartItemId: string, quantity: number) {

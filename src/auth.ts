@@ -6,7 +6,7 @@ import {
   SystemError,
 } from "./utils/error";
 import { IUser } from "./types/next-auth";
-import { IBackendRes, ILogin, loginDTO } from "./types/backend";
+import { loginDTO } from "./types/backend";
 import { handleLogin } from "./services/auth.api";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -57,18 +57,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: async ({ auth, request: { nextUrl } }) => {
       const isLoggedIn = !!auth;
       const pathname = nextUrl.pathname;
-      const protectedPaths = [
-        "/admin",
+
+      const isInternalPage = pathname.startsWith("/admin");
+      const isCustomerProtectedPage = [
         "/profile",
         "/checkout",
         "/orders",
         "/settings",
-      ];
-      const isProtected = protectedPaths.some((path) =>
-        pathname.startsWith(path),
-      );
+      ].some((path) => pathname.startsWith(path));
 
-      if (isProtected) {
+      if (isInternalPage) {
+        const isAdmin = (auth?.user as any)?.role === "ADMIN";
+        return isLoggedIn && isAdmin;
+      }
+
+      if (isCustomerProtectedPage) {
         return isLoggedIn;
       }
 

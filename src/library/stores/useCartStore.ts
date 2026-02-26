@@ -1,4 +1,5 @@
 import {
+  addToCart,
   deleteCartItem,
   getCartByUserId,
   updateCartItem,
@@ -9,6 +10,12 @@ interface CartState {
   items: any[];
   isLoading: boolean;
   fetchCart: () => Promise<void>;
+  addToStoreCart: (
+    userId: string,
+    productId: string,
+    variantId: string,
+    quantity: number,
+  ) => Promise<void>;
   updateQuantity: (cartItemId: string, quantity: number) => void;
   removeItem: (cartItemId: string) => void;
   getTotalPrice: () => number;
@@ -26,6 +33,21 @@ export const useCartStore = create<CartState>((set, get) => ({
     } catch (error) {
       console.error("Failed to fetch cart in useCartStore:", error);
       set({ isLoading: false });
+    }
+  },
+
+  addToStoreCart: async (userId, productId, variantId, quantity) => {
+    try {
+      await addToCart({
+        userId,
+        payload: {
+          items: [{ productId, variantId, quantity }],
+        },
+      });
+
+      await get().fetchCart();
+    } catch (error) {
+      throw error;
     }
   },
 

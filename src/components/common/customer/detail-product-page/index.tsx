@@ -9,6 +9,7 @@ import { IProductDetail } from "@/types/interface";
 import { message } from "antd";
 import { addToCart } from "@/services/cart.api";
 import { isMissingUserId } from "@/constants";
+import { useCartStore } from "@/library/stores/useCartStore";
 
 const DetailPage = ({
   product,
@@ -17,6 +18,7 @@ const DetailPage = ({
   product: IProductDetail;
   userId: string;
 }) => {
+  const addToStoreCart = useCartStore((state) => state.addToStoreCart);
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >(() => {
@@ -86,18 +88,7 @@ const DetailPage = ({
     }
 
     try {
-      await addToCart({
-        userId,
-        payload: {
-          items: [
-            {
-              productId: product._id,
-              variantId,
-              quantity,
-            },
-          ],
-        },
-      });
+      await addToStoreCart(userId, product._id, variantId, quantity);
       message.success("Added to cart successfully!");
     } catch (error: any) {
       console.error(error);

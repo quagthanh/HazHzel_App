@@ -3,6 +3,8 @@ import styles from "@/components/common/customer/list-cart-item/style.module.scs
 import Image from "next/image";
 import { useCartStore } from "@/library/stores/useCartStore";
 import { useEffect, useState } from "react";
+import { CartItemSkeleton } from "../skeleton/cart";
+import { Empty } from "antd";
 
 interface CartItemProps {
   layout?: "vertical" | "two-column";
@@ -15,15 +17,25 @@ const CartItem = ({ layout = "vertical" }: CartItemProps) => {
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
-
   if (isLoading && items.length === 0) {
     return (
-      <div className={styles.loadingContainer}>
-        <span className={styles.loadingText}>Loading...</span>
-      </div>
+      <>
+        {[1, 2, 3].map((key) => (
+          <CartItemSkeleton key={key} layout={layout} />
+        ))}
+      </>
     );
   }
-
+  if (!isLoading && (!items || items.length == 0)) {
+    return (
+      <>
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description="Your cart is currently empty."
+        />
+      </>
+    );
+  }
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -45,20 +57,18 @@ const CartItem = ({ layout = "vertical" }: CartItemProps) => {
               <Image
                 width={120}
                 height={180}
-                src={
-                  variant?.images?.[0]?.secure_url || "/assets/placeholder.webp"
-                }
-                alt={product?.name || "Product Image"}
+                src={variant?.images?.[0]?.secure_url}
+                alt={variant?.name}
               />
             </div>
 
             <div className={styles.productInfo}>
               <span className={styles.category}>
-                {product?.category || "Category"}
+                {product?.supplierId?.name || "NAN"}
               </span>
-              <h4 className={styles.productName}>{product?.name}</h4>
+              <h4 className={styles.productName}>{variant?.name}</h4>
               <p className={styles.price}>
-                {formatPrice(variant?.currentPrice || 0)}
+                {formatPrice(variant?.currentPrice || "NAN")}
               </p>
 
               <div className={styles.attributes}>

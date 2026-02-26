@@ -23,21 +23,22 @@ export async function getProductsForAdmin({
 }
 //Product by gender
 export async function getProducts(
-  gender: string,
+  gender: string | undefined,
   params: {
     current: number;
     pageSize: number;
   },
 ) {
-  if (gender) {
+  if (gender && gender.toUpperCase() !== "UNDEFINED") {
     gender = gender.toUpperCase();
   }
 
-  return sendRequest<ResponseData<any>>({
+  const res = await sendRequest<ResponseData<any>>({
     url: "/products",
     method: "GET",
     queryParams: { gender, current: params.current, pageSize: params.pageSize },
   });
+  return res;
 }
 //GET detail product
 export async function getDetailProduct(

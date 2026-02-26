@@ -10,7 +10,7 @@ import { getAttr } from "@/utils/helper";
 import { useState } from "react";
 
 const CartList = () => {
-  const { items, updateQuantity, removeItem } = useCartStore();
+  const { items, isLoading, updateQuantity, removeItem } = useCartStore();
   const [tempQty, setTempQty] = useState<{ [key: string]: number }>({});
   const columns = [
     {
@@ -23,8 +23,8 @@ const CartList = () => {
           <div className={styles.productCell}>
             <div className={styles.imageWrapper}>
               <Image
-                src={record?.productId?.images[0].secure_url}
-                alt={record?.productId?.name}
+                src={record?.variantId?.images[0].secure_url}
+                alt={record?.variantId?.name}
                 width={100}
                 height={140}
                 style={{ objectFit: "cover" }}
@@ -35,7 +35,7 @@ const CartList = () => {
                 {record.productId?.supplierId?.name}
               </Link>
               <Link href="#" className={styles.name}>
-                {record?.productId?.name}
+                {record?.variantId?.name}
               </Link>
               <span className={styles.priceMobile}>
                 {record?.variantId?.currentPrice?.toLocaleString("vi-VN") || 0}đ
@@ -86,7 +86,6 @@ const CartList = () => {
               min={1}
               max={record?.variantId?.stock}
               value={tempQty[record._id] ?? record.quantity}
-              // khi gõ input
               onChange={(val) => {
                 if (val) {
                   setTempQty((prev) => ({
@@ -95,12 +94,10 @@ const CartList = () => {
                   }));
                 }
               }}
-              // khi nhấn enter
               onPressEnter={(e) => {
                 const value = Number((e.target as HTMLInputElement).value);
                 updateQuantity(record._id, value);
               }}
-              // khi bấm nút + -
               onStep={(value) => {
                 updateQuantity(record._id, value);
               }}
@@ -128,6 +125,7 @@ const CartList = () => {
         dataSource={items}
         pagination={false}
         rowKey="_id"
+        loading={isLoading}
         className={styles.customTable}
       />
     </div>

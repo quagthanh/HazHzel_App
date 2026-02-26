@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Drawer, Col, Row, Input, Empty, Spin } from "antd";
+import { Drawer, Col, Row, Input, Empty, Skeleton } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -22,8 +22,8 @@ import {
   searchCollections,
   searchProducts,
 } from "@/services/search.api";
-import { formatPriceHelper } from "@/utils/helper";
 import CustomButton from "../../public-button";
+import { ProductSkeleton } from "../../skeleton/search";
 
 const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,15 +35,18 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
   const [products, setProducts] = useState<SearchProductResult[]>([]);
   const [collections, setCollections] = useState<SearchCollectionResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   useEffect(() => {
     if (open) {
       const fetchSuggestions = async () => {
         try {
+          setSuggestionsLoading(true);
           const res = await getTopViewedProducts();
           if (res?.data) setSuggestions(res?.data);
         } catch (error) {
           console.error("Failed to fetch top viewed products", error);
         }
+        setSuggestionsLoading(false);
       };
       fetchSuggestions();
     }
@@ -147,13 +150,17 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
           <Col xs={24} md={6}>
             <h4 className={styles.sectionTitle}>SUGGESTIONS</h4>
             <ul className={styles.suggestionList}>
-              {suggestions.map((item) => (
-                <li key={item._id} onClick={() => setSearchTerm(item.name)}>
-                  {searchTerm
-                    ? getHighlightedText(item.name, debouncedTerm)
-                    : item.name}
-                </li>
-              ))}
+              {suggestionsLoading ? (
+                <Skeleton paragraph={{ rows: 10 }} />
+              ) : (
+                suggestions.map((item) => (
+                  <li key={item._id} onClick={() => setSearchTerm(item.name)}>
+                    {searchTerm
+                      ? getHighlightedText(item.name, debouncedTerm)
+                      : item.name}
+                  </li>
+                ))
+              )}
             </ul>
           </Col>
 
@@ -164,8 +171,15 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
               </div>
             )}
             {loading && (
-              <div style={{ textAlign: "center", padding: "50px 0" }}>
-                <Spin size="large" />
+              <div style={{ padding: "20px 0" }}>
+                <div className={styles.tabsHeader} style={{ marginBottom: 20 }}>
+                  <Skeleton.Button
+                    active
+                    style={{ width: 120, marginRight: 10 }}
+                  />
+                  <Skeleton.Button active style={{ width: 120 }} />
+                </div>
+                <ProductSkeleton />
               </div>
             )}
             {debouncedTerm && !loading && (
@@ -223,9 +237,6 @@ const SearchDrawer: React.FC<SearchDrawerProps> = ({ open, onClose }) => {
                                         debouncedTerm,
                                       )}
                                     </h5>
-                                    <p className={styles.price}>
-                                      {formatPriceHelper(product.price)}
-                                    </p>
                                   </div>
                                 </div>
                               </Link>
